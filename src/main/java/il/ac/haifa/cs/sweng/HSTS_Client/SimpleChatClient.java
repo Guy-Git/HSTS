@@ -1,4 +1,4 @@
-package il.ac.haifa.cs.sweng.OCSFSimpleChat;
+package il.ac.haifa.cs.sweng.HSTS_Client;
 
 import java.io.IOException;
 import java.util.logging.Logger;
