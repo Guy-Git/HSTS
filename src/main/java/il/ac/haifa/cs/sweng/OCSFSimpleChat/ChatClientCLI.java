@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class ChatClientCLI {
-
+//hi by chen
 	private SimpleChatClient client;
 	private boolean isRunning;
 	private static final String SHELL_STRING = "Enter message (or exit to quit)> ";
