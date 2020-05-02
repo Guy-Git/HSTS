@@ -17,11 +17,7 @@ public class ChatClientCLI {
 		this.client = client;
 		this.isRunning = false;
 	}
-<<<<<<< HEAD
-//Push check
-=======
 	
->>>>>>> refs/heads/linoy
 	public void loop() throws IOException {
 		loopThread = new Thread(new Runnable() {
 
