@@ -16,7 +16,7 @@ public class ChatClientCLI {
 		this.client = client;
 		this.isRunning = false;
 	}
-/*hi hi*/
+/*hi hi hi*/
 	public void loop() throws IOException {
 		loopThread = new Thread(new Runnable() {
 
