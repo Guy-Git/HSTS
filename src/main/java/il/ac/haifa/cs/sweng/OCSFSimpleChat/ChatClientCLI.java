@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
+/*hii*/
 public class ChatClientCLI {
 //hi by chen
 	private SimpleChatClient client;
