@@ -1,12 +1,17 @@
 package HSTS_Server;
 
+import java.awt.print.Printable;
 import java.util.ArrayList;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "questions")
@@ -21,7 +26,12 @@ public class Question {
 	
 	private String course;
 	//private static int questionNumber = 0; //3 digits
-	private int [] subject = new int [100];
+	//@Column (columnDefinition = "")
+	private int subject;
+	private String questionID;
+	
+	@Transient
+	private static int[] subjectCounter = new int[100];
 	
 	public Question(String questionContent, ArrayList<String> answer, int rightAnswer, String course, int newSubject) 
 	{
@@ -29,7 +39,34 @@ public class Question {
 		this.answer = answer;
 		this.rightAnswer = rightAnswer;
 		this.course = course;
-		this.subject[newSubject]++;
+		this.subject = newSubject;
+		
+		subjectCounter[subject]++;
+		if (subject < 10) {
+			questionID = "0" + subject;
+		} else {
+			questionID = Integer.toString(subject);
+		}
+		if (subjectCounter[subject] < 10) {
+			questionID = questionID + "00" + subjectCounter[subject];
+		} else if (subjectCounter[subject] < 100) {
+			questionID = questionID + "0" + subjectCounter[subject];
+		} else {
+			questionID = questionID + subjectCounter[subject];
+		}
+		
+	}
+
+	public String getQuestionID() {
+		return questionID;
+	}
+
+	public void setQuestionID(String questionID) {
+		this.questionID = questionID;
+	}
+
+	public void setSubject(int subject) {
+		this.subject = subject;
 	}
 
 	public long getId() {
@@ -72,7 +109,7 @@ public class Question {
 		this.course = course;
 	}
 
-	public int [] getSubject() {
+	public int getSubject() {
 		return subject;
 	}
 	

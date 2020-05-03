@@ -1,18 +1,18 @@
-package il.ac.haifa.cs.sweng.HSTS_Client;
+package HSTS_Client;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.client.AbstractClient;
 
-public class SimpleChatClient extends AbstractClient {
+public class AppsClient extends AbstractClient {
 	private static final Logger LOGGER =
-			Logger.getLogger(SimpleChatClient.class.getName());
+			Logger.getLogger(AppsClient.class.getName());
 	
-	private ChatClientCLI chatClientCLI;	
-	public SimpleChatClient(String host, int port) {
+	private AppsCLI chatClientCLI;	
+	public AppsClient(String host, int port) {
 		super(host, port);
-		this.chatClientCLI = new ChatClientCLI(this);
+		this.chatClientCLI = new AppsCLI(this);
 	}
 	
 	@Override

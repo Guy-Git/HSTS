@@ -1,17 +1,17 @@
-package il.ac.haifa.cs.sweng.HSTS_Client;
+package HSTS_Client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-public class ChatClientCLI {
-	private SimpleChatClient client;
+public class AppsCLI {
+	private AppsClient client;
 	private boolean isRunning;
 	private static final String SHELL_STRING = "Enter message (or exit to quit)> ";
 	private Thread loopThread;
 
-	public ChatClientCLI(SimpleChatClient client) {
+	public AppsCLI(AppsClient client) {
 		this.client = client;
 		this.isRunning = false;
 	}
@@ -72,7 +72,7 @@ public class ChatClientCLI {
 			String host = args[0];
 			int port = Integer.parseInt(args[1]);
 
-			SimpleChatClient chatClient = new SimpleChatClient(host, port);
+			AppsClient chatClient = new AppsClient(host, port);
 			chatClient.openConnection();
 		}
 	}
