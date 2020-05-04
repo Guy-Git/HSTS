@@ -275,7 +275,6 @@ public abstract class AbstractClient implements Runnable
         try { // added in version 2.31
         
           msg = input.readObject();
-
           // Concrete subclasses do what they want with the
           // msg by implementing the following method
           if (!readyToStop) {  // Added in version 2.2

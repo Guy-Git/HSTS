@@ -1,8 +1,11 @@
 package HSTS_Client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import HSTS_Server.Question;
+import antlr.collections.List;
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.client.AbstractClient;
 
 public class AppsClient extends AbstractClient {
@@ -29,8 +32,24 @@ public class AppsClient extends AbstractClient {
 	}
 
 	@Override
-	protected void handleMessageFromServer(Object msg) {
-		chatClientCLI.displayMessage(msg);
+	protected void handleMessageFromServer(Object msg) 
+	{
+		
+		//Question question = (Question)msg;
+		//showAll(question);
+		
+		System.out.println(msg.toString());
+	}
+	
+	public static void showAll(Question question) {
+		
+		System.out.println("Course: " + question.getCourse());
+		System.out.println("Question id: " + question.getQuestionID());
+		System.out.println(question.getQuestionContent());
+		for (String answer : question.getAnswer())
+			System.out.println(answer);
+
+		System.out.println("And the right answer is: " + question.getRightAnswer());
 	}
 	
 	@Override

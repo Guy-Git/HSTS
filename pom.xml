@@ -100,11 +100,11 @@
 							<goals>
 								<goal>java</goal>
 							</goals>
-							<configuration>
-								<mainClass>il.ac.haifa.cs.sweng.OCSFSimpleChat.ChatClientCLI</mainClass>
-							</configuration>
 						</execution>
 					</executions>
+							<configuration>
+								<mainClass>HSTS_Client.AppsCLI</mainClass>
+							</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

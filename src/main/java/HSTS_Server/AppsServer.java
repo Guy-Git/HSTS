@@ -19,40 +19,159 @@ import org.hibernate.service.ServiceRegistry;
 
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.AbstractServer;
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.ConnectionToClient;
+import net.bytebuddy.asm.Advice.This;
 
 public class AppsServer extends AbstractServer {
 
-	//out = new PrintWriter(socket.getOutputStream());
-    //in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	// out = new PrintWriter(socket.getOutputStream());
+	// in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-    private static Session session;
-    
+	private static Session session;
+	private Question chosenQuestion;
+	private int changeType;
+	private int answerNum;
+	static SessionFactory sessionFactory = getSessionFactory();
+
 	public AppsServer(int port) {
 		super(port);
 	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		
-		if (msg.toString() == "Show All") 
-			showAll();
-	
-	//	msg = "#Edit 56001 ChangeQuestion"
-		if(msg.toString().startsWith("#Edit"))
-		{
-			if(msg.toString().contains("ChangeQuestion"))
-				editQuestion(msg.toString().substring(6, 11), 1);
-			
-			if(msg.toString().contains("ChangeAnswer"))
-				editQuestion(msg.toString().substring(6, 11), 2);
-			
-			if(msg.toString().contains("ChangeRightAnswer"))
-				editQuestion(msg.toString().substring(6, 11), 3);
-			
-		}
-			
+
 		System.out.println("Received Message: " + msg.toString());
-		sendToAllClients(msg);
+
+		if (msg.toString().equals("#ShowAll")) {
+			showAll(client);
+		}
+
+		// msg = #Edit 56001
+		// msg = #ChangeQuestion
+		// msg = "What's your Last name?"
+		else if (msg.toString().startsWith("#Edit")) {
+			findQuestion(msg.toString().substring(6, 11), client);
+		}
+
+		else if (msg.toString().startsWith("#ChangeQuestion")) {
+			msg = "Enter changes for question";
+			changeType = 1;
+		}
+
+		else if (msg.toString().startsWith("#ChangeAnswer")) {
+			msg = "Enter the changes for answer: ";
+			answerNum = Character.getNumericValue(msg.toString().charAt(msg.toString().length() - 1));
+			changeType = 2;
+		}
+
+		else if (msg.toString().startsWith("#ChangeRightAnswer")) {
+			msg = "Enter changes for question";
+			changeType = 3;
+		}
+
+		else {
+			editQuestion(chosenQuestion, msg.toString(), changeType, client);
+		}
+
+	}
+
+	public void showAll(ConnectionToClient client) {
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			List<Question> questions = getAll(Question.class);
+			try {
+				System.out.println(questions.get(0));
+				client.sendToClient(questions.get(0));
+			} catch (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
+			}
+
+			session.getTransaction().commit(); // Save everything.
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+
+	public void findQuestion(String questionID, ConnectionToClient client) {
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			// You can change the question, answers, right answers,
+			List<Question> questions = getAll(Question.class);
+			Object msg;
+			System.out.println("KAKI");
+			
+			for (Question question : questions) { // Change to a better type of search!!!!!!!
+				if (question.getQuestionID() == questionID)
+					chosenQuestion = question;
+			}
+
+			msg = "Choose action: \n 1. Change Question \n 2. Choose an answer to change \n 3. Change the right answer";
+
+			try {
+				client.sendToClient(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			session.getTransaction().commit(); // Save everything.
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+
+	public void editQuestion(Question question, String theActualChange, int changeType, ConnectionToClient client) {
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			switch (changeType) {
+			case 1: // Edit question content
+				question.setQuestionContent(theActualChange);
+				session.save(question);
+				break;
+			case 2: // Edit one Answers
+				question.setAnswer(theActualChange, answerNum);
+				session.save(question);
+				break;
+			case 3:
+				question.setRightAnswer(Integer.parseInt(theActualChange));
+				session.save(question);
+				break;
+			}
+			session.flush();
+
+			System.out.println("Question after updates: ");
+			System.out.println("Course: " + question.getCourse());
+			System.out.println("Question id: " + question.getQuestionID());
+			System.out.println(question.getQuestionContent());
+			for (String answer : question.getAnswer())
+				System.out.println(answer);
+
+			System.out.println("And the right answer is: " + question.getRightAnswer());
+
+			session.getTransaction().commit(); // Save everything.
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
 	}
 
 	public static <T> List<T> getAll(Class<T> object) {
@@ -63,37 +182,6 @@ public class AppsServer extends AbstractServer {
 
 		TypedQuery<T> allQuery = session.createQuery(allCriteriaQuery);
 		return allQuery.getResultList();
-	}
-
-	public static void showAll() {
-		List<Question> questions = getAll(Question.class);
-		
-		System.out.println("Course: " + questions.get(0).getCourse());
-		System.out.println("Question id: " + questions.get(0).getQuestionID());
-		System.out.println(questions.get(0).getQuestionContent());
-		for(String answer : questions.get(0).getAnswer())
-			System.out.println(answer);
-		
-		System.out.println("And the right answer is: " + questions.get(0).getRightAnswer());
-	}
-	
-	public void editQuestion(String questionID, int change)
-	{
-		//You can change the question, answers, right answers, 
-		List<Question> questions = getAll(Question.class);
-		Question chosenQuestion;
-		
-		for(Question question: questions)
-		{
-			if(question.getQuestionID() == questionID)
-				chosenQuestion = question;
-		}
-		
-		switch(change)
-		{
-			case 1: //Edit question content
-				//send("Enter changes for question");
-		}
 	}
 
 	@Override
@@ -119,18 +207,10 @@ public class AppsServer extends AbstractServer {
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void addQuestionToDB() {
 		try {
-			SessionFactory sessionFactory = getSessionFactory();
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-
-			if (args.length != 1) {
-				System.out.println("Required argument: <port>");
-			} else {
-				AppsServer server = new AppsServer(Integer.parseInt(args[0]));
-				server.listen();
-			}
 
 			ArrayList<Question> allQuestion = new ArrayList<Question>();
 			ArrayList<String> answers = new ArrayList<String>();
@@ -143,8 +223,6 @@ public class AppsServer extends AbstractServer {
 			session.save(allQuestion.get(0));
 			session.flush();
 
-			showAll();
-
 			session.getTransaction().commit(); // Save everything.
 		} catch (Exception exception) {
 			if (session != null) {
@@ -155,6 +233,19 @@ public class AppsServer extends AbstractServer {
 		} finally {
 			session.close();
 		}
+	}
+
+	public static void main(String[] args) throws IOException {
+
+		if (args.length != 1) {
+			System.out.println("Required argument: <port>");
+		} else {
+			AppsServer server = new AppsServer(Integer.parseInt(args[0]));
+			server.listen();
+		}
+
+		addQuestionToDB();
 
 	}
+
 }

@@ -1,6 +1,6 @@
 package HSTS_Server;
 
-import java.awt.print.Printable;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
@@ -15,7 +15,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "questions")
-public class Question {
+public class Question implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -32,6 +32,10 @@ public class Question {
 	
 	@Transient
 	private static int[] subjectCounter = new int[100];
+	
+	public Question() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public Question(String questionContent, ArrayList<String> answer, int rightAnswer, String course, int newSubject) 
 	{
@@ -89,10 +93,14 @@ public class Question {
 		return answer;
 	}
 
-	public void setAnswer(ArrayList<String> answer) {
+	public void setAnswers(ArrayList<String> answer) {
 		this.answer = answer;
 	}
-
+	
+	public void setAnswer(String answer, int chosenAnswer) {
+		this.answer.set(chosenAnswer-1, answer);
+	}
+	
 	public int getRightAnswer() {
 		return rightAnswer;
 	}
@@ -112,6 +120,13 @@ public class Question {
 	public int getSubject() {
 		return subject;
 	}
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", questionContent=" + questionContent + ", answer=" + answer + ", rightAnswer="
+				+ rightAnswer + ", course=" + course + ", subject=" + subject + ", questionID=" + questionID + "]";
+	}
+	
 	
 	 
 }
