@@ -98,7 +98,7 @@ public class Question implements Serializable {
 	}
 	
 	public void setAnswer(String answer, int chosenAnswer) {
-		this.answer.set(chosenAnswer-1, answer);
+		this.answer.set(chosenAnswer-1, chosenAnswer + ". " + answer);
 	}
 	
 	public int getRightAnswer() {
