@@ -1,6 +1,8 @@
 package HSTS_Client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -9,27 +11,30 @@ import antlr.collections.List;
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.client.AbstractClient;
 
 public class AppsClient extends AbstractClient {
-	
+
 	private static final String SHELL_STRING = "Choose action number: \n" + "   1. To Show all questions - Enter '#1'\n"
-			+ "   2. To Edit a question - Enter '#2'\n" + "   3. To Exit the system - Enter '#Exit'\n ";
-	
+			+ "   2. To Edit a question - Enter '#2'\n" + "   3. To Exit the system - Enter '#Exit'\n"
+			+ "Enter input: ";
+
 	private int printShell = 0;
 	private int beforeOrAfterChange = 0;
-	private static final Logger LOGGER =
-			Logger.getLogger(AppsClient.class.getName());
+	public static boolean questionNotFound = false;
 	
-	private AppsCLI chatClientCLI;	
+	private static final Logger LOGGER = Logger.getLogger(AppsClient.class.getName());
+
+	private AppsCLI chatClientCLI;
+
 	public AppsClient(String host, int port) {
 		super(host, port);
 		this.chatClientCLI = new AppsCLI(this);
 	}
-	
+
 	@Override
 	protected void connectionEstablished() {
 		// TODO Auto-generated method stub
 		super.connectionEstablished();
 		LOGGER.info("Connected to server.");
-		
+
 		try {
 			chatClientCLI.loop();
 		} catch (IOException e) {
@@ -38,54 +43,53 @@ public class AppsClient extends AbstractClient {
 	}
 
 	@Override
-	protected void handleMessageFromServer(Object msg) 
-	{
-		if(msg.getClass() == ArrayList.class)
-		{
-			ArrayList<Question> questions = (ArrayList<Question>)msg;
+	protected void handleMessageFromServer(Object msg) {
+		String questionID;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+		if (msg.getClass() == ArrayList.class) {
+			ArrayList<Question> questions = (ArrayList<Question>) msg;
 			showAll(questions);
-			System.out.print(SHELL_STRING);	
+			System.out.print(SHELL_STRING);
 		}
-		
-		if(msg.getClass() == String.class)
-			System.out.println(msg.toString());
-		
-		//System.out.println(msg);
-		if(msg.getClass() == Question.class)
-		{
-			if(beforeOrAfterChange == 0 || AppsCLI.isEditing() == 1)
-			{
+
+		if (msg.getClass() == String.class) {
+			System.out.print(msg.toString());
+			if (msg.toString().equals("Question not found! please try again: "))
+				questionNotFound = true;
+		}
+
+		// System.out.println(msg);
+		if (msg.getClass() == Question.class) {
+			if (beforeOrAfterChange == 0 || AppsCLI.isEditing() == 1) {
 				System.out.println("The chosen question is: ");
 				ArrayList<Question> questions = new ArrayList<Question>();
-				questions.add((Question)msg);
+				questions.add((Question) msg);
 				showAll(questions);
-				
-				System.out.println("Choose action: \n"
-						+ "  1. Change Question - Enter '#CQ'\n"
+
+				System.out.print("Choose action: \n" + "  1. Change Question - Enter '#CQ'\n"
 						+ "  2. Choose an answer to change - Enter '#CA' \n"
-						+ "  3. Change the right answer - Enter '#CRA' \n"
-						+ "  4. For Main Menu - '#M'");
-				
+						+ "  3. Change the right answer - Enter '#CRA' \n" + "  4. For Main Menu - '#M'\n"
+						+ "Enter input: ");
+
 				beforeOrAfterChange = 1;
 				AppsCLI.setStopEditing();
-			}
-			else {
-				System.out.println("The question after update: ");	
-				
-				//System.out.println((Question)msg);
+			} else {
+				System.out.println("The question after update: ");
+
+				// System.out.println((Question)msg);
 				ArrayList<Question> questions1 = new ArrayList<Question>();
-				questions1.add((Question)msg);
+				questions1.add((Question) msg);
 				showAll(questions1);
 				beforeOrAfterChange = 0;
-				System.out.print(SHELL_STRING);		
+				System.out.print(SHELL_STRING);
 			}
 		}
 	}
-	
+
 	public static void showAll(ArrayList<Question> questions) {
-		
-		for(int i = 0; i < questions.size(); i++)
-		{
+
+		for (int i = 0; i < questions.size(); i++) {
 			System.out.println("Course: " + questions.get(i).getCourse());
 			System.out.println("Question id: " + questions.get(i).getQuestionID());
 			System.out.println(questions.get(i).getQuestionContent());
@@ -95,7 +99,7 @@ public class AppsClient extends AbstractClient {
 			System.out.println();
 		}
 	}
-	
+
 	@Override
 	protected void connectionClosed() {
 		// TODO Auto-generated method stub

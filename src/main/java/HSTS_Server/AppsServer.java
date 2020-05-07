@@ -27,6 +27,7 @@ public class AppsServer extends AbstractServer {
 
 	private static Session session;
 	private Question chosenQuestion;
+	private int isFound = 0;
 	private int changeType;
 	private int answerNum;
 	static SessionFactory sessionFactory = getSessionFactory();
@@ -161,12 +162,19 @@ public class AppsServer extends AbstractServer {
 
 			for (Question question : questions) { // Change to a better type of search!!!!!!!
 				if (question.getQuestionID().equals(questionID))
+				{
 					chosenQuestion = question;
+					isFound = 1;
+				}
 			}
-
-			// System.out.println(chosenQuestion.getQuestionContent());
-
-			msg = chosenQuestion;
+			
+			if(isFound == 1)
+				msg = chosenQuestion;
+			else {
+				msg = "Question not found! please try again: ";
+			}
+			isFound = 0;
+			
 			try {
 				client.sendToClient(msg);
 			} catch (IOException e) {
