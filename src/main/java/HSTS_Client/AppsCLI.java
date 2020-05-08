@@ -41,7 +41,7 @@ public class AppsCLI {
 						if (message.isBlank())
 							continue;
 
-						if (message.toString().contains("#M")) {
+						if (message.toString().equals("#M")) {
 							stopEditing = 1;
 							badInput = 0;
 							startEdit = false;
@@ -58,10 +58,11 @@ public class AppsCLI {
 						}
 						
 						else {
-							if (message.startsWith("#2") || AppsClient.questionNotFound == true) {
+							if (message.equals("#2") || AppsClient.questionNotFound == true) {
 								startEdit = true;
 								if(AppsClient.questionNotFound == false)
 								{
+									System.out.println();
 									System.out.print("Choose question ID: ");
 									questionID = reader.readLine();
 								}
@@ -73,19 +74,23 @@ public class AppsCLI {
 									if(questionID.equals("#M"))
 										break;
 									
-									System.out.print("Invalid input! try again:");
 									System.out.println();
+									System.out.print("Invalid input! try again: ");
 									questionID = reader.readLine();
 								}
 								stopEditing = 0;
-								message = "#2 " + questionID;
+								if(questionID.contains("#M"))
+									message = "#M";
+								else
+									message = "#2 " + questionID;
 								AppsClient.questionNotFound = false;
 							}
 
 							else {
-								if (message.startsWith("#CA")) {
+								if (message.equals("#CA")) {
 									startEdit = false;
-									System.out.println("Choose the answer number to change: ");
+									System.out.println();
+									System.out.print("Choose the answer number to change: ");
 									answerNumber = reader.readLine();
 									
 									while((!answerNumber.matches("[1-4]+") || answerNumber.length() != 1))
@@ -93,22 +98,26 @@ public class AppsCLI {
 										if(answerNumber.equals("#M"))
 											break;
 										
-										System.out.println("Invalid input! try again: ");
+										System.out.println();
+										System.out.print("Invalid input! try again: ");
 										answerNumber = reader.readLine();
 									}
 									stopEditing = 0;
-									message = "#CA " + answerNumber;
+									if(answerNumber.contains("#M"))
+										message = "#M";
+									else
+										message = "#CA " + answerNumber;
 								}
 
 								else
 								{
-									if(message.startsWith("#CQ")) {
+									if(message.equals("#CQ")) {
 										stopEditing = 0;
 										startEdit = false;						
 									}
 									else
 									{
-										if(message.startsWith("#CRA")) {
+										if(message.equals("#CRA")) {
 											stopEditing = 0;
 											startEdit = false;
 											isCRA = true;
@@ -117,7 +126,9 @@ public class AppsCLI {
 										{
 											if(startEdit == true)
 											{
+												System.out.println();
 												System.out.print("Invalid action! try again: ");
+												//System.out.println();
 												continue;
 											}
 											
@@ -125,7 +136,8 @@ public class AppsCLI {
 											{
 												if(!message.matches("[1-4]+") || message.length() != 1)
 												{
-													System.out.println("Invalid input! try again: ");
+													System.out.println();
+													System.out.print("Invalid input! try again: ");
 													continue;
 												}
 												else
@@ -140,7 +152,7 @@ public class AppsCLI {
 							System.out.println();
 						}
 
-						if (message.toString().contains("#M")) {
+						if (message.toString().equals("#M")) {
 							stopEditing = 1;
 							System.out.println();
 							System.out.print(SHELL_STRING);

@@ -67,7 +67,7 @@ public class AppsClient extends AbstractClient {
 				questions.add((Question) msg);
 				showAll(questions);
 
-				System.out.print("Choose action: \n" + "  1. Change Question - Enter '#CQ'\n"
+				System.out.print("Choose action: \n" + "  1. Change question content - Enter '#CQ'\n"
 						+ "  2. Choose an answer to change - Enter '#CA' \n"
 						+ "  3. Change the right answer - Enter '#CRA' \n" + "  4. For Main Menu - '#M'\n"
 						+ "Enter input: ");

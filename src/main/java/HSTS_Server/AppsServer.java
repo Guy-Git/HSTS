@@ -65,7 +65,7 @@ public class AppsServer extends AbstractServer {
 			}
 
 			else if (msg.toString().startsWith("#CA")) {
-				System.out.println(msg.toString().charAt(msg.toString().length() - 1));
+				System.out.print(msg.toString().charAt(msg.toString().length() - 1));
 
 				answerNum = Character.getNumericValue(msg.toString().charAt(msg.toString().length() - 1));
 				msg = "Enter the changes for the chosen answer: ";
