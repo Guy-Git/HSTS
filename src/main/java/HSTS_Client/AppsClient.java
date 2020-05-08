@@ -17,7 +17,7 @@ public class AppsClient extends AbstractClient {
 			+ "Enter input: ";
 
 	private int printShell = 0;
-	private int beforeOrAfterChange = 0;
+	private static int beforeOrAfterChange = 0;
 	public static boolean questionNotFound = false;
 	
 	private static final Logger LOGGER = Logger.getLogger(AppsClient.class.getName());
@@ -100,6 +100,10 @@ public class AppsClient extends AbstractClient {
 		}
 	}
 
+	public static void setBeforeOrAfterChange() 
+	{
+		beforeOrAfterChange = 0;
+	}
 	@Override
 	protected void connectionClosed() {
 		// TODO Auto-generated method stub

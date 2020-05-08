@@ -9,6 +9,8 @@ public class AppsCLI {
 	private boolean isRunning;
 	private static int stopEditing = 1;
 	private int badInput = 0;
+	private boolean startEdit = false;
+	private boolean isCRA = false;
 
 	private static final String SHELL_STRING = "Choose action number: \n" + "   1. To Show all questions - Enter '#1'\n"
 			+ "   2. To Edit a question - Enter '#2'\n" + "   3. To Exit the system - Enter '#Exit'\n" + "Enter input: ";
@@ -39,12 +41,15 @@ public class AppsCLI {
 						if (message.isBlank())
 							continue;
 
-						if (message.toString().equals("#M")) {
+						if (message.toString().contains("#M")) {
 							stopEditing = 1;
 							badInput = 0;
+							startEdit = false;
+							isCRA = false;
 							AppsClient.questionNotFound = false;
 							System.out.println();
 							System.out.print(SHELL_STRING);
+							AppsClient.setBeforeOrAfterChange();
 							continue;
 						}
 
@@ -54,6 +59,7 @@ public class AppsCLI {
 						
 						else {
 							if (message.startsWith("#2") || AppsClient.questionNotFound == true) {
+								startEdit = true;
 								if(AppsClient.questionNotFound == false)
 								{
 									System.out.print("Choose question ID: ");
@@ -78,6 +84,7 @@ public class AppsCLI {
 
 							else {
 								if (message.startsWith("#CA")) {
+									startEdit = false;
 									System.out.println("Choose the answer number to change: ");
 									answerNumber = reader.readLine();
 									
@@ -94,7 +101,41 @@ public class AppsCLI {
 								}
 
 								else
-									badInput = 1;
+								{
+									if(message.startsWith("#CQ")) {
+										stopEditing = 0;
+										startEdit = false;						
+									}
+									else
+									{
+										if(message.startsWith("#CRA")) {
+											stopEditing = 0;
+											startEdit = false;
+											isCRA = true;
+										}
+										else
+										{
+											if(startEdit == true)
+											{
+												System.out.print("Invalid action! try again: ");
+												continue;
+											}
+											
+											if(isCRA)
+											{
+												if(!message.matches("[1-4]+") || message.length() != 1)
+												{
+													System.out.println("Invalid input! try again: ");
+													continue;
+												}
+												else
+													isCRA = false;
+											}
+											badInput = 1;
+										}
+									}
+								}
+									
 							}
 							System.out.println();
 						}
@@ -104,6 +145,9 @@ public class AppsCLI {
 							System.out.println();
 							System.out.print(SHELL_STRING);
 							badInput = 0;
+							startEdit = false;
+							isCRA = false;
+							AppsClient.setBeforeOrAfterChange();
 							AppsClient.questionNotFound = false;
 							continue;
 						}
