@@ -90,7 +90,7 @@ public class AppsServer extends AbstractServer {
 			}
 
 			else {
-				if (!msg.toString().contains("#M")) {
+				if (!msg.toString().equals("#M")) {
 					editQuestion(msg.toString(), changeType, client);
 					try {
 						session = sessionFactory.openSession();

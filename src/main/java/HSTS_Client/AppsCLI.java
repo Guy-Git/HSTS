@@ -213,8 +213,8 @@ public class AppsCLI {
 		return stopEditing;
 	}
 
-	public static void setStopEditing() {
-		stopEditing = 0;
+	public static void setStopEditing(int n) {
+		stopEditing = n;
 	}
 
 	public static void main(String[] args) throws IOException {
