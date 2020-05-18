@@ -143,7 +143,8 @@ public class AppsCLI {
 												else
 													isCRA = false;
 											}
-											badInput = 1;
+											if(stopEditing == 1)
+												badInput = 1;
 										}
 									}
 								}
@@ -175,7 +176,7 @@ public class AppsCLI {
 							else 
 							{	
 								System.out.print("Invalid action! try again: ");
-								System.out.println();
+								System.out.println("jgmjr");
 								System.out.print(SHELL_STRING);
 								badInput = 0;
 							}

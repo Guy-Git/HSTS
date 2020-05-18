@@ -1,7 +1,6 @@
 package HSTS_Server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import HSTS_Entities.Question;
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.AbstractServer;
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.ConnectionToClient;
 

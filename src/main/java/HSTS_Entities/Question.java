@@ -1,4 +1,4 @@
-package HSTS_Server;
+package HSTS_Entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -6,8 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import HSTS_Server.Question;
-import antlr.collections.List;
+import HSTS_Entities.Question;
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.client.AbstractClient;
 
 public class AppsClient extends AbstractClient {
@@ -25,7 +24,7 @@ public class AppsClient extends AbstractClient {
 	private AppsCLI chatClientCLI;
 
 	public AppsClient(String host, int port) {
-		super(host, port);
+		super("127.0.0.1", 3000);
 		this.chatClientCLI = new AppsCLI(this);
 	}
 
