@@ -6,8 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import HSTS_Server.Question;
-import antlr.collections.List;
+import HSTS_Entities.Question;
 import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.client.AbstractClient;
 
 public class AppsClient extends AbstractClient {
