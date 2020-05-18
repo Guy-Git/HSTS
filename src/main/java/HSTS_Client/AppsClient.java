@@ -72,7 +72,7 @@ public class AppsClient extends AbstractClient {
 						+ "Enter input: ");
 
 				beforeOrAfterChange = 1;
-				AppsCLI.setStopEditing(0);
+				AppsCLI.setStopEditing();
 			} else {
 				System.out.println("The question after update: ");
 
@@ -81,7 +81,6 @@ public class AppsClient extends AbstractClient {
 				questions1.add((Question) msg);
 				showAll(questions1);
 				beforeOrAfterChange = 0;
-				AppsCLI.setStopEditing(1);
 				System.out.print(SHELL_STRING);
 			}
 		}
@@ -103,10 +102,6 @@ public class AppsClient extends AbstractClient {
 	public static void setBeforeOrAfterChange() 
 	{
 		beforeOrAfterChange = 0;
-	}
-	
-	public static int getBeforeOrAfterChange() {
-		return beforeOrAfterChange;
 	}
 	@Override
 	protected void connectionClosed() {
