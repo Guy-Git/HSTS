@@ -176,7 +176,6 @@ public class AppsCLI {
 							else 
 							{	
 								System.out.print("Invalid action! try again: ");
-								System.out.println("jgmjr");
 								System.out.print(SHELL_STRING);
 								badInput = 0;
 							}
