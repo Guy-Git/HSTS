@@ -1,3 +1,5 @@
+# Remember to change mySQL connection properties in the project! (src/main/resoueces -> hibernate.properties)
+
 # Running order and why it's important
 You **must** run the server first and then the client. That's because otherwise the client tries to connect to the server, but there is no server to connect to, so you will get an error.
 
