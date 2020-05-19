@@ -24,7 +24,7 @@ public class AppsClient extends AbstractClient {
 	private AppsCLI chatClientCLI;
 
 	public AppsClient(String host, int port) {
-		super("127.0.0.1", 3000);
+		super(host, port);
 		this.chatClientCLI = new AppsCLI(this);
 	}
 
@@ -47,9 +47,15 @@ public class AppsClient extends AbstractClient {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 		if (msg.getClass() == ArrayList.class) {
-			ArrayList<Question> questions = (ArrayList<Question>) msg;
-			showAll(questions);
-			System.out.print(SHELL_STRING);
+			try {
+				ArrayList<Question> questions = (ArrayList<Question>) msg;
+				showAll(questions);
+				System.out.print(SHELL_STRING);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
 		}
 
 		if (msg.getClass() == String.class) {
