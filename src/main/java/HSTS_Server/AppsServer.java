@@ -17,8 +17,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import HSTS_Entities.Question;
-import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.AbstractServer;
-import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.ConnectionToClient;
+import ocsf_Server.AbstractServer;
+import ocsf_Server.ConnectionToClient;
 
 public class AppsServer extends AbstractServer {
 
@@ -39,15 +39,14 @@ public class AppsServer extends AbstractServer {
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
-		System.out.println("Received Message: " + msg.toString());
+		QuestionController.addQuestion((Question) msg);
+		
+		/*System.out.println("Received Message: " + msg.toString());
 
 		if (msg.toString().equals("#ShowAll")) {
 			showAll(client);
 		}
-
-		// msg = #Edit 56001
-		// msg = #ChangeQuestion
-		// msg = "What's your Last name?"
+		
 		else {
 			if (msg.toString().startsWith("#2")) {
 				findQuestion(msg.toString().substring(3, 8), client);
@@ -124,7 +123,7 @@ public class AppsServer extends AbstractServer {
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	public void showAll(ConnectionToClient client) {

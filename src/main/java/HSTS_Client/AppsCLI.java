@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AppsCLI {
-	private AppsClient client;
+	/*private AppsClient client;
 	private boolean isRunning;
 	private static int stopEditing = 1;
 	private int badInput = 0;
@@ -175,7 +175,7 @@ public class AppsCLI {
 							
 							else 
 							{	
-								System.out.print("Invalid action! try again: ");
+								System.out.println("Invalid action! try again: ");
 								System.out.print(SHELL_STRING);
 								badInput = 0;
 							}
@@ -227,5 +227,5 @@ public class AppsCLI {
 			AppsClient chatClient = new AppsClient(host, port);
 			chatClient.openConnection();
 		}
-	}
+	}*/
 }

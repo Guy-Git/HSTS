@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import HSTS_Entities.Question;
-import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.client.AbstractClient;
+import ocsf_Client.AbstractClient;
 
 public class AppsClient extends AbstractClient {
 
@@ -15,17 +15,12 @@ public class AppsClient extends AbstractClient {
 			+ "   2. To Edit a question - Enter '#2'\n" + "   3. To Exit the system - Enter '#Exit'\n"
 			+ "Enter input: ";
 
-	private int printShell = 0;
-	private static int beforeOrAfterChange = 0;
-	public static boolean questionNotFound = false;
+	private static AppsClient client = null;
 	
 	private static final Logger LOGGER = Logger.getLogger(AppsClient.class.getName());
-
-	private AppsCLI chatClientCLI;
-
+	
 	public AppsClient(String host, int port) {
 		super(host, port);
-		this.chatClientCLI = new AppsCLI(this);
 	}
 
 	@Override
@@ -33,17 +28,18 @@ public class AppsClient extends AbstractClient {
 		// TODO Auto-generated method stub
 		super.connectionEstablished();
 		LOGGER.info("Connected to server.");
-
-		try {
-			chatClientCLI.loop();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
+	public static AppsClient getClient() {
+		if (client == null) {
+			client = new AppsClient("localhost", 3000);
+		}
+		return client;
+	}
+	
 	@Override
 	protected void handleMessageFromServer(Object msg) {
-		String questionID;
+		/*String questionID;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 		if (msg.getClass() == ArrayList.class) {
@@ -54,8 +50,7 @@ public class AppsClient extends AbstractClient {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-			}
-			
+			}	
 		}
 
 		if (msg.getClass() == String.class) {
@@ -89,7 +84,7 @@ public class AppsClient extends AbstractClient {
 				beforeOrAfterChange = 0;
 				System.out.print(SHELL_STRING);
 			}
-		}
+		}*/
 	}
 
 	public static void showAll(ArrayList<Question> questions) {
@@ -103,16 +98,5 @@ public class AppsClient extends AbstractClient {
 			System.out.println("And the right answer is: " + questions.get(i).getRightAnswer());
 			System.out.println();
 		}
-	}
-
-	public static void setBeforeOrAfterChange() 
-	{
-		beforeOrAfterChange = 0;
-	}
-	@Override
-	protected void connectionClosed() {
-		// TODO Auto-generated method stub
-		super.connectionClosed();
-		chatClientCLI.closeConnection();
 	}
 }
