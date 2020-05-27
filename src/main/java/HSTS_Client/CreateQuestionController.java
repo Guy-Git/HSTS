@@ -3,6 +3,7 @@ package HSTS_Client;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -130,8 +131,12 @@ public class CreateQuestionController {
 			question = new Question(contentText.getText(), answers, rightAnswer, courseText.getText(),
 					Integer.parseInt(subjectText.getText()));
 
+			Message msg = new Message();
+			msg.setQuestion(question);
+			msg.setAction("Create Question");
+			
 			try {
-				AppsClient.getClient().sendToServer(question);
+				AppsClient.getClient().sendToServer(msg);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
