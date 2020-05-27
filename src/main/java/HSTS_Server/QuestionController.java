@@ -25,6 +25,7 @@ public class QuestionController
 			session.beginTransaction();
 
 			session.save(question);
+			session.flush();
 			
 			session.getTransaction().commit(); // Save everything.
 		} catch (Exception exception) {

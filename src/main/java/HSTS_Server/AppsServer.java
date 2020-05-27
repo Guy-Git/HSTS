@@ -16,7 +16,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import HSTS_Entities.Message;
 import HSTS_Entities.Question;
+import HSTS_Entities.HstsUser;
 import ocsf_Server.AbstractServer;
 import ocsf_Server.ConnectionToClient;
 
@@ -39,7 +41,8 @@ public class AppsServer extends AbstractServer {
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
-		QuestionController.addQuestion((Question) msg);
+		if(((Message)msg).getAction().equals("Create Question"))
+			QuestionController.addQuestion(((Message)msg).getQuestion());
 		
 		/*System.out.println("Received Message: " + msg.toString());
 
@@ -266,77 +269,25 @@ public class AppsServer extends AbstractServer {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
 		configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(HstsUser.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
 
-	public static void addQuestionsToDB() {
+	public static void addUsersToDB() {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
-			ArrayList<Question> allQuestion = new ArrayList<Question>();
-
-			// Question 1:
-			ArrayList<String> answers = new ArrayList<String>();
-			answers.add("1. My name is yacov");
-			answers.add("2. My name is Arneiu");
-			answers.add("3. My name is shmulek");
-			answers.add("4. My name is opal");
-
-			allQuestion.add(new Question("What's your name?", answers, 2, "Assi&Guri", 56));
-			session.save(allQuestion.get(0));
-
-			// Question 2:
-			ArrayList<String> answers1 = new ArrayList<String>();
-			answers1.add("1. 4");
-			answers1.add("2. 6");
-			answers1.add("3. 7");
-			answers1.add("4. 2222");
-
-			allQuestion.add(new Question("2 + 2 =", answers1, 1, "Math", 2));
-			session.save(allQuestion.get(1));
-
-			// Question 3:
-			ArrayList<String> answers2 = new ArrayList<String>();
-			answers2.add("1. 5");
-			answers2.add("2. 78");
-			answers2.add("3. 4");
-			answers2.add("4. 2222");
-
-			allQuestion.add(new Question("2 x 2 =", answers2, 3, "Math", 2));
-			session.save(allQuestion.get(2));
-
-			// Question 4:
-			ArrayList<String> answers3 = new ArrayList<String>();
-			answers3.add("1. Java");
-			answers3.add("2. C (YAK)");
-			answers3.add("3. C++");
-			answers3.add("4. Python");
-
-			allQuestion.add(new Question("What is the current best programming language?", answers3, 1, "CS", 10));
-			session.save(allQuestion.get(3));
-
-			// Question 5:
-			ArrayList<String> answers4 = new ArrayList<String>();
-			answers4.add("1. A cat scratched her (She's a cat lady)");
-			answers4.add("2. She hitpatzla to 3");
-			answers4.add("3. She was hit by a bus");
-			answers4.add("4. She hitpatzla to 2");
-
-			allQuestion.add(new Question("What happend to the zkena?", answers4, 4, "Assi&Guri", 56));
-			session.save(allQuestion.get(4));
-
-			// Question 6:
-			ArrayList<String> answers5 = new ArrayList<String>();
-			answers5.add("1. Jerusalem");
-			answers5.add("2. Haifa");
-			answers5.add("3. Tel-Aviv");
-			answers5.add("4. Rishon");
-
-			allQuestion.add(new Question("What's the capital of Israel?", answers5, 1, "Geography", 76));
-			session.save(allQuestion.get(5));
+			HstsUser user = new HstsUser("1111", "123456", 1);
+			session.save(user);
+			HstsUser user1 = new HstsUser("2222", "1234", 1);
+			session.save(user1);
+			HstsUser user2 = new HstsUser("3333", "1234A", 2);
+			session.save(user2);
+			HstsUser user3 = new HstsUser("4444", "123ABC", 3);
+			session.save(user3);
 
 			session.flush();
 
@@ -361,7 +312,7 @@ public class AppsServer extends AbstractServer {
 			server.listen();
 		}
 
-		addQuestionsToDB();
+		addUsersToDB();
 
 	}
 
