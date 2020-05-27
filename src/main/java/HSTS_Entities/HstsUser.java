@@ -25,7 +25,14 @@ public class HstsUser implements Serializable {
 		this.userPassword = userPassword;
 		this.userType = userType;
 	}
-
+	
+	public HstsUser(String userId, String userPassword) {
+		super();
+		this.userId = userId;
+		this.userPassword = userPassword;
+		this.userType = 0;
+	}
+	
 	public String getUserId() {
 		return userId;
 	}
