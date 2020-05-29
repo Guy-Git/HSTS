@@ -18,14 +18,12 @@ import org.hibernate.service.ServiceRegistry;
 
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
+import HSTS_Entities.Exam;
 import HSTS_Entities.HstsUser;
 import ocsf_Server.AbstractServer;
 import ocsf_Server.ConnectionToClient;
 
 public class AppsServer extends AbstractServer {
-
-	// out = new PrintWriter(socket.getOutputStream());
-	// in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 	private static Session session;
 	private Question chosenQuestion;
@@ -33,16 +31,40 @@ public class AppsServer extends AbstractServer {
 	private int changeType;
 	private int answerNum;
 	static SessionFactory sessionFactory = getSessionFactory();
+	private QuestionController questionController;
+	private UserController userController;
+	Message serverMsg;
 
 	public AppsServer(int port) {
 		super(port);
+		questionController = new QuestionController();
+		userController = new UserController();
 	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
+		serverMsg = new Message();
+		
 		if(((Message)msg).getAction().equals("Create Question"))
-			QuestionController.addQuestion(((Message)msg).getQuestion());
+		{
+			questionController.addQuestion(((Message)msg).getQuestion());
+		}
+		
+		if(((Message)msg).getAction().equals("Get Teachers Subjects and couerses"))
+		{
+			serverMsg.setAction("Got subjects and courses");
+			serverMsg.setSubjects(userController.getSubsAndCourses(((Message)msg).getUser()).getSubjects());
+			serverMsg.setCourses(userController.getSubsAndCourses(((Message)msg).getUser()).getCourses());
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 		
 		/*System.out.println("Received Message: " + msg.toString());
 
@@ -270,6 +292,7 @@ public class AppsServer extends AbstractServer {
 		// Add ALL of your entities here. You can also try adding a whole package
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(HstsUser.class);
+		configuration.addAnnotatedClass(Exam.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
@@ -280,15 +303,26 @@ public class AppsServer extends AbstractServer {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
-			HstsUser user = new HstsUser("1111", "123456", 1);
-			session.save(user);
-			HstsUser user1 = new HstsUser("2222", "1234", 1);
-			session.save(user1);
-			HstsUser user2 = new HstsUser("3333", "1234A", 2);
-			session.save(user2);
-			HstsUser user3 = new HstsUser("4444", "123ABC", 3);
-			session.save(user3);
-
+			HstsUser student1 = new HstsUser("1111", "123456", 1, null, null);
+			session.save(student1);
+			session.flush();
+			HstsUser student2 = new HstsUser("2222", "1234", 1, null, null);
+			session.save(student2);
+			session.flush();
+			
+			ArrayList<Integer> subjects = new ArrayList<Integer>();
+			subjects.add(10);
+			subjects.add(43);
+			
+			ArrayList<String> courses = new ArrayList<String>();
+			courses.add("Hedva");
+			courses.add("CS Intro");
+			
+			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses);
+			session.save(teacher1);
+			session.flush();
+			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null);
+			session.save(principal);
 			session.flush();
 
 			session.getTransaction().commit(); // Save everything.

@@ -11,8 +11,8 @@ public class Message implements Serializable
 	HstsUser user;
 	
 	ArrayList<Exam> exams; //For report
-
-	
+	ArrayList<Integer> subjects; //For report
+	ArrayList<String> courses; //For report
 	
 	public Message() {
 		super();
@@ -58,4 +58,22 @@ public class Message implements Serializable
 	public void setExams(ArrayList<Exam> exams) {
 		this.exams = exams;
 	}
+
+	public ArrayList<Integer> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(ArrayList<Integer> subjects) {
+		this.subjects = subjects;
+	}
+
+	public ArrayList<String> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(ArrayList<String> courses) {
+		this.courses = courses;
+	}
+	
+	
 }
