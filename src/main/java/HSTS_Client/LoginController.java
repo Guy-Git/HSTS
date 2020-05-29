@@ -24,7 +24,7 @@ public class LoginController {
     @FXML
 	void onClick(ActionEvent event) {
 		
-	HstsUser user= new HstsUser(username_text.getText(), password_text.getText());
+	HstsUser user= new HstsUser(username_text.getText(), password_text.getText(), 0, null, null);
 	
 	Message msg = new Message();
 	msg.setUser(user);

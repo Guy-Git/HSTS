@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="HSTS_Client.MainPageController">
+   <children>
+      <AnchorPane prefHeight="520.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="create_question_btn" layoutX="245.0" layoutY="187.0" mnemonicParsing="false" onAction="#onClick" text="Create a question" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

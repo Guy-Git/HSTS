@@ -6,18 +6,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 import ocsf_Client.AbstractClient;
 
 public class AppsClient extends AbstractClient {
 
-	private static final String SHELL_STRING = "Choose action number: \n" + "   1. To Show all questions - Enter '#1'\n"
-			+ "   2. To Edit a question - Enter '#2'\n" + "   3. To Exit the system - Enter '#Exit'\n"
-			+ "Enter input: ";
-
 	private static AppsClient client = null;
-	
 	private static final Logger LOGGER = Logger.getLogger(AppsClient.class.getName());
+	private Message clientMessage;
 	
 	public AppsClient(String host, int port) {
 		super(host, port);
@@ -30,15 +27,33 @@ public class AppsClient extends AbstractClient {
 		LOGGER.info("Connected to server.");
 	}
 
-	public static AppsClient getClient() {
+	public static AppsClient getClient() 
+	{
 		if (client == null) {
 			client = new AppsClient("localhost", 3000);
 		}
 		return client;
 	}
 	
+	public void setSubsAndCourses(Message msg)
+	{
+		clientMessage = msg;
+	}
+	
+	public Message getSubsAndCourses()
+	{
+		return clientMessage;
+	}
+	
 	@Override
-	protected void handleMessageFromServer(Object msg) {
+	protected void handleMessageFromServer(Object msg) 
+	{
+		
+		if(((Message)msg).getAction().equals("Got subjects and courses"))
+			setSubsAndCourses((Message)msg);
+		
+			
+		//if(((Message)msg).getAction().equals(""))
 		/*String questionID;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
