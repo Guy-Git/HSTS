@@ -175,7 +175,7 @@ public class AppsServer extends AbstractServer {
 		}
 	}
 
-	public void findQuestion(String questionID, ConnectionToClient client) {
+/*	public void findQuestion(String questionID, ConnectionToClient client) {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -217,7 +217,7 @@ public class AppsServer extends AbstractServer {
 			session.close();
 		}
 	}
-
+*/
 	public void editQuestion(String theActualChange, int changeType, ConnectionToClient client) {
 		try {
 			session = sessionFactory.openSession();
