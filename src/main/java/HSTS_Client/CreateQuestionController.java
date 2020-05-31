@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -67,6 +68,9 @@ public class CreateQuestionController implements Initializable {
 
 	@FXML
 	private Button saveBtn;
+	
+    @FXML
+    private Button clearBtn;
 
 	@FXML
 	private ChoiceBox<Integer> chooseSubject;
@@ -75,8 +79,10 @@ public class CreateQuestionController implements Initializable {
 	private ChoiceBox<String> chooseCourse;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
+	public void initialize(URL location, ResourceBundle resources) 
+	{
+		Scene scene = saveBtn.getScene();
+		
 		Message msg = new Message();
 		HstsUser user = new HstsUser();
 		user.setUserId("3333");
@@ -95,7 +101,9 @@ public class CreateQuestionController implements Initializable {
 			Message recieved = AppsClient.getClient().getSubsAndCourses();
 			subjects = recieved.getSubjects();
 			courses = recieved.getCourses();
-
+			subjects.add(0, null);
+			courses.add(0, "");
+			
 			ObservableList<Integer> setToSubjects = FXCollections.observableArrayList(subjects);
 			ObservableList<String> setToCourse = FXCollections.observableArrayList(courses);
 
@@ -105,20 +113,20 @@ public class CreateQuestionController implements Initializable {
 	}
 
 	@FXML
-	void onClick(ActionEvent event) {
+	void save(ActionEvent event) {
 		ArrayList<String> answers = new ArrayList<String>();
 		Question question;
 		int rightAnswer = 0;
 		boolean badInput = false;
 
-		if (chooseSubject.getSelectionModel().isEmpty()) {
+		if (chooseSubject.getSelectionModel().getSelectedItem() == null || chooseSubject.getSelectionModel().isEmpty()) {
 			chooseSubject.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
 			chooseSubject.setStyle("-fx-background-color: #00bfff");
 		}
 
-		if (chooseCourse.getSelectionModel().isEmpty()) {
+		if (chooseCourse.getSelectionModel().getSelectedItem().equals("") || chooseCourse.getSelectionModel().isEmpty()) {
 			chooseCourse.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
@@ -195,5 +203,18 @@ public class CreateQuestionController implements Initializable {
 			// alert.setContentText("The fields marked red must be filled");
 			alert.show();
 		}
+	}
+	
+	@FXML
+	void clear(ActionEvent event) 
+	{
+		contentText.setText("");
+		answer1Text.setText("");
+		answer2Text.setText("");
+		answer3Text.setText("");
+		answer4Text.setText("");
+		right_answer.selectToggle(rightAnswer1);
+		chooseSubject.setValue(null);
+		chooseCourse.setValue("");
 	}
 }

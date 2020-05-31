@@ -19,7 +19,7 @@ public class AppsGUI extends Application {
 		client = AppsClient.getClient();
 		client.openConnection();
 		
-		Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/MainPage.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/MainMenu.fxml"));
 		stage.setTitle("High School Test System");
 		scene = new Scene(root);
 		stage.setScene(scene);
