@@ -51,11 +51,17 @@ public class AppsServer extends AbstractServer {
 			questionController.addQuestion(((Message)msg).getQuestion());
 		}
 		
-		if(((Message)msg).getAction().equals("Get Teachers Subjects and couerses"))
-		{
-			serverMsg.setAction("Got subjects and courses");
-			serverMsg.setSubjects(userController.getSubsAndCourses(((Message)msg).getUser()).getSubjects());
-			serverMsg.setCourses(userController.getSubsAndCourses(((Message)msg).getUser()).getCourses());
+		if(((Message)msg).getAction().equals("Login"))
+		{	
+			HstsUser identifiedUser = userController.identification(((Message)msg).getUser());
+			if(identifiedUser == null)
+				serverMsg.setAction("Identification failed");
+			else 
+			{
+				serverMsg.setAction("Identification succeed");
+				serverMsg.setUser(identifiedUser);
+			}
+			
 			try {
 				client.sendToClient(serverMsg);
 			} catch (IOException e) {
@@ -64,94 +70,9 @@ public class AppsServer extends AbstractServer {
 			}
 		}
 		
-		
-		
-		/*System.out.println("Received Message: " + msg.toString());
-
-		if (msg.toString().equals("#ShowAll")) {
-			showAll(client);
-		}
-		
-		else {
-			if (msg.toString().startsWith("#2")) {
-				findQuestion(msg.toString().substring(3, 8), client);
-			}
-
-			else if (msg.toString().startsWith("#CQ")) {
-				msg = "Enter changes for question: ";
-				changeType = 1;
-				try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			else if (msg.toString().startsWith("#CA")) {
-				System.out.print(msg.toString().charAt(msg.toString().length() - 1));
-
-				answerNum = Character.getNumericValue(msg.toString().charAt(msg.toString().length() - 1));
-				msg = "Enter the changes for the chosen answer: ";
-				changeType = 2;
-				try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			else if (msg.toString().startsWith("#CRA")) {
-				msg = "Enter the new right answer number: ";
-				changeType = 3;
-				try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			else {
-				if (!msg.toString().contains("#M")) {
-					editQuestion(msg.toString(), changeType, client);
-					try {
-						session = sessionFactory.openSession();
-						session.beginTransaction();
-
-						List<Question> questions = getAll(Question.class);
-						// System.out.println("KAKI");
-
-						for (Question question : questions) { // Change to a better type of search!!!!!!!
-							if (question.getQuestionID().equals(chosenQuestion.getQuestionID()))
-								chosenQuestion = question;
-						}
-
-						msg = chosenQuestion;
-						try {
-							client.sendToClient(msg);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						session.getTransaction().commit(); // Save everything.
-					} catch (Exception exception) {
-						if (session != null) {
-							session.getTransaction().rollback();
-						}
-						System.err.println("An error occured, changes have been rolled back.");
-						exception.printStackTrace();
-					} finally {
-						session.close();
-					}
-				}
-			}
-		}*/
 	}
 
-	public void showAll(ConnectionToClient client) {
+	/*public void showAll(ConnectionToClient client) {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -217,7 +138,7 @@ public class AppsServer extends AbstractServer {
 			session.close();
 		}
 	}
-*/
+	
 	public void editQuestion(String theActualChange, int changeType, ConnectionToClient client) {
 		try {
 			session = sessionFactory.openSession();
@@ -247,10 +168,10 @@ public class AppsServer extends AbstractServer {
 
 			// System.out.println(chosenQuestion.toString());
 
-			/*
-			 * try { client.sendToClient(chosenQuestion); } catch (IOException e) { // TODO
-			 * Auto-generated catch block e.printStackTrace(); }
-			 */
+			
+			  try { client.sendToClient(chosenQuestion); } catch (IOException e) { // TODO
+			  Auto-generated catch block e.printStackTrace(); }
+			 
 
 		} catch (Exception exception) {
 			if (session != null) {
@@ -261,7 +182,7 @@ public class AppsServer extends AbstractServer {
 		} finally {
 			session.close();
 		}
-	}
+	}*/
 
 	public static <T> List<T> getAll(Class<T> object) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -306,6 +227,7 @@ public class AppsServer extends AbstractServer {
 			HstsUser student1 = new HstsUser("1111", "123456", 1, null, null);
 			session.save(student1);
 			session.flush();
+			
 			HstsUser student2 = new HstsUser("2222", "1234", 1, null, null);
 			session.save(student2);
 			session.flush();
@@ -321,6 +243,7 @@ public class AppsServer extends AbstractServer {
 			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses);
 			session.save(teacher1);
 			session.flush();
+			
 			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null);
 			session.save(principal);
 			session.flush();

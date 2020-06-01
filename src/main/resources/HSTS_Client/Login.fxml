@@ -6,17 +6,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="HSTS_Client.LoginController">
+<AnchorPane prefHeight="560.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.LoginController">
    <children>
-      <AnchorPane prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <Text layoutX="90.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" wrappingWidth="66.13671803474426" />
-            <TextField fx:id="username_text" layoutX="156.0" layoutY="131.0" />
-            <Text layoutX="90.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
-            <Button fx:id="login_btn" layoutX="279.0" layoutY="279.0" mnemonicParsing="false" onAction="#onClick" text="login" />
-            <PasswordField fx:id="password_text" layoutX="156.0" layoutY="194.0" />
-         </children>
-      </AnchorPane>
+      <Text layoutX="181.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" wrappingWidth="19.470031023025513" />
+      <TextField fx:id="username_text" layoutX="236.0" layoutY="188.0" />
+      <Text layoutX="165.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
+      <Button fx:id="login_btn" layoutX="271.0" layoutY="309.0" mnemonicParsing="false" onAction="#onClick" prefHeight="32.0" prefWidth="60.0" text="Login" />
+      <PasswordField fx:id="password_text" layoutX="236.0" layoutY="249.0" />
    </children>
 </AnchorPane>

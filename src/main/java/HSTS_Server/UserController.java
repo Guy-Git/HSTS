@@ -15,46 +15,71 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import HSTS_Entities.HstsUser;
-import HSTS_Entities.Message;
-import HSTS_Entities.Question;
 
-public class UserController 
-{
+public class UserController {
 	static SessionFactory sessionFactory = getSessionFactory();
 	private static Session session;
-	
-	public HstsUser getSubsAndCourses(HstsUser user)
-	{
-		HstsUser foundUser = new HstsUser();
-		
+
+	public HstsUser getSubsAndCourses(HstsUser user) {
+		HstsUser foundUser = null;
+
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			
-			List<HstsUser> users = getAll(HstsUser.class);
 
-			for (HstsUser findUser : users) 
-			{ // Change to a better type of search!!!!!!!
-				if (findUser.getUserId().equals(user.getUserId()))
-				{
-					foundUser = findUser;
-				}
-			}
-			
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
+			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userId"), user.getUserId()));
+			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
+			foundUser = query.getResultList().get(0);
+
+//			Criteria crit = session.createCriteria(HstsUser.class);
+//			crit.add(Restrictions.eq("userId", user.getUserId()));
+//			foundUser = crit.list();
+
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 			System.err.println("An error occured, changes have been rolled back.");
 			exception.printStackTrace();
-		}
-		finally {
+		} finally {
 			session.close();
 		}
 		return foundUser;
-		
+
 	}
-	
+
+	public HstsUser identification(HstsUser user) {
+		HstsUser foundUser = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
+			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("userId"), user.getUserId()), 
+					builder.equal(rootEntry.get("userPassword"), user.getUserPassword()));
+			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
+			foundUser = query.getResultList().get(0);
+
+			System.out.println(foundUser.getUserId());
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return foundUser;
+	}
+
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
@@ -62,16 +87,6 @@ public class UserController
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
-		}
-	
-	public static <T> List<T> getAll(Class<T> object) {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<T> criteriaQuery = builder.createQuery(object);
-		Root<T> rootEntry = criteriaQuery.from(object);
-		CriteriaQuery<T> allCriteriaQuery = criteriaQuery.select(rootEntry);
-
-		TypedQuery<T> allQuery = session.createQuery(allCriteriaQuery);
-		return allQuery.getResultList();
 	}
-	
+
 }
