@@ -97,6 +97,11 @@ public class ConnectionToClient extends Thread
    */
   private HashMap savedInfo = new HashMap(10);
 
+/**
+  * Stream used to write to the client.
+  */
+  private ObjectOutputStream output;
+
 
 // CONSTRUCTORS *****************************************************
 

@@ -2,23 +2,33 @@ package HSTS_Entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+import java.util.List;
+import HSTS_Entities.Exam;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Type;
+
 
 @Entity
 @Table(name = "questions")
 public class Question implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "QUESTION_ID")
 	private long id;
+	
+	@ManyToMany(
+			mappedBy = "questions",
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			targetEntity = Exam.class)
+	private List<Exam> exams;
 	
 	private String questionContent;
 	private ArrayList<String> answer;
@@ -44,6 +54,7 @@ public class Question implements Serializable {
 		this.rightAnswer = rightAnswer;
 		this.course = course;
 		this.subject = newSubject;
+		setExams(exams);
 		
 		subjectCounter[subject]++;
 		if (subject < 10) {
@@ -59,6 +70,18 @@ public class Question implements Serializable {
 			questionID = questionID + subjectCounter[subject];
 		}
 		
+	}
+
+	
+	public List<Exam> getExams() {
+		return exams;
+	}
+
+	public void setExams(List<Exam> exams) {
+		this.exams = exams;
+		for(Exam exam : exams) {
+			exam.getQuestions().add(this);
+		}
 	}
 
 	public String getQuestionID() {
