@@ -3,12 +3,11 @@ package HSTS_Entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -36,7 +35,8 @@ public class Exam implements Serializable
 	private ArrayList<Integer> questionGrade;
 	
 	public Exam(ArrayList<Question> questions, String notes, String teacherName, int time,
-			ArrayList<Integer> questionGrade) {
+			ArrayList<Integer> questionGrade) 
+
 		super();
 		this.questions = new ArrayList<Question>();
 		this.notes = notes;
@@ -44,6 +44,7 @@ public class Exam implements Serializable
 		this.time = time;
 		this.questionGrade = questionGrade;
 	}
+  
 	public List<Question> getQuestions() {
 		return questions;
 	}
@@ -60,6 +61,7 @@ public class Exam implements Serializable
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+
 	public String getTeacherName() {
 		return teacherName;
 	}
@@ -78,6 +80,4 @@ public class Exam implements Serializable
 	public void setQuestionGrade(ArrayList<Integer> questionGrade) {
 		this.questionGrade = questionGrade;
 	}
-	
-	
 }
