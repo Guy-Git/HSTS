@@ -10,8 +10,6 @@ import javafx.stage.Stage;
 
 public class AppsGUI extends Application {
 	private AppsClient client;
-	private boolean isRunning;
-	private Thread loopThread;
 	private static Scene scene;
 
 	@Override
@@ -19,7 +17,7 @@ public class AppsGUI extends Application {
 		client = AppsClient.getClient();
 		client.openConnection();
 		
-		Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/MainMenu.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
 		stage.setTitle("High School Test System");
 		scene = new Scene(root);
 		stage.setScene(scene);

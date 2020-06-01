@@ -1,10 +1,9 @@
 package HSTS_Client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import org.greenrobot.eventbus.EventBus;
 
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
@@ -35,22 +34,14 @@ public class AppsClient extends AbstractClient {
 		return client;
 	}
 	
-	public void setSubsAndCourses(Message msg)
-	{
-		clientMessage = msg;
-	}
-	
-	public Message getSubsAndCourses()
-	{
-		return clientMessage;
-	}
 	
 	@Override
 	protected void handleMessageFromServer(Object msg) 
-	{
-		
-		if(((Message)msg).getAction().equals("Got subjects and courses"))
-			setSubsAndCourses((Message)msg);
+	{	
+		if(((Message)msg).getAction().contains("Identification"))
+		{
+			EventBus.getDefault().post(((Message)msg));
+		}
 		
 			
 		//if(((Message)msg).getAction().equals(""))

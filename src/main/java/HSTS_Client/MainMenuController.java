@@ -33,7 +33,6 @@ public class MainMenuController {
 		if (event.getSource() == create_question_btn) 
 		{
 			Stage stage = (Stage) create_question_btn.getScene().getWindow();
-
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateQuestion.fxml"));
 				stage.setTitle("High School Test System");

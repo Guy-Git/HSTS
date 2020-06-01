@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -44,5 +45,18 @@
             <Font size="14.0" />
          </font>
       </Button>
+      <AnchorPane layoutX="5.0" prefWidth="620.0">
+         <children>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <Button fx:id="create_question_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create a question" />
+                  <Button fx:id="create_exam_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create an exam" />
+                  <Button fx:id="exam_execution_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Exam execution" />
+                  <Button fx:id="watch_reports_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Watch reports" />
+                  <Button fx:id="about_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="About" />
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
