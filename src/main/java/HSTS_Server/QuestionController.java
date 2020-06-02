@@ -10,6 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import HSTS_Entities.Exam;
 import HSTS_Entities.Question;
 import ocsf_Server.ConnectionToClient;
 
@@ -43,6 +44,7 @@ public class QuestionController
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
 		configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(Exam.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);

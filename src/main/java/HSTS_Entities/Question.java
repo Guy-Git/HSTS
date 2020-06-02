@@ -14,14 +14,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-
-
 @Entity
 @Table(name = "questions")
 public class Question implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "QUESTION_ID")
+	@Column(name = "questions_id")
 	private long id;
 	
 	@ManyToMany(
@@ -54,7 +52,6 @@ public class Question implements Serializable {
 		this.rightAnswer = rightAnswer;
 		this.course = course;
 		this.subject = newSubject;
-		setExams(exams);
 		
 		subjectCounter[subject]++;
 		if (subject < 10) {
@@ -72,7 +69,6 @@ public class Question implements Serializable {
 		
 	}
 
-	
 	public List<Exam> getExams() {
 		return exams;
 	}

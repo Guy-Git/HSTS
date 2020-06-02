@@ -7,13 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CascadeType;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "exams")
@@ -21,12 +19,13 @@ public class Exam implements Serializable
 {	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column (name = "exams_id")
 	private long id;
 	
-	@ManyToMany ( 
-		cascade = {javax.persistence.CascadeType.PERSIST, javax.persistence.CascadeType.MERGE},
-		targetEntity = Question.class)
-	@JoinTable(name="exams_questions", joinColumns = @JoinColumn(name="exam_id"),inverseJoinColumns = @JoinColumn(name="question_id"))
+	@ManyToMany(
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			targetEntity = Question.class)
+	@JoinTable(name = "exams_questions", joinColumns = @JoinColumn(name = "exams_id"), inverseJoinColumns = @JoinColumn(name = "questions_id"))
 	private List<Question> questions;
 	
 	private String notes;
@@ -34,9 +33,13 @@ public class Exam implements Serializable
 	private int time;
 	private ArrayList<Integer> questionGrade;
 	
-	public Exam(ArrayList<Question> questions, String notes, String teacherName, int time,
-			ArrayList<Integer> questionGrade) 
+	public Exam() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
+	public Exam(ArrayList<Question> questions, String notes, String teacherName, int time, ArrayList<Integer> questionGrade) 
+	{
 		super();
 		this.questions = new ArrayList<Question>();
 		this.notes = notes;
@@ -79,5 +82,6 @@ public class Exam implements Serializable
 	}
 	public void setQuestionGrade(ArrayList<Integer> questionGrade) {
 		this.questionGrade = questionGrade;
+		
 	}
 }

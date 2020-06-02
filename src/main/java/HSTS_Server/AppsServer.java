@@ -268,7 +268,6 @@ public class AppsServer extends AbstractServer {
 			AppsServer server = new AppsServer(Integer.parseInt(args[0]));
 			server.listen();
 		}
-
 		addUsersToDB();
 
 	}
