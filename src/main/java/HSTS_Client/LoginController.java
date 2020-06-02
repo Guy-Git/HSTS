@@ -74,7 +74,7 @@ public class LoginController implements Initializable {
 			{
 				Stage stage = (Stage) login_btn.getScene().getWindow();
 				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateQuestion.fxml"));
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateExam.fxml"));
 					stage.setTitle("High School Test System");
 					Scene scene = new Scene(root);
 					stage.setScene(scene);

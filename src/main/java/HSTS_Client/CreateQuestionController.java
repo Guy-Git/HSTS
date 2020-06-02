@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.management.loading.PrivateMLet;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import HSTS_Entities.HstsUser;
@@ -32,9 +30,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.ChoiceBox;
 
 public class CreateQuestionController implements Initializable {
-
-	@FXML
-	private AnchorPane menu_pane;
 
 	@FXML
 	private TextArea contentText;
@@ -118,7 +113,23 @@ public class CreateQuestionController implements Initializable {
 			}
 		}
 
-//			if (event.getSource() == create_exam_btn) 
+		if (event.getSource() == create_exam_btn) 
+		{
+			Stage stage = (Stage) create_exam_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateExam.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 //			if (event.getSource() == exam_execution_btn) 
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
@@ -221,7 +232,7 @@ public class CreateQuestionController implements Initializable {
 	}
 
 	@FXML
-	void clear(ActionEvent event) {
+    void clear(ActionEvent event) {
 		contentText.setText("");
 		answer1Text.setText("");
 		answer2Text.setText("");
@@ -230,7 +241,7 @@ public class CreateQuestionController implements Initializable {
 		right_answer.selectToggle(rightAnswer1);
 		chooseSubject.setValue(null);
 		chooseCourse.setValue("");
-	}
+    }
 
 	@Subscribe
 	public void onUserEvent(HstsUser user) {
