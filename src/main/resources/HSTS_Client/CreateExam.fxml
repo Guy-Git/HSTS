@@ -16,36 +16,36 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="560.0" prefWidth="620.0">
                <children>
-                  <AnchorPane prefWidth="620.0">
-                     <children>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                           <children>
-                              <Button fx:id="create_question_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create a question" />
-                              <Button fx:id="create_exam_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create an exam" />
-                              <Button fx:id="exam_execution_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Exam execution" />
-                              <Button fx:id="watch_reports_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Watch reports" />
-                              <Button fx:id="about_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="About" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </AnchorPane>
                   <Text layoutX="325.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter course:" />
                   <ChoiceBox fx:id="chooseSubject" cache="true" layoutX="143.0" layoutY="58.0" prefWidth="150.0" />
                   <ChoiceBox fx:id="chooseCourse" layoutX="413.0" layoutY="58.0" prefWidth="150.0" />
                   <Text layoutX="57.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter subject:" />
                   <Button fx:id="save_btn" layoutX="256.0" layoutY="504.0" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="90.0" text="Save Exam" />
-                  <GridPane layoutX="7.0" layoutY="152.0" prefHeight="338.0" prefWidth="593.0">
+                  <Button fx:id="show_question_btn" layoutX="260.0" layoutY="111.0" mnemonicParsing="false" onAction="#showQuestions" text="Show Questions" />
+                  <GridPane fx:id="questions_grid" layoutX="86.0" layoutY="172.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-                  <Button fx:id="show_question_btn" layoutX="260.0" layoutY="111.0" mnemonicParsing="false" onAction="#showQuestions" text="Show Questions" />
                </children>
             </AnchorPane>
         </content>
       </ScrollPane>
+      <AnchorPane prefWidth="620.0">
+         <children>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <Button fx:id="create_question_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create a question" />
+                  <Button fx:id="create_exam_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create an exam" />
+                  <Button fx:id="exam_execution_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Exam execution" />
+                  <Button fx:id="watch_reports_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Watch reports" />
+                  <Button fx:id="about_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="About" />
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

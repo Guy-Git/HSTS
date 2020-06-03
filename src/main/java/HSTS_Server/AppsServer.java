@@ -45,7 +45,19 @@ public class AppsServer extends AbstractServer {
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
 		serverMsg = new Message();
-		
+		if(((Message)msg).getAction().equals("Show Questions"))
+		{
+			serverMsg.setQuestions(questionController.getQuestions((Message)msg));
+			serverMsg.setAction("Show Questions");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
 		if(((Message)msg).getAction().equals("Create Question"))
 		{
 			questionController.addQuestion(((Message)msg).getQuestion());
