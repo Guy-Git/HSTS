@@ -179,7 +179,7 @@ public class CreateExamController implements Initializable {
 				//questions_grid.set
 				questions_grid.setPadding(new Insets(10));
 				questionBox.setStyle("-fx-background-color: #deb887");
-			    questions_grid.add(questionBox,i,0,1,1);
+			    questions_grid.add(questionBox,0,i,1,1);
 			
 			}
 		});
