@@ -20,19 +20,30 @@ public class HstsUser implements Serializable {
 	String userId;
 	String userPassword;
 	int userType; // 1.Student 2.Teacher 3.Principal
+	String fullName;
 	
 	ArrayList<Integer> subjects; //Teacher's
 	ArrayList<String> courses; //Teacher's
 	
 	public HstsUser() {}
 	
-	public HstsUser(String userId, String userPassword, int userType, ArrayList<Integer> subjects, ArrayList<String> courses) {
+	public HstsUser(String userId, String userPassword, int userType, ArrayList<Integer> subjects, ArrayList<String> courses, String fullName)
+	{
 		super();
 		this.userId = userId;
 		this.userPassword = userPassword;
 		this.userType = userType;
 		this.subjects = subjects;
 		this.courses = courses;
+		this.fullName = fullName;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getUserId() {
@@ -74,7 +85,5 @@ public class HstsUser implements Serializable {
 	public void setCourses(ArrayList<String> courses) {
 		this.courses = courses;
 	}
-	
-	
 	
 }

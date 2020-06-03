@@ -236,11 +236,11 @@ public class AppsServer extends AbstractServer {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
-			HstsUser student1 = new HstsUser("1111", "123456", 1, null, null);
+			HstsUser student1 = new HstsUser("1111", "123456", 1, null, null, "Opal");
 			session.save(student1);
 			session.flush();
 			
-			HstsUser student2 = new HstsUser("2222", "1234", 1, null, null);
+			HstsUser student2 = new HstsUser("2222", "1234", 1, null, null, "Guy");
 			session.save(student2);
 			session.flush();
 			
@@ -252,11 +252,11 @@ public class AppsServer extends AbstractServer {
 			courses.add("Hedva");
 			courses.add("CS Intro");
 			
-			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses);
+			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses, "Cheni");
 			session.save(teacher1);
 			session.flush();
 			
-			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null);
+			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null, "Malki");
 			session.save(principal);
 			session.flush();
 
