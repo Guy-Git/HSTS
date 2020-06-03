@@ -45,9 +45,9 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <AnchorPane layoutX="5.0" prefWidth="620.0">
+      <AnchorPane layoutX="15.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
          <children>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+            <HBox alignment="CENTER" layoutX="-7.0" layoutY="-1.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Button fx:id="create_question_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create a question" />
                   <Button fx:id="create_exam_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create an exam" />

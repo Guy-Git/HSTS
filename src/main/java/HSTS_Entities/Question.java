@@ -33,8 +33,6 @@ public class Question implements Serializable {
 	private int rightAnswer;
 	
 	private String course;
-	//private static int questionNumber = 0; //3 digits
-	//@Column (columnDefinition = "")
 	private int subject;
 	private String questionID;
 	
