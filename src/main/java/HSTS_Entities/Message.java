@@ -9,7 +9,11 @@ public class Message implements Serializable
 	Question question;
 	Exam exam;
 	HstsUser user;
+	String course;
+	int subject;
 	
+	ArrayList<Question> questions;
+
 	ArrayList<Exam> exams; //For report
 	ArrayList<Integer> subjects; //For report
 	ArrayList<String> courses; //For report
@@ -25,6 +29,30 @@ public class Message implements Serializable
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+	
+	public ArrayList<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(ArrayList<Question> questions) {
+		this.questions = questions;
+	}
+	
+	public String getCourse() {
+		return course;
+	}
+
+	public void setCourse(String course) {
+		this.course = course;
+	}
+
+	public int getSubject() {
+		return subject;
+	}
+
+	public void setSubject(int subject) {
+		this.subject = subject;
 	}
 
 	public Question getQuestion() {
