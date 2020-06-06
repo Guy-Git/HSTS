@@ -11,6 +11,7 @@ public class Message implements Serializable
 	HstsUser user;
 	String course;
 	String subject;
+	String execCode;
 	
 	ArrayList<Question> questions;
 
@@ -101,6 +102,14 @@ public class Message implements Serializable
 
 	public void setCourses(ArrayList<String> courses) {
 		this.courses = courses;
+	}
+
+	public String getExecCode() {
+		return execCode;
+	}
+
+	public void setExecCode(String execCode) {
+		this.execCode = execCode;
 	}
 	
 	
