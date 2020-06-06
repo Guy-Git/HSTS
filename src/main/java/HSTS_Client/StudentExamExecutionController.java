@@ -124,8 +124,10 @@ public class StudentExamExecutionController implements Initializable  {
 	
 	@FXML
 	void enterSubmit(ActionEvent event) {
+		
 		Message msg = new Message();
 		msg.setAction("Enter code");
+		msg.setExecCode(enterExamCode.getText());
 		
 		try {
 			AppsClient.getClient().sendToServer(msg);
