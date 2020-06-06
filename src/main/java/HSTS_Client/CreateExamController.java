@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import HSTS_Entities.Exam;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Question;
 import javafx.application.Platform;
@@ -22,11 +23,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -50,7 +52,7 @@ public class CreateExamController implements Initializable {
 	private Button about_btn;
 
 	@FXML
-	private ChoiceBox<Integer> chooseSubject;
+	private ChoiceBox<String> chooseSubject;
 
 	@FXML
 	private ChoiceBox<String> chooseCourse;
@@ -59,16 +61,38 @@ public class CreateExamController implements Initializable {
 	private Button save_btn;
 
 	@FXML
-	private GridPane questions_grid;
-
-	@FXML
 	private Button show_question_btn;
 
+	@FXML
+	private VBox show_questions;
+
+	@FXML
+	private TextArea instructions_text;
+
+	@FXML
+	private HBox instructions_box;
+
+	@FXML
+	private TextField time_text;
+
+	@FXML
+	private Text for_multi_line;
+
+	@FXML
+	private TextArea notes_text;
+
 	private HstsUser user;
+
+	private ArrayList<Question> questions;
+
+	private boolean newPage;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
+		for_multi_line.setText("Instructions for\nthe students:");
+		for_multi_line.setWrappingWidth(80);
+		newPage = true;
 	}
 
 	@FXML
@@ -113,7 +137,43 @@ public class CreateExamController implements Initializable {
 
 	@FXML
 	void save(ActionEvent event) {
+		ArrayList<Question> examQuestions = new ArrayList<Question>();
+		ArrayList<Integer> questionPoints = new ArrayList<Integer>();
 
+		for (int j = 2; j < show_questions.getChildren().size() - 2; j++) {
+			HBox chooseQuestion = (HBox) show_questions.getChildren().get(j);
+			VBox questionBox = (VBox) chooseQuestion.getChildren().get(1);
+			HBox gradesBox = (HBox) questionBox.getChildren().get(6);
+			String grade = ((TextField) gradesBox.getChildren().get(1)).getText();
+
+			if (((CheckBox) (((HBox) show_questions.getChildren().get(j)).getChildren().get(0))).isSelected()) {
+				examQuestions.add(questions.get(j - 2));
+				questionPoints.add(Integer.valueOf(grade));
+			}
+		}
+
+		Exam newExam = new Exam(examQuestions, instructions_text.getText(), notes_text.getText(), user.getFullName(),
+				Integer.valueOf(time_text.getText()), questionPoints, chooseSubject.getValue(),
+				chooseCourse.getValue());
+
+		ArrayList<Exam> exams = new ArrayList<Exam>();
+		exams.add(newExam);
+
+		for (Question question : examQuestions) {
+			question.setExams(exams);
+		}
+		newExam.setQuestions(examQuestions);
+
+		Message msgToServer = new Message();
+
+		msgToServer.setAction("Add Exam");
+		msgToServer.setExam(newExam);
+
+		try {
+			AppsClient.getClient().sendToServer(msgToServer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -134,54 +194,79 @@ public class CreateExamController implements Initializable {
 	}
 
 	@Subscribe
-	public void setQuestionsToPage(ArrayList<Question> questions) {
+	public void setQuestionsToPage(ArrayList<Question> questions) 
+	{
+		this.questions = questions;
+		EventBus.getDefault().clearCaches();
+
 		Platform.runLater(() -> {
+			
+			while(show_questions.getChildren().get(3).getClass() != Button.class)
+				show_questions.getChildren().remove(show_questions.getChildren().get(2));
+			
+			GridPane questionsGrid = new GridPane();
+			questionsGrid.setAlignment(Pos.CENTER);
+			show_questions.setVisible(true);
+			show_questions.setMargin(instructions_box, new Insets(0, 0, 10, 0));
+
 			for (int i = 0; i < questions.size(); i++) {
+
+				HBox chooseHB = new HBox();
+				chooseHB.setAlignment(Pos.CENTER);
+				CheckBox chooseQuestion = new CheckBox();
+				chooseHB.getChildren().add(chooseQuestion);
+
 				VBox questionBox = new VBox();
-				questionBox.setPrefWidth(620);
-				questionBox.setMinHeight(200);
-				Text questionContent = new Text(""+(i+1)+". "+questions.get(i).getQuestionContent());
-				Text answer1 = new Text("1. "+questions.get(i).getAnswer().get(0));
-				Text answer2 = new Text("2. "+questions.get(i).getAnswer().get(1));
-				Text answer3 = new Text("3. "+questions.get(i).getAnswer().get(2));
-				Text answer4 = new Text("4. "+questions.get(i).getAnswer().get(3));
-				Text rightAnswer = new Text("The right answer is: "+String.valueOf(questions.get(i).getRightAnswer()));
+				Text questionContent = new Text("" + (i + 1) + ". " + questions.get(i).getQuestionContent());
+				Text answer1 = new Text("1. " + questions.get(i).getAnswer().get(0));
+				Text answer2 = new Text("2. " + questions.get(i).getAnswer().get(1));
+				Text answer3 = new Text("3. " + questions.get(i).getAnswer().get(2));
+				Text answer4 = new Text("4. " + questions.get(i).getAnswer().get(3));
+				Text rightAnswer = new Text(
+						"The right answer is: " + String.valueOf(questions.get(i).getRightAnswer()));
 				Text gradeText = new Text("Add grade for chosen question: ");
-				TextField questionGrade = new TextField();
-				
+				TextField gradeTextField = new TextField();
+
 				questionBox.getChildren().add(questionContent);
 				questionBox.getChildren().add(answer1);
 				questionBox.getChildren().add(answer2);
 				questionBox.getChildren().add(answer3);
 				questionBox.getChildren().add(answer4);
 				questionBox.getChildren().add(rightAnswer);
-				questionBox.getChildren().add(questionGrade);
-				questionBox.getChildren().add(gradeText);
-				/*questionContent.setLayoutX(50);
-				answer1.setLayoutX(100);
-				answer1.setLayoutY(30);
-				answer2.setLayoutX(100);
-				answer2.setLayoutY(60);
-				answer3.setLayoutX(100);
-				answer3.setLayoutY(90);
-				answer4.setLayoutX(100);
-				answer4.setLayoutY(120);
-				rightAnswer.setLayoutX(200);
-				rightAnswer.setLayoutY(150);
-				gradeText.setLayoutX(50);
-				gradeText.setLayoutY(180);			
-				questionGrade.setLayoutX(200);
-				questionGrade.setLayoutY(180);*/
-				
-				questionBox.setSpacing(30);
-				
-				//answer1.setLayoutY(200);
-				//questions_grid.set
-				questions_grid.setPadding(new Insets(10));
-				questionBox.setStyle("-fx-background-color: #deb887");
-			    questions_grid.add(questionBox,0,i,1,1);
-			
+
+				HBox gradesHB = new HBox();
+				gradeTextField.setPrefWidth(50);
+				gradeTextField.setMaxWidth(50);
+				gradesHB.getChildren().add(gradeText);
+				gradesHB.getChildren().add(gradeTextField);
+				gradesHB.setSpacing(10);
+				questionBox.getChildren().add(gradesHB);
+
+				questionBox.setMargin(questionContent, new Insets(0, 0, 0, 5));
+				questionBox.setMargin(rightAnswer, new Insets(0, 0, 0, 5));
+				questionBox.setMargin(gradesHB, new Insets(0, 5, 0, 5));
+
+				questionBox.setMargin(answer1, new Insets(0, 0, 0, 35));
+				questionBox.setMargin(answer2, new Insets(0, 0, 0, 35));
+				questionBox.setMargin(answer3, new Insets(0, 0, 0, 35));
+				questionBox.setMargin(answer4, new Insets(0, 0, 0, 35));
+
+				questionBox.setSpacing(15);
+
+				questionsGrid.setVgap(10);
+				questionBox.setStyle("-fx-background-color: #ADD8E6");
+				questionsGrid.add(questionBox, 0, i + 1, 1, 1);
+
+				chooseHB.getChildren().add(questionBox);
+				chooseHB.setSpacing(15);
+				show_questions.getChildren().add(chooseHB);
 			}
+
+			HBox switchHBox = (HBox) show_questions.getChildren().remove(2);
+			show_questions.getChildren().add(switchHBox);
+			Button switchButton = (Button) show_questions.getChildren().remove(2);
+			show_questions.getChildren().add(switchButton);
+			newPage = false;
 		});
 	}
 
@@ -189,7 +274,7 @@ public class CreateExamController implements Initializable {
 	public void onUserEvent(HstsUser user) {
 		Platform.runLater(() -> {
 			this.user = user;
-			ArrayList<Integer> subjects = new ArrayList<Integer>();
+			ArrayList<String> subjects = new ArrayList<String>();
 			ArrayList<String> courses = new ArrayList<String>();
 			subjects = user.getSubjects();
 			courses = user.getCourses();
@@ -199,7 +284,7 @@ public class CreateExamController implements Initializable {
 				courses.add(0, "");
 			}
 
-			ObservableList<Integer> setToSubjects = FXCollections.observableArrayList(subjects);
+			ObservableList<String> setToSubjects = FXCollections.observableArrayList(subjects);
 			ObservableList<String> setToCourse = FXCollections.observableArrayList(courses);
 
 			chooseSubject.setItems(setToSubjects);

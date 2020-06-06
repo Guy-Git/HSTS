@@ -33,7 +33,7 @@ public class Question implements Serializable {
 	private int rightAnswer;
 	
 	private String course;
-	private int subject;
+	private String subject;
 	private String questionID;
 	
 	@Transient
@@ -43,7 +43,7 @@ public class Question implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Question(String questionContent, ArrayList<String> answer, int rightAnswer, String course, int newSubject) 
+	public Question(String questionContent, ArrayList<String> answer, int rightAnswer, String course, String newSubject) 
 	{
 		this.questionContent = questionContent;
 		this.answer = answer;
@@ -51,18 +51,35 @@ public class Question implements Serializable {
 		this.course = course;
 		this.subject = newSubject;
 		
-		subjectCounter[subject]++;
-		if (subject < 10) {
-			questionID = "0" + subject;
-		} else {
-			questionID = Integer.toString(subject);
+		int subjectCode = 0;
+		
+		if(subject.equals("Math"))
+		{
+			subjectCode = 1;
+			subjectCounter[subjectCode]++;
+			questionID = "01";
 		}
-		if (subjectCounter[subject] < 10) {
-			questionID = questionID + "00" + subjectCounter[subject];
-		} else if (subjectCounter[subject] < 100) {
-			questionID = questionID + "0" + subjectCounter[subject];
+		
+		if(subject.equals("CS"))
+		{
+			subjectCode = 43;
+			subjectCounter[subjectCode]++;
+			questionID = "43";
+		}
+		
+		if(subject.equals("Biology"))
+		{
+			subjectCode = 78;
+			subjectCounter[subjectCode]++;
+			questionID = "78";
+		}
+		
+		if (subjectCounter[subjectCode] < 10) {
+			questionID = questionID + "00" + subjectCounter[subjectCode];
+		} else if (subjectCounter[subjectCode] < 100) {
+			questionID = questionID + "0" + subjectCounter[subjectCode];
 		} else {
-			questionID = questionID + subjectCounter[subject];
+			questionID = questionID + subjectCounter[subjectCode];
 		}
 		
 	}
@@ -86,7 +103,7 @@ public class Question implements Serializable {
 		this.questionID = questionID;
 	}
 
-	public void setSubject(int subject) {
+	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 
@@ -134,7 +151,7 @@ public class Question implements Serializable {
 		this.course = course;
 	}
 
-	public int getSubject() {
+	public String getSubject() {
 		return subject;
 	}
 

@@ -68,7 +68,7 @@ public class CreateQuestionController implements Initializable {
 	private Button clearBtn;
 
 	@FXML
-	private ChoiceBox<Integer> chooseSubject;
+	private ChoiceBox<String> chooseSubject;
 
 	@FXML
 	private ChoiceBox<String> chooseCourse;
@@ -247,7 +247,7 @@ public class CreateQuestionController implements Initializable {
 	public void onUserEvent(HstsUser user) {
 		Platform.runLater(() -> {
 			this.user = user;
-			ArrayList<Integer> subjects = new ArrayList<Integer>();
+			ArrayList<String> subjects = new ArrayList<String>();
 			ArrayList<String> courses = new ArrayList<String>();
 			subjects = user.getSubjects();
 			courses = user.getCourses();
@@ -257,7 +257,7 @@ public class CreateQuestionController implements Initializable {
 				courses.add(0, "");
 			}
 
-			ObservableList<Integer> setToSubjects = FXCollections.observableArrayList(subjects);
+			ObservableList<String> setToSubjects = FXCollections.observableArrayList(subjects);
 			ObservableList<String> setToCourse = FXCollections.observableArrayList(courses);
 
 			chooseSubject.setItems(setToSubjects);
