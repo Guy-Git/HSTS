@@ -22,12 +22,29 @@ public class HstsUser implements Serializable {
 	int userType; // 1.Student 2.Teacher 3.Principal
 	String fullName;
 	
-	ArrayList<Integer> subjects; //Teacher's
+	ArrayList<String> subjects; //Teacher's
+	
+	// Math - 01
+	// CS - 43
+	// Biology - 78
+	
 	ArrayList<String> courses; //Teacher's
+	
+	// Calculus - 22
+	// Algebra 101 - 13
+	// Introduction to Probability - 10
+	
+	// Introduction to CS - 19
+	// Data structures - 65
+	// OS - 03
+	
+	// Anatomy - 72
+	// Stem Cells - 42
+	// Biostructure - 16
 	
 	public HstsUser() {}
 	
-	public HstsUser(String userId, String userPassword, int userType, ArrayList<Integer> subjects, ArrayList<String> courses, String fullName)
+	public HstsUser(String userId, String userPassword, int userType, ArrayList<String> subjects, ArrayList<String> courses, String fullName)
 	{
 		super();
 		this.userId = userId;
@@ -70,11 +87,11 @@ public class HstsUser implements Serializable {
 		this.userType = userType;
 	}
 
-	public ArrayList<Integer> getSubjects() {
+	public ArrayList<String> getSubjects() {
 		return subjects;
 	}
 
-	public void setSubjects(ArrayList<Integer> subjects) {
+	public void setSubjects(ArrayList<String> subjects) {
 		this.subjects = subjects;
 	}
 

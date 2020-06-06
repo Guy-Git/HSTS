@@ -10,12 +10,12 @@ public class Message implements Serializable
 	Exam exam;
 	HstsUser user;
 	String course;
-	int subject;
+	String subject;
 	
 	ArrayList<Question> questions;
 
 	ArrayList<Exam> exams; //For report
-	ArrayList<Integer> subjects; //For report
+	ArrayList<String> subjects; //For report
 	ArrayList<String> courses; //For report
 	
 	public Message() {
@@ -47,11 +47,11 @@ public class Message implements Serializable
 		this.course = course;
 	}
 
-	public int getSubject() {
+	public String getSubject() {
 		return subject;
 	}
 
-	public void setSubject(int subject) {
+	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 
@@ -87,11 +87,11 @@ public class Message implements Serializable
 		this.exams = exams;
 	}
 
-	public ArrayList<Integer> getSubjects() {
+	public ArrayList<String> getSubjects() {
 		return subjects;
 	}
 
-	public void setSubjects(ArrayList<Integer> subjects) {
+	public void setSubjects(ArrayList<String> subjects) {
 		this.subjects = subjects;
 	}
 

@@ -33,18 +33,26 @@ public class AppsServer extends AbstractServer {
 	static SessionFactory sessionFactory = getSessionFactory();
 	private QuestionController questionController;
 	private UserController userController;
+	private ExamController examController;
 	Message serverMsg;
 
 	public AppsServer(int port) {
 		super(port);
 		questionController = new QuestionController();
 		userController = new UserController();
+		examController = new ExamController();
 	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-
+		
 		serverMsg = new Message();
+		
+		if(((Message)msg).getAction().equals("Add Exam"))
+		{
+			examController.addExam(((Message)msg).getExam());
+		}
+		
 		if(((Message)msg).getAction().equals("Show Questions"))
 		{
 			serverMsg.setQuestions(questionController.getQuestions((Message)msg));
@@ -244,19 +252,21 @@ public class AppsServer extends AbstractServer {
 			session.save(student2);
 			session.flush();
 			
-			ArrayList<Integer> subjects = new ArrayList<Integer>();
-			subjects.add(10);
-			subjects.add(43);
+			ArrayList<String> subjects = new ArrayList<String>();
+			subjects.add("Math");
+			subjects.add("CS");
 			
 			ArrayList<String> courses = new ArrayList<String>();
-			courses.add("Hedva");
-			courses.add("CS Intro");
+			courses.add("Calculus");
+			courses.add("Introduction to CS");
+			courses.add("OS");
 			
-			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses, "Cheni");
+			
+			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses, "Trachel");
 			session.save(teacher1);
 			session.flush();
 			
-			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null, "Malki");
+			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null, "Cheni");
 			session.save(principal);
 			session.flush();
 
