@@ -105,7 +105,7 @@ public class TeacherMainPageController implements Initializable {
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherExamExecution.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StartExamExecution.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);

@@ -33,7 +33,7 @@
 				<ChoiceBox fx:id="chooseCourse" layoutX="417.0" layoutY="60.0" prefWidth="150.0" />
 				<Text layoutX="48.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter subject:" />
 				<Button fx:id="show_question_btn" layoutX="259.0" layoutY="110.0" mnemonicParsing="false" onAction="#showQuestions" text="Show Questions" />
-				<VBox fx:id="show_questions" alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
+				<VBox fx:id="show_questions" alignment="CENTER" spacing="20.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
 					<children>
                   <HBox fx:id="instructions_box" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
