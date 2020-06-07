@@ -129,7 +129,6 @@ public class CreateExamController implements Initializable {
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
-				stage.close();
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StartExamExecution.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
@@ -147,6 +146,7 @@ public class CreateExamController implements Initializable {
 //		if (event.getSource() == watch_reports_btn) 
 //		if (event.getSource() == about_btn) 
 
+		EventBus.getDefault().unregister(this);
 	}
 
 	@FXML

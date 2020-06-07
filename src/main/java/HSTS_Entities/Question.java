@@ -30,6 +30,7 @@ public class Question implements Serializable {
 			targetEntity = Exam.class)
 	private List<Exam> exams;
 	
+	@Column(length = 100000)
 	private String questionContent;
 	private ArrayList<String> answer;
 	private int rightAnswer;

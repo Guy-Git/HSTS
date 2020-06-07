@@ -66,7 +66,7 @@ public class UserController {
 			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
 			foundUser = query.getResultList().get(0);
 
-			System.out.println(foundUser.getUserId());
+			//System.out.println(foundUser.getUserId());
 
 		} catch (Exception exception) {
 			if (session != null) {

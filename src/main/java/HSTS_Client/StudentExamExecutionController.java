@@ -188,16 +188,11 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	void onDownlodeEvent(ActionEvent event) {
 		XWPFDocument document = new XWPFDocument();
-		try {
-			FileOutputStream out = new FileOutputStream(new File("C:/poiword/alignparagraph.docx"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		XWPFParagraph paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		XWPFRun run = paragraph.createRun();
+		System.out.println(exam.getCourse());
 		run.setText("Exam in course " + exam.getCourse() + " the subject is " + exam.getSubject());
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.LEFT);
@@ -219,6 +214,25 @@ public class StudentExamExecutionController implements Initializable {
 		paragraph.setAlignment(ParagraphAlignment.LEFT);
 		run = paragraph.createRun();
 		run.setText("Good Luck!");
+		
+		try {
+			FileOutputStream out = new FileOutputStream(new File("C:/Users/ASUS/Desktop/CoolTest.docx"));
+			try {
+				document.write(out);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    try {
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
     @FXML

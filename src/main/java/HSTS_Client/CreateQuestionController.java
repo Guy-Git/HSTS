@@ -128,7 +128,7 @@ public class CreateQuestionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
@@ -149,6 +149,7 @@ public class CreateQuestionController implements Initializable {
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
 
+		EventBus.getDefault().unregister(this);
 	}
 
 	@FXML
@@ -159,17 +160,15 @@ public class CreateQuestionController implements Initializable {
 		boolean badInput = false;
 
 		if (chooseSubject.getSelectionModel().isEmpty()
-				|| chooseSubject.getSelectionModel().getSelectedItem().equals("")) 
-		{
+				|| chooseSubject.getSelectionModel().getSelectedItem().equals("")) {
 			chooseSubject.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
 			chooseSubject.setStyle("-fx-background-color: #00bfff");
 		}
 
-		if (chooseCourse.getSelectionModel().isEmpty() 
-				|| chooseCourse.getSelectionModel().getSelectedItem().equals("")) 
-		{
+		if (chooseCourse.getSelectionModel().isEmpty()
+				|| chooseCourse.getSelectionModel().getSelectedItem().equals("")) {
 			chooseCourse.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {

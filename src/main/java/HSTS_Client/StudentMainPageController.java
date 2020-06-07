@@ -63,7 +63,22 @@ public class StudentMainPageController implements Initializable {
 	@FXML
 	void menuClick(ActionEvent event) {
 
-//			if (event.getSource() == exam_execution_btn) 
+		if (event.getSource() == exam_execution_btn) 
+		{
+			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentExamExecution.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
 
