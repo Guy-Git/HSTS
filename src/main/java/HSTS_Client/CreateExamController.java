@@ -85,14 +85,11 @@ public class CreateExamController implements Initializable {
 
 	private ArrayList<Question> questions;
 
-	private boolean newPage;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
 		for_multi_line.setText("Instructions for\nthe students:");
 		for_multi_line.setWrappingWidth(80);
-		newPage = true;
 	}
 
 	@FXML
@@ -266,7 +263,6 @@ public class CreateExamController implements Initializable {
 			show_questions.getChildren().add(switchHBox);
 			Button switchButton = (Button) show_questions.getChildren().remove(2);
 			show_questions.getChildren().add(switchButton);
-			newPage = false;
 		});
 	}
 
