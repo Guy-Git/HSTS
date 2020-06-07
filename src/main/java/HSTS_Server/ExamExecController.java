@@ -15,55 +15,40 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import HSTS_Entities.Exam;
+import HSTS_Entities.ExamForExec;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 
-public class ExamController 
-{
+public class ExamExecController {
+
 	static SessionFactory sessionFactory = getSessionFactory();
 	private static Session session;
 
-	public void addExam(Exam exam)
-	{
-		try 
-		{
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			
-			session.save(exam);
-			
-			session.flush();
-			session.getTransaction().commit(); // Save everything.
-		}
-		
-		catch (Exception exception) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			System.err.println("An error occured, changes have been rolled back.");
-			exception.printStackTrace();
-		} finally {
-			session.close();
-		}
-	}
-	
-	public ArrayList<Exam> getExams(Message msg)
-	{
-		ArrayList<Exam> exams = new ArrayList<Exam>();
-		
+	public Exam getExamForExec(Message msg) {
+		ExamForExec examForExec = new ExamForExec();
+		Exam exam = new Exam();
+
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
 			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<Exam> criteriaQuery = builder.createQuery(Exam.class);
-			Root<Exam> rootEntry = criteriaQuery.from(Exam.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("course"), msg.getCourse()), 
-					builder.equal(rootEntry.get("subject"), msg.getSubject()));
-			TypedQuery<Exam> query = session.createQuery(criteriaQuery);
-			exams = (ArrayList<Exam>) query.getResultList();
-
+			CriteriaQuery<ExamForExec> criteriaQuery = builder.createQuery(ExamForExec.class);
+			Root<ExamForExec> rootEntry = criteriaQuery.from(ExamForExec.class);
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examCode"), msg.getExecCode()));
+			TypedQuery<ExamForExec> query = session.createQuery(criteriaQuery);
+			examForExec = (ExamForExec) query.getResultList().get(0);
+			if (examForExec == null) {
+				exam = null;
+			} 
+			else {
+				CriteriaQuery<Exam> criteriaQuery1 = builder.createQuery(Exam.class);
+				Root<Exam> rootEntry1 = criteriaQuery1.from(Exam.class);
+				criteriaQuery1.select(rootEntry1)
+						.where(builder.equal(rootEntry1.get("examID"), examForExec.getExamID()));
+				TypedQuery<Exam> query1 = session.createQuery(criteriaQuery1);
+				exam = (Exam) query1.getResultList().get(0);
+			}
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -73,9 +58,9 @@ public class ExamController
 		} finally {
 			session.close();
 		}
-		return exams;
+		return exam;
 	}
-	
+
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package

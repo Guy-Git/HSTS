@@ -34,6 +34,7 @@ public class AppsServer extends AbstractServer {
 	private QuestionController questionController;
 	private UserController userController;
 	private ExamController examController;
+	private ExamExecController examExecController;
 	Message serverMsg;
 
 	public AppsServer(int port) {
@@ -41,6 +42,7 @@ public class AppsServer extends AbstractServer {
 		questionController = new QuestionController();
 		userController = new UserController();
 		examController = new ExamController();
+		examExecController = new ExamExecController();
 	}
 
 	@Override
@@ -52,6 +54,38 @@ public class AppsServer extends AbstractServer {
 		{
 			examController.addExam(((Message)msg).getExam());
 		}
+	
+		if(((Message)msg).getAction().equals("Enter code"))
+		{
+			serverMsg.setExam(examExecController.getExamForExec(((Message)msg)));
+			if(serverMsg.getExam()==null)
+			{
+				serverMsg.setAction("Exam code invalid");
+			}
+			else {
+				serverMsg.setAction("Exam for exec");
+			}
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		
+		if(((Message)msg).getAction().equals("Pull Exams"))
+		{
+			serverMsg.setExams(examController.getExams((Message)msg));
+			serverMsg.setAction("Got Exams");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
 		
 		if(((Message)msg).getAction().equals("Show Questions"))
 		{

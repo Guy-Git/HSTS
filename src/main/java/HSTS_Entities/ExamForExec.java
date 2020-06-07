@@ -21,6 +21,11 @@ public class ExamForExec implements Serializable
 	private boolean isManual;
 	private String examCode;
 	
+	public ExamForExec() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public ExamForExec(String examID, boolean isManual, String examCode) {
 		super();
 		this.examID = examID;

@@ -18,7 +18,16 @@ public class Message implements Serializable
 	ArrayList<Exam> exams; //For report
 	ArrayList<String> subjects; //For report
 	ArrayList<String> courses; //For report
+	ExamForExec examForExec;
 	
+	public ExamForExec getExamForExec() {
+		return examForExec;
+	}
+
+	public void setExamForExec(ExamForExec examForExec) {
+		this.examForExec = examForExec;
+	}
+
 	public Message() {
 		super();
 		// TODO Auto-generated constructor stub
