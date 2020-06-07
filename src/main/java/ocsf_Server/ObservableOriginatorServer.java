@@ -2,7 +2,7 @@
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
 
-package il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server;
+package ocsf_Server;
 
 /**
 * The <code> ObservableOriginatorServer </code> is a subclass

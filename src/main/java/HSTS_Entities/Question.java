@@ -2,32 +2,38 @@ package HSTS_Entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+import java.util.List;
+import HSTS_Entities.Exam;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "questions")
 public class Question implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "questions_id")
 	private long id;
+	
+	@ManyToMany(
+			mappedBy = "questions",
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			targetEntity = Exam.class)
+	private List<Exam> exams;
 	
 	private String questionContent;
 	private ArrayList<String> answer;
 	private int rightAnswer;
 	
 	private String course;
-	//private static int questionNumber = 0; //3 digits
-	//@Column (columnDefinition = "")
-	private int subject;
+	private String subject;
 	private String questionID;
 	
 	@Transient
@@ -37,7 +43,7 @@ public class Question implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Question(String questionContent, ArrayList<String> answer, int rightAnswer, String course, int newSubject) 
+	public Question(String questionContent, ArrayList<String> answer, int rightAnswer, String course, String newSubject) 
 	{
 		this.questionContent = questionContent;
 		this.answer = answer;
@@ -45,20 +51,48 @@ public class Question implements Serializable {
 		this.course = course;
 		this.subject = newSubject;
 		
-		subjectCounter[subject]++;
-		if (subject < 10) {
-			questionID = "0" + subject;
-		} else {
-			questionID = Integer.toString(subject);
-		}
-		if (subjectCounter[subject] < 10) {
-			questionID = questionID + "00" + subjectCounter[subject];
-		} else if (subjectCounter[subject] < 100) {
-			questionID = questionID + "0" + subjectCounter[subject];
-		} else {
-			questionID = questionID + subjectCounter[subject];
+		int subjectCode = 0;
+		
+		if(subject.equals("Math"))
+		{
+			subjectCode = 1;
+			subjectCounter[subjectCode]++;
+			questionID = "01";
 		}
 		
+		if(subject.equals("CS"))
+		{
+			subjectCode = 43;
+			subjectCounter[subjectCode]++;
+			questionID = "43";
+		}
+		
+		if(subject.equals("Biology"))
+		{
+			subjectCode = 78;
+			subjectCounter[subjectCode]++;
+			questionID = "78";
+		}
+		
+		if (subjectCounter[subjectCode] < 10) {
+			questionID = questionID + "00" + subjectCounter[subjectCode];
+		} else if (subjectCounter[subjectCode] < 100) {
+			questionID = questionID + "0" + subjectCounter[subjectCode];
+		} else {
+			questionID = questionID + subjectCounter[subjectCode];
+		}
+		
+	}
+
+	public List<Exam> getExams() {
+		return exams;
+	}
+
+	public void setExams(List<Exam> exams) {
+		this.exams = exams;
+		for(Exam exam : exams) {
+			exam.getQuestions().add(this);
+		}
 	}
 
 	public String getQuestionID() {
@@ -69,7 +103,7 @@ public class Question implements Serializable {
 		this.questionID = questionID;
 	}
 
-	public void setSubject(int subject) {
+	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 
@@ -117,7 +151,7 @@ public class Question implements Serializable {
 		this.course = course;
 	}
 
-	public int getSubject() {
+	public String getSubject() {
 		return subject;
 	}
 

@@ -16,14 +16,14 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import HSTS_Entities.Message;
 import HSTS_Entities.Question;
-import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.AbstractServer;
-import il.ac.haifa.cs.sweng.OCSFSimpleChat.ocsf.server.ConnectionToClient;
+import HSTS_Entities.Exam;
+import HSTS_Entities.HstsUser;
+import ocsf_Server.AbstractServer;
+import ocsf_Server.ConnectionToClient;
 
 public class AppsServer extends AbstractServer {
-
-	// out = new PrintWriter(socket.getOutputStream());
-	// in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 	private static Session session;
 	private Question chosenQuestion;
@@ -31,103 +31,102 @@ public class AppsServer extends AbstractServer {
 	private int changeType;
 	private int answerNum;
 	static SessionFactory sessionFactory = getSessionFactory();
+	private QuestionController questionController;
+	private UserController userController;
+	private ExamController examController;
+	private ExamExecController examExecController;
+	Message serverMsg;
 
 	public AppsServer(int port) {
 		super(port);
+		questionController = new QuestionController();
+		userController = new UserController();
+		examController = new ExamController();
+		examExecController = new ExamExecController();
 	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-
-		System.out.println("Received Message: " + msg.toString());
-
-		if (msg.toString().equals("#ShowAll")) {
-			showAll(client);
+		
+		serverMsg = new Message();
+		
+		if(((Message)msg).getAction().equals("Add Exam"))
+		{
+			examController.addExam(((Message)msg).getExam());
 		}
-
-		// msg = #Edit 56001
-		// msg = #ChangeQuestion
-		// msg = "What's your Last name?"
-		else {
-			if (msg.toString().startsWith("#2")) {
-				findQuestion(msg.toString().substring(3, 8), client);
+	
+		if(((Message)msg).getAction().equals("Enter code"))
+		{
+			serverMsg.setExam(examExecController.getExamForExec(((Message)msg)));
+			if(serverMsg.getExam()==null)
+			{
+				serverMsg.setAction("Exam code invalid");
 			}
-
-			else if (msg.toString().startsWith("#CQ")) {
-				msg = "Enter changes for question: ";
-				changeType = 1;
-				try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			else if (msg.toString().startsWith("#CA")) {
-				System.out.print(msg.toString().charAt(msg.toString().length() - 1));
-
-				answerNum = Character.getNumericValue(msg.toString().charAt(msg.toString().length() - 1));
-				msg = "Enter the changes for the chosen answer: ";
-				changeType = 2;
-				try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			else if (msg.toString().startsWith("#CRA")) {
-				msg = "Enter the new right answer number: ";
-				changeType = 3;
-				try {
-					client.sendToClient(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
 			else {
-				if (!msg.toString().contains("#M")) {
-					editQuestion(msg.toString(), changeType, client);
-					try {
-						session = sessionFactory.openSession();
-						session.beginTransaction();
+				serverMsg.setAction("Exam for exec");
+			}
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-						List<Question> questions = getAll(Question.class);
-						// System.out.println("KAKI");
-
-						for (Question question : questions) { // Change to a better type of search!!!!!!!
-							if (question.getQuestionID().equals(chosenQuestion.getQuestionID()))
-								chosenQuestion = question;
-						}
-
-						msg = chosenQuestion;
-						try {
-							client.sendToClient(msg);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						session.getTransaction().commit(); // Save everything.
-					} catch (Exception exception) {
-						if (session != null) {
-							session.getTransaction().rollback();
-						}
-						System.err.println("An error occured, changes have been rolled back.");
-						exception.printStackTrace();
-					} finally {
-						session.close();
-					}
-				}
+		}
+		
+		if(((Message)msg).getAction().equals("Pull Exams"))
+		{
+			serverMsg.setExams(examController.getExams((Message)msg));
+			serverMsg.setAction("Got Exams");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+		
+		if(((Message)msg).getAction().equals("Show Questions"))
+		{
+			serverMsg.setQuestions(questionController.getQuestions((Message)msg));
+			serverMsg.setAction("Show Questions");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
+			
+		if(((Message)msg).getAction().equals("Create Question"))
+		{
+			questionController.addQuestion(((Message)msg).getQuestion());
+		}
+		
+		if(((Message)msg).getAction().equals("Login"))
+		{	
+			HstsUser identifiedUser = userController.identification(((Message)msg).getUser());
+			if(identifiedUser == null)
+				serverMsg.setAction("Identification failed");
+			else 
+			{
+				serverMsg.setAction("Identification succeed");
+				serverMsg.setUser(identifiedUser);
+			}
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
-	public void showAll(ConnectionToClient client) {
+	/*public void showAll(ConnectionToClient client) {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -151,7 +150,7 @@ public class AppsServer extends AbstractServer {
 		}
 	}
 
-	public void findQuestion(String questionID, ConnectionToClient client) {
+/*	public void findQuestion(String questionID, ConnectionToClient client) {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -193,7 +192,7 @@ public class AppsServer extends AbstractServer {
 			session.close();
 		}
 	}
-
+	
 	public void editQuestion(String theActualChange, int changeType, ConnectionToClient client) {
 		try {
 			session = sessionFactory.openSession();
@@ -223,10 +222,10 @@ public class AppsServer extends AbstractServer {
 
 			// System.out.println(chosenQuestion.toString());
 
-			/*
-			 * try { client.sendToClient(chosenQuestion); } catch (IOException e) { // TODO
-			 * Auto-generated catch block e.printStackTrace(); }
-			 */
+			
+			  try { client.sendToClient(chosenQuestion); } catch (IOException e) { // TODO
+			  Auto-generated catch block e.printStackTrace(); }
+			 
 
 		} catch (Exception exception) {
 			if (session != null) {
@@ -237,7 +236,7 @@ public class AppsServer extends AbstractServer {
 		} finally {
 			session.close();
 		}
-	}
+	}*/
 
 	public static <T> List<T> getAll(Class<T> object) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -267,78 +266,42 @@ public class AppsServer extends AbstractServer {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
 		configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(HstsUser.class);
+		configuration.addAnnotatedClass(Exam.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
 
-	public static void addQuestionsToDB() {
+	public static void addUsersToDB() {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
-			ArrayList<Question> allQuestion = new ArrayList<Question>();
-
-			// Question 1:
-			ArrayList<String> answers = new ArrayList<String>();
-			answers.add("1. My name is yacov");
-			answers.add("2. My name is Arneiu");
-			answers.add("3. My name is shmulek");
-			answers.add("4. My name is opal");
-
-			allQuestion.add(new Question("What's your name?", answers, 2, "Assi&Guri", 56));
-			session.save(allQuestion.get(0));
-
-			// Question 2:
-			ArrayList<String> answers1 = new ArrayList<String>();
-			answers1.add("1. 4");
-			answers1.add("2. 6");
-			answers1.add("3. 7");
-			answers1.add("4. 2222");
-
-			allQuestion.add(new Question("2 + 2 =", answers1, 1, "Math", 2));
-			session.save(allQuestion.get(1));
-
-			// Question 3:
-			ArrayList<String> answers2 = new ArrayList<String>();
-			answers2.add("1. 5");
-			answers2.add("2. 78");
-			answers2.add("3. 4");
-			answers2.add("4. 2222");
-
-			allQuestion.add(new Question("2 x 2 =", answers2, 3, "Math", 2));
-			session.save(allQuestion.get(2));
-
-			// Question 4:
-			ArrayList<String> answers3 = new ArrayList<String>();
-			answers3.add("1. Java");
-			answers3.add("2. C (YAK)");
-			answers3.add("3. C++");
-			answers3.add("4. Python");
-
-			allQuestion.add(new Question("What is the current best programming language?", answers3, 1, "CS", 10));
-			session.save(allQuestion.get(3));
-
-			// Question 5:
-			ArrayList<String> answers4 = new ArrayList<String>();
-			answers4.add("1. A cat scratched her (She's a cat lady)");
-			answers4.add("2. She hitpatzla to 3");
-			answers4.add("3. She was hit by a bus");
-			answers4.add("4. She hitpatzla to 2");
-
-			allQuestion.add(new Question("What happend to the zkena?", answers4, 4, "Assi&Guri", 56));
-			session.save(allQuestion.get(4));
-
-			// Question 6:
-			ArrayList<String> answers5 = new ArrayList<String>();
-			answers5.add("1. Jerusalem");
-			answers5.add("2. Haifa");
-			answers5.add("3. Tel-Aviv");
-			answers5.add("4. Rishon");
-
-			allQuestion.add(new Question("What's the capital of Israel?", answers5, 1, "Geography", 76));
-			session.save(allQuestion.get(5));
-
+			HstsUser student1 = new HstsUser("1111", "123456", 1, null, null, "Opal");
+			session.save(student1);
+			session.flush();
+			
+			HstsUser student2 = new HstsUser("2222", "1234", 1, null, null, "Guy");
+			session.save(student2);
+			session.flush();
+			
+			ArrayList<String> subjects = new ArrayList<String>();
+			subjects.add("Math");
+			subjects.add("CS");
+			
+			ArrayList<String> courses = new ArrayList<String>();
+			courses.add("Calculus");
+			courses.add("Introduction to CS");
+			courses.add("OS");
+			
+			
+			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses, "Trachel");
+			session.save(teacher1);
+			session.flush();
+			
+			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null, "Cheni");
+			session.save(principal);
 			session.flush();
 
 			session.getTransaction().commit(); // Save everything.
@@ -361,8 +324,7 @@ public class AppsServer extends AbstractServer {
 			AppsServer server = new AppsServer(Integer.parseInt(args[0]));
 			server.listen();
 		}
-
-		addQuestionsToDB();
+		addUsersToDB();
 
 	}
 
