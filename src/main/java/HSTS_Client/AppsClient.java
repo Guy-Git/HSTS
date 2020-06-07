@@ -41,7 +41,6 @@ public class AppsClient extends AbstractClient {
 
 		if (((Message) msg).getAction().contains("Show Questions"))
 		{
-			// System.out.println("kaki");
 			EventBus.getDefault().post(((Message) msg).getQuestions());
 		}
 
