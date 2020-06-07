@@ -14,13 +14,20 @@ public class Exam implements Serializable {
 	@Column(name = "exams_id")
 	private long id;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, targetEntity = Question.class)
+	@ManyToMany(fetch = FetchType.EAGER, 
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE }, 
+			targetEntity = Question.class)
 	@JoinTable(name = "exams_questions", joinColumns = @JoinColumn(name = "exams_id"), inverseJoinColumns = @JoinColumn(name = "questions_id"))
 	private List<Question> questions;
 
 	private String examID;
+	
+	@Column(length = 100000)
 	private String instructions;
+	
+	@Column(length = 100000)
 	private String notes;
+	
 	private String teacherName;
 	private int time;
 	private boolean manual;

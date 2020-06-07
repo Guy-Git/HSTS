@@ -19,6 +19,7 @@ import org.hibernate.service.ServiceRegistry;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 import HSTS_Entities.Exam;
+import HSTS_Entities.ExamForExec;
 import HSTS_Entities.HstsUser;
 import ocsf_Server.AbstractServer;
 import ocsf_Server.ConnectionToClient;
@@ -74,11 +75,16 @@ public class AppsServer extends AbstractServer {
 
 		}
 		
+		if(((Message)msg).getAction().equals("Add exam for execution"))
+		{
+			examExecController.addExamForExec(((Message)(msg)).getExamForExec());
+		}
+		
 		if(((Message)msg).getAction().equals("Pull Exams"))
 		{
 			serverMsg.setExams(examController.getExams((Message)msg));
 			serverMsg.setAction("Got Exams");
-			
+
 			try {
 				client.sendToClient(serverMsg);
 			} catch (IOException e) {
@@ -123,7 +129,6 @@ public class AppsServer extends AbstractServer {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 
 	/*public void showAll(ConnectionToClient client) {

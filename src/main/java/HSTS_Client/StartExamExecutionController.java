@@ -9,6 +9,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import HSTS_Entities.Exam;
+import HSTS_Entities.ExamForExec;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
@@ -27,6 +28,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
@@ -69,11 +71,20 @@ public class StartExamExecutionController implements Initializable {
 	@FXML
 	private TextField exam_code_text;
 
-	@FXML
-	private ToggleGroup isManual;
+    @FXML
+    private RadioButton com_exam;
+
+    @FXML
+    private ToggleGroup isManual;
+
+    @FXML
+    private RadioButton manual_exam;
 
 	@FXML
 	private Button saveBtn;
+	
+    @FXML
+    private VBox exams_box;
 
 	private HstsUser user;
 
@@ -82,8 +93,6 @@ public class StartExamExecutionController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-
-		exams_container.getPanes().add(new TitledPane("Exam #KAKIFAKI", new Text("KAKIZ")));
 	}
 
 	@FXML
@@ -130,28 +139,33 @@ public class StartExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
 
 //			if (event.getSource() == exam_execution_btn) 
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
 		
+		EventBus.getDefault().unregister(this);
 	}
 
 	@FXML
-	void pullExams(ActionEvent event) {
-		Message msg = new Message();
-		msg.setSubject(chooseSubject.getValue());
-		msg.setCourse(chooseCourse.getValue());
-		msg.setAction("Pull Exams");
+	void pullExams(ActionEvent event) 
+	{
+		exams_container.getPanes().clear();
+		Message msgToServer = new Message();
+		msgToServer.setSubject(chooseSubject.getValue());
+		msgToServer.setCourse(chooseCourse.getValue());
+		msgToServer.setAction("Pull Exams");
 
 		try {
-			AppsClient.getClient().sendToServer(msg);
+			AppsClient.getClient().sendToServer(msgToServer);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -159,8 +173,27 @@ public class StartExamExecutionController implements Initializable {
 	}
 
 	@FXML
-	void save(ActionEvent event) {
-
+	void save(ActionEvent event) 
+	{
+		boolean examType;
+		
+		if(isManual.getSelectedToggle() == manual_exam)
+			examType = true;
+		else 
+			examType = false;
+		
+		ExamForExec newExamForExec = new ExamForExec(exams_container.getExpandedPane().getText().substring(6), examType, exam_code_text.getText());
+		
+		Message msgToServer = new Message();
+		msgToServer.setAction("Add exam for execution");
+		msgToServer.setExamForExec(newExamForExec);
+		
+		try {
+			AppsClient.getClient().sendToServer(msgToServer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Subscribe
@@ -170,6 +203,7 @@ public class StartExamExecutionController implements Initializable {
 		
 		Platform.runLater(() -> 
 		{
+			exams_box.setVisible(true);
 			for (int i = 0; i < exams.size(); i++) 
 			{
 				VBox displayExam = new VBox(15);
@@ -182,6 +216,8 @@ public class StartExamExecutionController implements Initializable {
 				
 				GridPane questionsGrid = new GridPane();
 				questionsGrid.setAlignment(Pos.CENTER);
+				
+				//System.out.println(exams.get(1).getInstructions());
 				
 				for (int j = 0; j < exams.get(i).getQuestions().size(); j++) 
 				{
@@ -223,72 +259,6 @@ public class StartExamExecutionController implements Initializable {
 
 				exams_container.getPanes().add(new TitledPane("Exam #" + exams.get(i).getExamID(), displayExam));
 			}
-
-//			while(show_questions.getChildren().get(3).getClass() != Button.class)
-//				show_questions.getChildren().remove(show_questions.getChildren().get(2));
-//			
-//			GridPane questionsGrid = new GridPane();
-//			questionsGrid.setAlignment(Pos.CENTER);
-//			show_questions.setVisible(true);
-//			show_questions.setMargin(instructions_box, new Insets(0, 0, 10, 0));
-//
-//			for (int i = 0; i < questions.size(); i++) {
-//
-//				HBox chooseHB = new HBox();
-//				chooseHB.setAlignment(Pos.CENTER);
-//				CheckBox chooseQuestion = new CheckBox();
-//				chooseHB.getChildren().add(chooseQuestion);
-//
-//				VBox questionBox = new VBox();
-//				Text questionContent = new Text("" + (i + 1) + ". " + questions.get(i).getQuestionContent());
-//				Text answer1 = new Text("1. " + questions.get(i).getAnswer().get(0));
-//				Text answer2 = new Text("2. " + questions.get(i).getAnswer().get(1));
-//				Text answer3 = new Text("3. " + questions.get(i).getAnswer().get(2));
-//				Text answer4 = new Text("4. " + questions.get(i).getAnswer().get(3));
-//				Text rightAnswer = new Text(
-//						"The right answer is: " + String.valueOf(questions.get(i).getRightAnswer()));
-//				Text gradeText = new Text("Add grade for chosen question: ");
-//				TextField gradeTextField = new TextField();
-//
-//				questionBox.getChildren().add(questionContent);
-//				questionBox.getChildren().add(answer1);
-//				questionBox.getChildren().add(answer2);
-//				questionBox.getChildren().add(answer3);
-//				questionBox.getChildren().add(answer4);
-//				questionBox.getChildren().add(rightAnswer);
-//
-//				HBox gradesHB = new HBox();
-//				gradeTextField.setPrefWidth(50);
-//				gradeTextField.setMaxWidth(50);
-//				gradesHB.getChildren().add(gradeText);
-//				gradesHB.getChildren().add(gradeTextField);
-//				gradesHB.setSpacing(10);
-//				questionBox.getChildren().add(gradesHB);
-//
-//				questionBox.setMargin(questionContent, new Insets(0, 0, 0, 5));
-//				questionBox.setMargin(rightAnswer, new Insets(0, 0, 0, 5));
-//				questionBox.setMargin(gradesHB, new Insets(0, 5, 0, 5));
-//
-//				questionBox.setMargin(answer1, new Insets(0, 0, 0, 35));
-//				questionBox.setMargin(answer2, new Insets(0, 0, 0, 35));
-//				questionBox.setMargin(answer3, new Insets(0, 0, 0, 35));
-//				questionBox.setMargin(answer4, new Insets(0, 0, 0, 35));
-//
-//				questionBox.setSpacing(15);
-//
-//				questionsGrid.setVgap(10);
-//				questionBox.setStyle("-fx-background-color: #ADD8E6");
-//				questionsGrid.add(questionBox, 0, i + 1, 1, 1);
-//
-//				chooseHB.getChildren().add(questionBox);
-//				chooseHB.setSpacing(15);
-//				show_questions.getChildren().add(chooseHB);
-//			}
-
-//			HBox switchHBox = (HBox) show_questions.getChildren().remove(2);
-//			show_questions.getChildren().add(switchHBox);
-//			Button switchButton = (Button) show_questions.getChildren().remove(2);
-//			show_questions.getChildren().add(switchButton);
 		});
 	}
 
