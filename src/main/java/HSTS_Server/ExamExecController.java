@@ -48,6 +48,7 @@ public class ExamExecController {
 						.where(builder.equal(rootEntry1.get("examID"), examForExec.getExamID()));
 				TypedQuery<Exam> query1 = session.createQuery(criteriaQuery1);
 				exam = (Exam) query1.getResultList().get(0);
+				exam.setManual(examForExec.isManual());
 			}
 		} catch (Exception exception) {
 			if (session != null) {

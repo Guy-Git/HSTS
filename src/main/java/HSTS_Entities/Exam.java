@@ -23,6 +23,7 @@ public class Exam implements Serializable {
 	private String notes;
 	private String teacherName;
 	private int time;
+	private boolean manual;
 	private ArrayList<Integer> questionGrade;
 	String subject;
 	String course;
@@ -187,5 +188,15 @@ public class Exam implements Serializable {
 	public void setCourse(String course) {
 		this.course = course;
 	}
+
+	public boolean isManual() {
+		return manual;
+	}
+
+	public void setManual(boolean manual) {
+		this.manual = manual;
+	}
+	
+	
 
 }

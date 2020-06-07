@@ -12,6 +12,7 @@ public class Message implements Serializable
 	String course;
 	String subject;
 	String execCode;
+	String userID;
 	
 	ArrayList<Question> questions;
 
@@ -120,6 +121,15 @@ public class Message implements Serializable
 	public void setExecCode(String execCode) {
 		this.execCode = execCode;
 	}
+
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
+	
 	
 	
 }
