@@ -113,8 +113,7 @@ public class CreateQuestionController implements Initializable {
 			}
 		}
 
-		if (event.getSource() == create_exam_btn) 
-		{
+		if (event.getSource() == create_exam_btn) {
 			Stage stage = (Stage) create_exam_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateExam.fxml"));
@@ -129,7 +128,7 @@ public class CreateQuestionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 //			if (event.getSource() == exam_execution_btn) 
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
@@ -143,16 +142,18 @@ public class CreateQuestionController implements Initializable {
 		int rightAnswer = 0;
 		boolean badInput = false;
 
-		if (chooseSubject.getSelectionModel().getSelectedItem() == null
-				|| chooseSubject.getSelectionModel().isEmpty()) {
+		if (chooseSubject.getSelectionModel().isEmpty()
+				|| chooseSubject.getSelectionModel().getSelectedItem().equals("")) 
+		{
 			chooseSubject.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
 			chooseSubject.setStyle("-fx-background-color: #00bfff");
 		}
 
-		if (chooseCourse.getSelectionModel().getSelectedItem().equals("")
-				|| chooseCourse.getSelectionModel().isEmpty()) {
+		if (chooseCourse.getSelectionModel().isEmpty() 
+				|| chooseCourse.getSelectionModel().getSelectedItem().equals("")) 
+		{
 			chooseCourse.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
@@ -232,16 +233,16 @@ public class CreateQuestionController implements Initializable {
 	}
 
 	@FXML
-    void clear(ActionEvent event) {
+	void clear(ActionEvent event) {
 		contentText.setText("");
 		answer1Text.setText("");
 		answer2Text.setText("");
 		answer3Text.setText("");
 		answer4Text.setText("");
 		right_answer.selectToggle(rightAnswer1);
-		chooseSubject.setValue(null);
+		chooseSubject.setValue("");
 		chooseCourse.setValue("");
-    }
+	}
 
 	@Subscribe
 	public void onUserEvent(HstsUser user) {
@@ -251,9 +252,9 @@ public class CreateQuestionController implements Initializable {
 			ArrayList<String> courses = new ArrayList<String>();
 			subjects = user.getSubjects();
 			courses = user.getCourses();
-			
-			if (subjects.get(0) != null && courses.get(0) != "") {
-				subjects.add(0, null);
+
+			if (subjects.get(0) != "" && courses.get(0) != "") {
+				subjects.add(0, "");
 				courses.add(0, "");
 			}
 
