@@ -1,5 +1,6 @@
 package HSTS_Client;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,12 +10,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import HSTS_Entities.HstsUser;
+import HSTS_Entities.Message;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class PrincipalMainPageController implements Initializable {
 
@@ -32,7 +38,11 @@ public class PrincipalMainPageController implements Initializable {
 
 	@FXML
 	private Button about_btn;
+	
+	@FXML
+	private Button log_out_btn;
 
+	
 	private HstsUser user;
 
 	@Override
@@ -62,6 +72,24 @@ public class PrincipalMainPageController implements Initializable {
 //			if (event.getSource() == exam_execution_btn) 
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
+		if (event.getSource() == log_out_btn) {
+			Message msg = new Message();
+			msg.setAction("Log out");
+			msg.setUser(user);
+			Stage stage = (Stage) create_question_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateQuestion.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
