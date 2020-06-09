@@ -19,19 +19,30 @@ public class Message implements Serializable
 	ArrayList<Exam> exams; //For report
 	ArrayList<String> subjects; //For report
 	ArrayList<String> courses; //For report
+	
 	ExamForExec examForExec;
 	
+	TimeExtention timeExtention;
+	
+	public Message() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public TimeExtention getTimeExtention() {
+		return timeExtention;
+	}
+
+	public void setTimeExtention(TimeExtention timeExtention) {
+		this.timeExtention = timeExtention;
+	}
+
 	public ExamForExec getExamForExec() {
 		return examForExec;
 	}
 
 	public void setExamForExec(ExamForExec examForExec) {
 		this.examForExec = examForExec;
-	}
-
-	public Message() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getAction() {

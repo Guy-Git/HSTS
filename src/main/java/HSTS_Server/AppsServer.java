@@ -36,6 +36,8 @@ public class AppsServer extends AbstractServer {
 	private UserController userController;
 	private ExamController examController;
 	private ExamExecController examExecController;
+	private TimeExtentionController timeExtentionController;
+	
 	Message serverMsg;
 
 	public AppsServer(int port) {
@@ -44,6 +46,7 @@ public class AppsServer extends AbstractServer {
 		userController = new UserController();
 		examController = new ExamController();
 		examExecController = new ExamExecController();
+		timeExtentionController = new TimeExtentionController();
 	}
 
 	@Override
@@ -51,15 +54,20 @@ public class AppsServer extends AbstractServer {
 		
 		serverMsg = new Message();
 		
+		if(((Message)msg).getAction().equals("Request time extention"))
+		{
+			timeExtentionController.addTimeExtentionRequest(((Message)msg).getTimeExtention());
+		}
+		
 		if(((Message)msg).getAction().equals("Add Exam"))
 		{
 			examController.addExam(((Message)msg).getExam());
 		}
 	
-		if(((Message)msg).getAction().equals("Enter code"))
+		if(((Message)msg).getAction().equals("Enter code") || ((Message)msg).getAction().equals("Pull exam by examCode"))
 		{
 			serverMsg.setExam(examExecController.getExamForExec(((Message)msg)));
-			if(serverMsg.getExam()==null)
+			if(serverMsg.getExam() == null)
 			{
 				serverMsg.setAction("Exam code invalid");
 			}
