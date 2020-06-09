@@ -50,7 +50,6 @@ public class ExamExecController {
 
 	public Exam getExamForExec(Message msg) {
 		
-		System.out.println("KAKI");
 		ExamForExec examForExec = new ExamForExec();
 		Exam exam = new Exam();
 
@@ -61,11 +60,9 @@ public class ExamExecController {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ExamForExec> criteriaQuery = builder.createQuery(ExamForExec.class);
 			Root<ExamForExec> rootEntry = criteriaQuery.from(ExamForExec.class);
-			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examCode"), msg.getExecCode()));
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examCode"), msg.getExamForExec().getExamCode()));
 			TypedQuery<ExamForExec> query = session.createQuery(criteriaQuery);
 			examForExec = (ExamForExec) query.getResultList().get(0);
-			
-			System.out.println(examForExec.getExamID());
 			
 			if (examForExec == null) 
 			{

@@ -107,7 +107,8 @@ public class StartExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-
+				EventBus.getDefault().unregister(this);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -123,7 +124,8 @@ public class StartExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-
+				EventBus.getDefault().unregister(this);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -139,7 +141,7 @@ public class StartExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-				
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -190,6 +192,23 @@ public class StartExamExecutionController implements Initializable {
 		
 		try {
 			AppsClient.getClient().sendToServer(msgToServer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherExamExecution.fxml"));
+			stage.setTitle("High School Test System");
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.show();
+			
+			EventBus.getDefault().post(user);
+			EventBus.getDefault().post(newExamForExec);
+			EventBus.getDefault().unregister(this);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

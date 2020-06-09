@@ -22,11 +22,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -153,6 +155,7 @@ public class CreateExamController implements Initializable {
 	void save(ActionEvent event) {
 		ArrayList<Question> examQuestions = new ArrayList<Question>();
 		ArrayList<Integer> questionPoints = new ArrayList<Integer>();
+		int chosenQuestions = 0;
 
 		for (int j = 2; j < show_questions.getChildren().size() - 2; j++) {
 			HBox chooseQuestion = (HBox) show_questions.getChildren().get(j);
@@ -160,9 +163,35 @@ public class CreateExamController implements Initializable {
 			HBox gradesBox = (HBox) questionBox.getChildren().get(6);
 			String grade = ((TextField) gradesBox.getChildren().get(1)).getText();
 
-			if (((CheckBox) (((HBox) show_questions.getChildren().get(j)).getChildren().get(0))).isSelected()) {
+			if (((CheckBox) (((HBox) show_questions.getChildren().get(j)).getChildren().get(0))).isSelected()) 
+			{
+				chosenQuestions++;
 				examQuestions.add(questions.get(j - 2));
 				questionPoints.add(Integer.valueOf(grade));
+			}
+		}
+		
+		if(chosenQuestions == 0)
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Please choose questions!");
+			alert.setTitle("");
+			// alert.setContentText("The fields marked red must be filled");
+			alert.show();
+		}
+		
+		else if(questionPoints.size() != chosenQuestions) 
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("You left somePlease choose questions!");
+			alert.setTitle("");
+			// alert.setContentText("The fields marked red must be filled");
+			alert.show();
+		}
+		else {
+			for(int i = 0; i < chosenQuestions; i++)
+			{
+				
 			}
 		}
 
@@ -192,19 +221,47 @@ public class CreateExamController implements Initializable {
 
 	@FXML
 	void showQuestions(ActionEvent event) {
+		boolean badInput = false;
 
-		Message msg = new Message();
-		msg.setSubject(chooseSubject.getValue());
-		msg.setCourse(chooseCourse.getValue());
-		msg.setAction("Show Questions");
-
-		try {
-			AppsClient.getClient().sendToServer(msg);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (chooseSubject.getSelectionModel().isEmpty()
+				|| chooseSubject.getSelectionModel().getSelectedItem().equals("")) {
+			chooseSubject.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			chooseSubject.setStyle("-fx-background-color: #00bfff");
 		}
 
+		if (chooseCourse.getSelectionModel().isEmpty()
+				|| chooseCourse.getSelectionModel().getSelectedItem().equals("")) {
+			chooseCourse.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			chooseCourse.setStyle("-fx-background-color: #00bfff");
+		}
+
+		if(badInput == false)
+		{
+			Message msg = new Message();
+			msg.setSubject(chooseSubject.getValue());
+			msg.setCourse(chooseCourse.getValue());
+			msg.setAction("Show Questions");
+			
+			try {
+				AppsClient.getClient().sendToServer(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		else 
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("The fields marked red must be filled");
+			alert.setTitle("");
+			// alert.setContentText("The fields marked red must be filled");
+			alert.show();
+		}
 	}
 
 	@Subscribe
