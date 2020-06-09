@@ -12,25 +12,37 @@ public class Message implements Serializable
 	String course;
 	String subject;
 	String execCode;
+	String userID;
 	
 	ArrayList<Question> questions;
 
 	ArrayList<Exam> exams; //For report
 	ArrayList<String> subjects; //For report
 	ArrayList<String> courses; //For report
+	
 	ExamForExec examForExec;
 	
+	TimeExtention timeExtention;
+	
+	public Message() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public TimeExtention getTimeExtention() {
+		return timeExtention;
+	}
+
+	public void setTimeExtention(TimeExtention timeExtention) {
+		this.timeExtention = timeExtention;
+	}
+
 	public ExamForExec getExamForExec() {
 		return examForExec;
 	}
 
 	public void setExamForExec(ExamForExec examForExec) {
 		this.examForExec = examForExec;
-	}
-
-	public Message() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getAction() {
@@ -120,6 +132,15 @@ public class Message implements Serializable
 	public void setExecCode(String execCode) {
 		this.execCode = execCode;
 	}
+
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
+	
 	
 	
 }

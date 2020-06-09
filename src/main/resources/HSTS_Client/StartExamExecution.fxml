@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.StartExamExecutionController">
+   <content>
+      <AnchorPane prefWidth="620.0">
+         <children>
+            <AnchorPane layoutX="15.0" layoutY="-1.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <HBox alignment="CENTER" layoutX="0.0" layoutY="0.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button fx:id="create_question_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create a question" />
+                        <Button fx:id="create_exam_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Create an exam" />
+                        <Button fx:id="exam_execution_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Exam execution" />
+                        <Button fx:id="watch_reports_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Watch reports" />
+                        <Button fx:id="about_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="About" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <Text layoutX="325.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter course:" />
+            <ChoiceBox fx:id="chooseSubject" cache="true" layoutX="140.0" layoutY="60.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="chooseCourse" layoutX="417.0" layoutY="60.0" prefWidth="150.0" />
+            <Text layoutX="48.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter subject:" />
+            <Button fx:id="show_question_btn" layoutX="259.0" layoutY="110.0" mnemonicParsing="false" onAction="#pullExams" text="Choose exam" />
+            <VBox fx:id="exams_box" alignment="CENTER" layoutX="253.0" layoutY="156.0" spacing="20.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+               <children>
+                  <Accordion fx:id="exams_container" prefWidth="600.0" />
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter exam code:" />
+                        <TextField fx:id="exam_code_text" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="60.0">
+                     <children>
+                        <RadioButton fx:id="com_exam" mnemonicParsing="false" selected="true" text="Computerized">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="isManual" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="manual_exam" mnemonicParsing="false" text="Manual" toggleGroup="$isManual" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#save" text="Save executianable exam" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>

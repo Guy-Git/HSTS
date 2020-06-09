@@ -27,11 +27,12 @@
             </AnchorPane>
             <Text fx:id="for_multi_line" layoutX="148.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter exam code:" wrappingWidth="95.33332824707031" />
             <TextField fx:id="enterExamCode" layoutX="249.0" layoutY="95.0" />
-            <Text fx:id="for_multi_line1" layoutX="193.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter ID:" visible="false" wrappingWidth="50.0" />
-            <Button fx:id="submit_btn" alignment="CENTER" contentDisplay="CENTER" layoutX="278.0" layoutY="141.0" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="90.0" text="submit" textAlignment="CENTER" />
-            <TextField fx:id="enterIdForExam" layoutX="249.0" layoutY="194.0" prefHeight="19.0" prefWidth="150.0" visible="false" />
-            <Button layoutX="277.0" layoutY="231.0" mnemonicParsing="false" text="downlod exam" visible="false" />
-            <VBox fx:id="exam_vbox" layoutX="260.0" layoutY="289.0" prefHeight="200.0" prefWidth="100.0" />
+            <Text fx:id="for_multi_line1" layoutX="193.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter ID:" wrappingWidth="50.0" />
+            <Button fx:id="submit_btn" alignment="CENTER" contentDisplay="CENTER" layoutX="278.0" layoutY="141.0" mnemonicParsing="false" onAction="#enterSubmit" prefHeight="30.0" prefWidth="90.0" text="submit" textAlignment="CENTER" />
+            <TextField fx:id="enterIdForExam" layoutX="249.0" layoutY="194.0" prefHeight="19.0" prefWidth="150.0" />
+            <Button fx:id="downlod_btn" layoutX="275.0" layoutY="261.0" mnemonicParsing="false" onAction="#onDownlodeEvent" text="downlod exam" />
+            <VBox fx:id="exam_vbox" layoutX="274.0" layoutY="312.0" prefHeight="200.0" prefWidth="100.0" />
+            <Button fx:id="start_exam_btn" layoutX="287.0" layoutY="229.0" mnemonicParsing="false" onAction="#startExam" text="start exam" />
          </children>
       </AnchorPane>
    </content>

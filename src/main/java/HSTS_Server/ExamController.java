@@ -64,6 +64,7 @@ public class ExamController
 			TypedQuery<Exam> query = session.createQuery(criteriaQuery);
 			exams = (ArrayList<Exam>) query.getResultList();
 
+			//System.out.println(exams.get(0).getQuestions().get(0).getQuestionContent());
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();

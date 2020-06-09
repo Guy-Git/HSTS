@@ -1,5 +1,6 @@
 package HSTS_Client;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -7,105 +8,160 @@ import java.util.ResourceBundle;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import HSTS_Entities.Exam;
+import HSTS_Entities.ExamForExec;
 import HSTS_Entities.HstsUser;
+import HSTS_Entities.Message;
+import HSTS_Entities.TimeExtention;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class TeacherExamExecutionController implements Initializable {
 
-    @FXML
-    private Button create_question_btn;
+	@FXML
+	private Button request_time_btn;
 
-    @FXML
-    private Button create_exam_btn;
+	@FXML
+	private TextArea reasons_text;
 
-    @FXML
-    private Button exam_execution_btn;
+	@FXML
+	private TextField enter_time_text;
 
-    @FXML
-    private Button watch_reports_btn;
+	@FXML
+	private Text time_text;
 
-    @FXML
-    private Button about_btn;
-
-    @FXML
-    private ChoiceBox<String> chooseSubject;
-
-    @FXML
-    private ChoiceBox<String> chooseCourse;
-
-    @FXML
-    private Button show_question_btn;
-
-    @FXML
-    private Accordion exams_container;
-
-    @FXML
-    private TextField exam_code_text;
-
-    @FXML
-    private ToggleGroup isManual;
-
-    @FXML
-    private Button saveBtn;
-    
 	private HstsUser user;
-    
-    @Override
-    public void initialize(URL location, ResourceBundle resources) 
-    {
-    	EventBus.getDefault().register(this);
-        
-    	exams_container.getPanes().add(new TitledPane("Exam #KAKIFAKI", new Text("KAKIZ")));
-    }
 
-    @FXML
-    void menuClick(ActionEvent event) {
+	private ExamForExec examForExec;
 
-    }
+	private Exam exam;
 
-    @FXML
-    void pullExams(ActionEvent event) {
+	private Integer hourTime;
+	private Integer minutesTime;
+	private Integer secondsTime;
+	private Integer startTime;
 
-    }
-
-    @FXML
-    void save(ActionEvent event) {
-
-    }
-
-    @Subscribe
-	public void onUserEvent(HstsUser user) {
-		Platform.runLater(() -> {
-			this.user = user;
-			ArrayList<String> subjects = new ArrayList<String>();
-			ArrayList<String> courses = new ArrayList<String>();
-			subjects = user.getSubjects();
-			courses = user.getCourses();
-
-			if (subjects.get(0) != null && courses.get(0) != "") {
-				subjects.add(0, null);
-				courses.add(0, "");
-			}
-
-			ObservableList<String> setToSubjects = FXCollections.observableArrayList(subjects);
-			ObservableList<String> setToCourse = FXCollections.observableArrayList(courses);
-
-			chooseSubject.setItems(setToSubjects);
-			chooseCourse.setItems(setToCourse);
-		});
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		EventBus.getDefault().register(this);
 	}
 
-    
+	@FXML
+	void sendRequest(ActionEvent event) {
+		TimeExtention requestedTime = new TimeExtention(exam.getExamID(), reasons_text.getText(),
+				Integer.valueOf(enter_time_text.getText()), false, true);
+		Message msgToServer = new Message();
+
+		msgToServer.setAction("Request time extention");
+		msgToServer.setTimeExtention(requestedTime);
+
+		try {
+			AppsClient.getClient().sendToServer(msgToServer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Subscribe
+	public void onUserEvent(HstsUser user) {
+		this.user = user;
+	}
+
+	@Subscribe
+	public void onExamExecEvent(ExamForExec examForExec) {
+		Message msgToServer = new Message();
+		msgToServer.setAction("Pull exam by examCode");
+		System.out.println(examForExec.getExamID());
+		msgToServer.setExamForExec(examForExec);
+
+		try {
+			AppsClient.getClient().sendToServer(msgToServer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Subscribe
+	public void onExamEvent(Exam exam) {
+		Platform.runLater(() -> {
+			this.exam = exam;
+
+			startTime = exam.getTime();
+			hourTime = exam.getTime() / 60;
+
+			System.out.println(hourTime);
+
+			if (startTime < 60) {
+				minutesTime = startTime;
+				if (minutesTime == 1) {
+					minutesTime = 1;
+					secondsTime = 0;
+				}
+			} else {
+				minutesTime = 59;
+				secondsTime = 59;
+			}
+
+			Timeline timeline = new Timeline();
+			timeline.setCycleCount(Timeline.INDEFINITE);
+			time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
+					+ secondsTime.toString());
+			if (timeline != null) {
+				timeline.stop();
+			}
+
+			KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					if (startTime == 1) {
+						secondsTime = 59;
+						minutesTime = 0;
+					}
+					startTime--;
+					time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
+							+ secondsTime.toString());
+					if (startTime <= 0 && secondsTime <= 0) {
+						timeline.stop();
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setHeaderText("time is up!");
+						alert.show();
+					} else {
+						secondsTime--;
+						if (secondsTime == 0 && minutesTime > 0) {
+							secondsTime = 59;
+							minutesTime--;
+						}
+						if (minutesTime == 1 && secondsTime == 0) {
+							minutesTime = 0;
+							secondsTime = 59;
+						}
+						if (hourTime > 0 && secondsTime == 0 && minutesTime == 0) {
+							hourTime--;
+							minutesTime = 59;
+							secondsTime = 59;
+						}
+					}
+				}
+			});
+			timeline.getKeyFrames().add(frame);
+			timeline.playFromStart();
+		});
+	}
 }

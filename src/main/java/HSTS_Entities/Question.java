@@ -7,6 +7,7 @@ import HSTS_Entities.Exam;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,11 +24,13 @@ public class Question implements Serializable {
 	private long id;
 	
 	@ManyToMany(
+			fetch = FetchType.EAGER,
 			mappedBy = "questions",
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
 			targetEntity = Exam.class)
 	private List<Exam> exams;
 	
+	@Column(length = 100000)
 	private String questionContent;
 	private ArrayList<String> answer;
 	private int rightAnswer;

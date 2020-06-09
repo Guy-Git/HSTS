@@ -23,8 +23,33 @@ public class ExamExecController {
 
 	static SessionFactory sessionFactory = getSessionFactory();
 	private static Session session;
+	
+	public void addExamForExec(ExamForExec examForExec)
+	{
+		try 
+		{
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			session.save(examForExec);
+			
+			session.flush();
+			session.getTransaction().commit(); // Save everything.
+		}
+		
+		catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
 
 	public Exam getExamForExec(Message msg) {
+		
 		ExamForExec examForExec = new ExamForExec();
 		Exam exam = new Exam();
 
@@ -35,12 +60,15 @@ public class ExamExecController {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ExamForExec> criteriaQuery = builder.createQuery(ExamForExec.class);
 			Root<ExamForExec> rootEntry = criteriaQuery.from(ExamForExec.class);
-			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examCode"), msg.getExecCode()));
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examCode"), msg.getExamForExec().getExamCode()));
 			TypedQuery<ExamForExec> query = session.createQuery(criteriaQuery);
 			examForExec = (ExamForExec) query.getResultList().get(0);
-			if (examForExec == null) {
+			
+			if (examForExec == null) 
+			{
 				exam = null;
 			} 
+			
 			else {
 				CriteriaQuery<Exam> criteriaQuery1 = builder.createQuery(Exam.class);
 				Root<Exam> rootEntry1 = criteriaQuery1.from(Exam.class);
@@ -48,6 +76,7 @@ public class ExamExecController {
 						.where(builder.equal(rootEntry1.get("examID"), examForExec.getExamID()));
 				TypedQuery<Exam> query1 = session.createQuery(criteriaQuery1);
 				exam = (Exam) query1.getResultList().get(0);
+				exam.setManual(examForExec.isManual());
 			}
 		} catch (Exception exception) {
 			if (session != null) {
@@ -64,8 +93,9 @@ public class ExamExecController {
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
-		configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(ExamForExec.class);
 		configuration.addAnnotatedClass(Exam.class);
+		configuration.addAnnotatedClass(Question.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);

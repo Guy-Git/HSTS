@@ -19,6 +19,7 @@ import org.hibernate.service.ServiceRegistry;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 import HSTS_Entities.Exam;
+import HSTS_Entities.ExamForExec;
 import HSTS_Entities.HstsUser;
 import ocsf_Server.AbstractServer;
 import ocsf_Server.ConnectionToClient;
@@ -35,6 +36,8 @@ public class AppsServer extends AbstractServer {
 	private UserController userController;
 	private ExamController examController;
 	private ExamExecController examExecController;
+	private TimeExtentionController timeExtentionController;
+	
 	Message serverMsg;
 
 	public AppsServer(int port) {
@@ -43,6 +46,7 @@ public class AppsServer extends AbstractServer {
 		userController = new UserController();
 		examController = new ExamController();
 		examExecController = new ExamExecController();
+		timeExtentionController = new TimeExtentionController();
 	}
 
 	@Override
@@ -50,15 +54,20 @@ public class AppsServer extends AbstractServer {
 		
 		serverMsg = new Message();
 		
+		if(((Message)msg).getAction().equals("Request time extention"))
+		{
+			timeExtentionController.addTimeExtentionRequest(((Message)msg).getTimeExtention());
+		}
+		
 		if(((Message)msg).getAction().equals("Add Exam"))
 		{
 			examController.addExam(((Message)msg).getExam());
 		}
 	
-		if(((Message)msg).getAction().equals("Enter code"))
+		if(((Message)msg).getAction().equals("Enter code") || ((Message)msg).getAction().equals("Pull exam by examCode"))
 		{
 			serverMsg.setExam(examExecController.getExamForExec(((Message)msg)));
-			if(serverMsg.getExam()==null)
+			if(serverMsg.getExam() == null)
 			{
 				serverMsg.setAction("Exam code invalid");
 			}
@@ -74,11 +83,16 @@ public class AppsServer extends AbstractServer {
 
 		}
 		
+		if(((Message)msg).getAction().equals("Add exam for execution"))
+		{
+			examExecController.addExamForExec(((Message)(msg)).getExamForExec());
+		}
+		
 		if(((Message)msg).getAction().equals("Pull Exams"))
 		{
 			serverMsg.setExams(examController.getExams((Message)msg));
 			serverMsg.setAction("Got Exams");
-			
+
 			try {
 				client.sendToClient(serverMsg);
 			} catch (IOException e) {
@@ -123,7 +137,6 @@ public class AppsServer extends AbstractServer {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 
 	/*public void showAll(ConnectionToClient client) {
