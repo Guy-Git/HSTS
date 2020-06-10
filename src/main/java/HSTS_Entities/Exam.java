@@ -35,9 +35,6 @@ public class Exam implements Serializable {
 	String subject;
 	String course;
 
-	@Transient
-	private static int[] subjectCounter = new int[100];
-
 	public Exam() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -54,70 +51,6 @@ public class Exam implements Serializable {
 		this.questionGrade = questionGrade;
 		this.subject = subject;
 		this.course = course;
-
-		// Dealing with exam ID:
-		int subjectCode = 0;
-
-		if (subject.equals("Math")) {
-			subjectCode = 1;
-			subjectCounter[subjectCode]++;
-			examID = "01";
-
-			if (course.equals("Calculus")) {
-				examID += "22";
-			}
-
-			if (course.equals("Algebra 101")) {
-				examID += "13";
-			}
-
-			if (course.equals("Introduction to Probability")) {
-				examID += "10";
-			}
-
-		}
-
-		if (subject.equals("CS")) {
-			subjectCode = 43;
-			subjectCounter[subjectCode]++;
-			examID = "43";
-
-			if (course.equals("Introduction to CS")) {
-				examID += "19";
-			}
-
-			if (course.equals("Data structures")) {
-				examID += "65";
-			}
-
-			if (course.equals("OS")) {
-				examID += "03";
-			}
-		}
-
-		if (subject.equals("Biology")) {
-			subjectCode = 78;
-			subjectCounter[subjectCode]++;
-			examID = "78";
-
-			if (course.equals("Anatomy")) {
-				examID += "72";
-			}
-
-			if (course.equals("Stem Cells")) {
-				examID += "42";
-			}
-
-			if (course.equals("Biostructure")) {
-				examID += "16";
-			}
-		}
-		
-		if (subjectCounter[subjectCode] < 10) {
-			examID += "0" + subjectCounter[subjectCode];
-		} else {
-			examID += subjectCounter[subjectCode];
-		}
 
 	}
 
