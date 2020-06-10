@@ -8,17 +8,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.impl.STTabJcImpl;
 
 import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
+import HSTS_Entities.StudentsExecutedExam;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -26,6 +31,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,10 +42,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -99,8 +109,10 @@ public class StudentExamExecutionController implements Initializable {
 
 	private Exam exam;
 
-	//private ExamForExec examForExec;
-	
+	StudentsExecutedExam studentsExecutedExam;
+
+	// private ExamForExec examForExec;
+
 	private Integer startTime;// time for exam in minutes
 
 	private Integer hourTime;
@@ -108,6 +120,8 @@ public class StudentExamExecutionController implements Initializable {
 	private Integer minutesTime;
 
 	private Integer secondsTime;
+
+	private boolean startSave = true;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -137,12 +151,11 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	void enterSubmit(ActionEvent event) {
 
+		ExamForExec examForExec = new ExamForExec();
 		Message msg = new Message();
-	//	ExamForExec.setExamCode(enterExamCode.getText())
-   //	msg.setExamForExec(examForExec);
-	  
+		examForExec.setExamCode(enterExamCode.getText());
+		msg.setExamForExec(examForExec);
 		msg.setAction("Enter code");
-		msg.setExecCode(enterExamCode.getText());
 
 		try {
 			AppsClient.getClient().sendToServer(msg);
@@ -156,10 +169,12 @@ public class StudentExamExecutionController implements Initializable {
 	public void setExamToPage(Exam exam) {
 		Platform.runLater(() -> {
 			this.exam = exam;
+			System.out.println("num of question " + exam.getQuestions().size());
 			hourTime = (exam.getTime()) / 60;
 			startTime = exam.getTime();
 			if (startTime < 60) {
 				minutesTime = startTime;
+				secondsTime = 59;
 				if (minutesTime == 1) {
 					minutesTime = 1;
 					secondsTime = 0;
@@ -192,7 +207,6 @@ public class StudentExamExecutionController implements Initializable {
 					start_exam_btn.setVisible(true);
 					start_exam_btn.setLayoutY(225);
 
-
 				} else {
 					submit_btn.setVisible(false);
 					downlod_btn.setVisible(true);
@@ -209,8 +223,9 @@ public class StudentExamExecutionController implements Initializable {
 		Timeline timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		Button submitExamBtn = new Button();
-		time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : " + secondsTime.toString());
-		
+		time_text.setText(
+				"time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : " + secondsTime.toString());
+
 		if (timeline != null) {
 			timeline.stop();
 		}
@@ -236,13 +251,12 @@ public class StudentExamExecutionController implements Initializable {
 			paragraph.setAlignment(ParagraphAlignment.RIGHT);
 			run = paragraph.createRun();
 			run.setText((i + 1) + ". " + exam.getQuestions().get(i).getQuestionContent());
-			
-			for (int j=0 ; j < 4 ; j++)
-			{
+
+			for (int j = 0; j < 4; j++) {
 				paragraph = document.createParagraph();
 				paragraph.setAlignment(ParagraphAlignment.RIGHT);
 				run = paragraph.createRun();
-				run.setText("  " + (j + 1) + ". " + exam.getQuestions().get(i).getAnswer().get(j));
+				run.setText("   " + (j + 1) + ". " + exam.getQuestions().get(i).getAnswer().get(j));
 			}
 
 		}
@@ -311,7 +325,6 @@ public class StudentExamExecutionController implements Initializable {
 		timeline.getKeyFrames().add(frame);
 		timeline.playFromStart();
 	}
-	
 
 	@FXML
 	void startExam(ActionEvent event) {
@@ -321,8 +334,8 @@ public class StudentExamExecutionController implements Initializable {
 			enterIdForExam.setVisible(false);
 			start_exam_btn.setVisible(false);
 			submit_btn.setVisible(false);
-			//save_exam.setVisible(true);
-			
+			// save_exam.setVisible(true);
+
 			Timeline timeline = new Timeline();
 			timeline.setCycleCount(Timeline.INDEFINITE);
 			time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
@@ -331,7 +344,7 @@ public class StudentExamExecutionController implements Initializable {
 			if (timeline != null) {
 				timeline.stop();
 			}
-
+			System.out.println(exam.getQuestions().get(0).getQuestionContent());
 			VBox displayExam = new VBox(15);
 			displayExam.setAlignment(Pos.CENTER);
 			Text instructions = new Text("Instructions: " + exam.getInstructions());
@@ -346,6 +359,25 @@ public class StudentExamExecutionController implements Initializable {
 
 			for (int j = 0; j < exam.getQuestions().size(); j++) {
 				VBox questionBox = new VBox(15);
+				ToggleGroup answerGroup = new ToggleGroup();
+				RadioButton ans1RB = new RadioButton();
+				RadioButton ans2RB = new RadioButton();
+				RadioButton ans3RB = new RadioButton();
+				RadioButton ans4RB = new RadioButton();
+				ans1RB.setToggleGroup(answerGroup);
+				ans2RB.setToggleGroup(answerGroup);
+				ans3RB.setToggleGroup(answerGroup);
+				ans4RB.setToggleGroup(answerGroup);
+
+				HBox answer1HBox = new HBox(5);
+				HBox answer2HBox = new HBox(5);
+				HBox answer3HBox = new HBox(5);
+				HBox answer4HBox = new HBox(5);
+
+				answer1HBox.getChildren().add(ans1RB);
+				answer2HBox.getChildren().add(ans2RB);
+				answer3HBox.getChildren().add(ans3RB);
+				answer4HBox.getChildren().add(ans4RB);
 
 				Text questionContent = new Text("" + (j + 1) + ". " + exam.getQuestions().get(j).getQuestionContent());
 				Text answer1 = new Text("1. " + exam.getQuestions().get(j).getAnswer().get(0));
@@ -353,11 +385,16 @@ public class StudentExamExecutionController implements Initializable {
 				Text answer3 = new Text("3. " + exam.getQuestions().get(j).getAnswer().get(2));
 				Text answer4 = new Text("4. " + exam.getQuestions().get(j).getAnswer().get(3));
 
+				answer1HBox.getChildren().add(answer1);
+				answer2HBox.getChildren().add(answer2);
+				answer3HBox.getChildren().add(answer3);
+				answer4HBox.getChildren().add(answer4);
+
 				questionBox.getChildren().add(questionContent);
-				questionBox.getChildren().add(answer1);
-				questionBox.getChildren().add(answer2);
-				questionBox.getChildren().add(answer3);
-				questionBox.getChildren().add(answer4);
+				questionBox.getChildren().add(answer1HBox);
+				questionBox.getChildren().add(answer2HBox);
+				questionBox.getChildren().add(answer3HBox);
+				questionBox.getChildren().add(answer4HBox);
 
 				questionBox.setMargin(questionContent, new Insets(0, 0, 0, 5));
 
@@ -368,17 +405,21 @@ public class StudentExamExecutionController implements Initializable {
 
 				questionBox.setSpacing(15);
 
-				// questionsGrid.setVgap(10);
+				questionsGrid.setVgap(10);
 				questionBox.setStyle("-fx-background-color: #ADD8E6");
-				questionsGrid.add(questionBox, 0, 1, 1, 1);
+				questionsGrid.add(questionBox, 0, j, 1, 1);
 				displayExam.getChildren().add(questionBox);
 
 			}
+
 			Text endTitle = new Text("GOOD LUCK!");
 			displayExam.getChildren().add(endTitle);
-			displayExam.getChildren().add(save_btn);
+			save_exam.setVisible(true);
+			save_exam.setDisable(false);
+			displayExam.getChildren().add(save_exam);
 			exam_anchor.setLayoutX(205);
 			exam_anchor.setLayoutY(120);
+			time_text.setLayoutY(100);
 			exam_anchor.getChildren().add(displayExam);
 
 			KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
@@ -394,12 +435,18 @@ public class StudentExamExecutionController implements Initializable {
 					time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 							+ secondsTime.toString());
 					if (startTime <= 0 && secondsTime <= 0) {
+
 						timeline.stop();
 						exam_anchor.setVisible(false);
 						save_exam.setVisible(false);
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("time is up!");
-						alert.show();
+
+						if (startSave == false) {
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setHeaderText("time is up!");
+							alert.show();
+
+						}
+						startSave = false;
 					} else {
 						secondsTime--;
 						if (secondsTime == 0 && minutesTime > 0) {
@@ -430,6 +477,40 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	void save(ActionEvent event) {
+
+		startSave = true;
+		ArrayList<Integer> chosenAnswers = new ArrayList<Integer>();
+		int sizeOfAnswers = 0;
+		this.studentsExecutedExam.setExecTime(exam.getTime() - startTime);
+		this.studentsExecutedExam.setForcedFinish(false);
+
+		for (int i = 0; i < exam.getQuestions().size(); i++) {
+			VBox questionBox = (VBox) exam_anchor.getChildren().get(0);
+			System.out.println("hello in save!");
+			VBox answersBox = (VBox) questionBox.getChildren().get(2 + i);
+
+			for (int j = 0; j < 4; j++) {
+
+				HBox answerBox = (HBox) answersBox.getChildren().get(j + 1);
+
+				if (((RadioButton) answerBox.getChildren().get(0)).isSelected()) {
+					chosenAnswers.add(j + 1);
+					sizeOfAnswers++;
+				}
+			}
+			if (sizeOfAnswers != (i + 1)) {
+				chosenAnswers.add(0);// none of the answers was chosen
+			}
+		}
+
+		this.studentsExecutedExam.setExecTime(exam.getTime() - startTime);
+		this.studentsExecutedExam.setAnswersForExam(chosenAnswers);
+		this.studentsExecutedExam.setUser(this.user);
+
+		save_exam.setVisible(false);
+		time_text.setVisible(false);
+		exam_anchor.setVisible(false);
+
 	}
 
 	@Subscribe

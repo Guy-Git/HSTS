@@ -14,7 +14,7 @@
             <Text fx:id="for_multi_line" layoutX="148.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter exam code:" wrappingWidth="95.33332824707031" />
             <TextField fx:id="enterExamCode" layoutX="249.0" layoutY="95.0" />
             <Text fx:id="for_multi_line1" layoutX="193.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter ID:" visible="false" wrappingWidth="50.0" />
-            <Button fx:id="submit_btn" alignment="CENTER" contentDisplay="CENTER" layoutX="277.0" layoutY="133.0" mnemonicParsing="false" onAction="#enterSubmit" prefHeight="30.0" prefWidth="90.0" text="submit" textAlignment="CENTER" />
+            <Button fx:id="submit_btn" alignment="CENTER" contentDisplay="CENTER" layoutX="279.0" layoutY="133.0" mnemonicParsing="false" onAction="#enterSubmit" prefHeight="30.0" prefWidth="90.0" text="submit" textAlignment="CENTER" />
             <TextField fx:id="enterIdForExam" layoutX="249.0" layoutY="194.0" prefHeight="19.0" prefWidth="150.0" visible="false" />
             <Button fx:id="downlod_btn" layoutX="262.0" layoutY="135.0" mnemonicParsing="false" onAction="#onDownlodeEvent" prefHeight="12.0" prefWidth="95.0" text="downlod exam" visible="false" />
             <Text fx:id="time_text" layoutX="261.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="122.80340576171875" />
@@ -30,11 +30,8 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="exam_anchor" layoutX="224.0" layoutY="182.0" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Button fx:id="start_exam_btn" layoutX="64.0" layoutY="68.0" mnemonicParsing="false" onAction="#startExam" text="start exam" visible="false" />
-               </children>
-            </AnchorPane>
+            <AnchorPane fx:id="exam_anchor" layoutX="222.0" layoutY="295.0" prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="start_exam_btn" layoutX="286.0" layoutY="282.0" mnemonicParsing="false" onAction="#startExam" text="start exam" visible="false" />
          </children>
       </AnchorPane>
    </content>

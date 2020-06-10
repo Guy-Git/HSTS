@@ -29,6 +29,8 @@ public class StudentsExecutedExam implements Serializable{
 	HstsUser user;
 	
 	private ArrayList<Integer> answersForExam;
+
+	//public StudentsExecutedExam studentsExecutedExam;
 	
 	
 	public StudentsExecutedExam() {
