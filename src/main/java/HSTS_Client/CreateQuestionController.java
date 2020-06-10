@@ -160,7 +160,7 @@ public class CreateQuestionController implements Initializable {
 		boolean badInput = false;
 
 		if (chooseSubject.getSelectionModel().isEmpty()
-				|| chooseSubject.getSelectionModel().getSelectedItem().equals("")) {
+				|| chooseSubject.getValue().equals("")) {
 			chooseSubject.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
@@ -168,7 +168,7 @@ public class CreateQuestionController implements Initializable {
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
-				|| chooseCourse.getSelectionModel().getSelectedItem().equals("")) {
+				|| chooseCourse.getValue().equals("")) {
 			chooseCourse.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {

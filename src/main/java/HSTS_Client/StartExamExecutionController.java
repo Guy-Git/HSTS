@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import com.google.protobuf.Duration;
+
 import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
 import HSTS_Entities.HstsUser;
@@ -107,7 +109,6 @@ public class StartExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -124,7 +125,6 @@ public class StartExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -141,7 +141,6 @@ public class StartExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -276,6 +275,10 @@ public class StartExamExecutionController implements Initializable {
 					displayExam.getChildren().add(questionBox);
 				}
 
+				Text examDuration = new Text("Exam duration is: " + exams.get(i).getTime() + " Minutes");
+				
+				displayExam.getChildren().add(examDuration);
+				
 				exams_container.getPanes().add(new TitledPane("Exam #" + exams.get(i).getExamID(), displayExam));
 			}
 		});

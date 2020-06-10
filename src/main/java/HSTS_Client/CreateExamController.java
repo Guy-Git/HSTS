@@ -127,7 +127,7 @@ public class CreateExamController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
@@ -153,69 +153,105 @@ public class CreateExamController implements Initializable {
 
 	@FXML
 	void save(ActionEvent event) {
+
+		boolean badInput = false;
+		
+		if (chooseSubject.getSelectionModel().isEmpty()
+				|| chooseSubject.getValue().equals("")) {
+			chooseSubject.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			chooseSubject.setStyle("-fx-background-color: #00bfff");
+		}
+
+		if (chooseCourse.getSelectionModel().isEmpty()
+				|| chooseCourse.getValue().equals("")) {
+			chooseCourse.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			chooseCourse.setStyle("-fx-background-color: #00bfff");
+		}
+
+		if (instructions_text.getText().isEmpty()) {
+			instructions_text.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			instructions_text.setStyle("-fx-background-color: #00bfff");
+		}
+
+		if (time_text.getText().isEmpty() || !time_text.getText().matches("[0-9]+")) {
+			time_text.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			time_text.setStyle("-fx-background-color: #00bfff");
+		}
+
 		ArrayList<Question> examQuestions = new ArrayList<Question>();
-		ArrayList<Integer> questionPoints = new ArrayList<Integer>();
+		ArrayList<Integer> questionsPoints = new ArrayList<Integer>();
 		int chosenQuestions = 0;
 
 		for (int j = 2; j < show_questions.getChildren().size() - 2; j++) {
 			HBox chooseQuestion = (HBox) show_questions.getChildren().get(j);
 			VBox questionBox = (VBox) chooseQuestion.getChildren().get(1);
 			HBox gradesBox = (HBox) questionBox.getChildren().get(6);
-			String grade = ((TextField) gradesBox.getChildren().get(1)).getText();
+			String questionPoints = ((TextField) gradesBox.getChildren().get(1)).getText();
 
-			if (((CheckBox) (((HBox) show_questions.getChildren().get(j)).getChildren().get(0))).isSelected()) 
-			{
+			if (((CheckBox) (((HBox) show_questions.getChildren().get(j)).getChildren().get(0))).isSelected()) {
 				chosenQuestions++;
 				examQuestions.add(questions.get(j - 2));
-				questionPoints.add(Integer.valueOf(grade));
+				if (questionPoints.matches("[0-9]+") && Integer.valueOf(questionPoints) > 0
+						&& Integer.valueOf(questionPoints) <= 100)
+					questionsPoints.add(Integer.valueOf(questionPoints));
 			}
 		}
-		
-		if(chosenQuestions == 0)
-		{
+
+		if (chosenQuestions == 0) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("Please choose questions!");
 			alert.setTitle("");
-			// alert.setContentText("The fields marked red must be filled");
 			alert.show();
+			return;
+		}
+
+		else if (questionsPoints.size() != chosenQuestions) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Some of the questions points field\nare empty or illegal");
+			alert.setTitle("");
+			alert.show();
+			return;
+		}
+
+		if (!badInput) {
+			Exam newExam = new Exam(examQuestions, instructions_text.getText(), notes_text.getText(),
+					user.getFullName(), Integer.valueOf(time_text.getText()), questionsPoints, chooseSubject.getValue(),
+					chooseCourse.getValue());
+
+			ArrayList<Exam> exams = new ArrayList<Exam>();
+			exams.add(newExam);
+
+			for (Question question : examQuestions) {
+				question.setExams(exams);
+			}
+			newExam.setQuestions(examQuestions);
+
+			Message msgToServer = new Message();
+
+			msgToServer.setAction("Add Exam");
+			msgToServer.setExam(newExam);
+
+			try {
+				AppsClient.getClient().sendToServer(msgToServer);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block e.printStackTrace();
+			}
 		}
 		
-		else if(questionPoints.size() != chosenQuestions) 
-		{
+		else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setHeaderText("You left somePlease choose questions!");
+			alert.setHeaderText("The fields marked red must be filled");
 			alert.setTitle("");
 			// alert.setContentText("The fields marked red must be filled");
 			alert.show();
-		}
-		else {
-			for(int i = 0; i < chosenQuestions; i++)
-			{
-				
-			}
-		}
-
-		Exam newExam = new Exam(examQuestions, instructions_text.getText(), notes_text.getText(), user.getFullName(),
-				Integer.valueOf(time_text.getText()), questionPoints, chooseSubject.getValue(),
-				chooseCourse.getValue());
-
-		ArrayList<Exam> exams = new ArrayList<Exam>();
-		exams.add(newExam);
-
-		for (Question question : examQuestions) {
-			question.setExams(exams);
-		}
-		newExam.setQuestions(examQuestions);
-
-		Message msgToServer = new Message();
-
-		msgToServer.setAction("Add Exam");
-		msgToServer.setExam(newExam);
-
-		try {
-			AppsClient.getClient().sendToServer(msgToServer);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block e.printStackTrace();
 		}
 	}
 
@@ -224,7 +260,7 @@ public class CreateExamController implements Initializable {
 		boolean badInput = false;
 
 		if (chooseSubject.getSelectionModel().isEmpty()
-				|| chooseSubject.getSelectionModel().getSelectedItem().equals("")) {
+				|| chooseSubject.getValue().equals("")) {
 			chooseSubject.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
@@ -232,20 +268,19 @@ public class CreateExamController implements Initializable {
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
-				|| chooseCourse.getSelectionModel().getSelectedItem().equals("")) {
+				|| chooseCourse.getValue().equals("")) {
 			chooseCourse.setStyle("-fx-background-color: RED");
 			badInput = true;
 		} else {
 			chooseCourse.setStyle("-fx-background-color: #00bfff");
 		}
 
-		if(badInput == false)
-		{
+		if (badInput == false) {
 			Message msg = new Message();
 			msg.setSubject(chooseSubject.getValue());
 			msg.setCourse(chooseCourse.getValue());
 			msg.setAction("Show Questions");
-			
+
 			try {
 				AppsClient.getClient().sendToServer(msg);
 			} catch (IOException e) {
@@ -253,9 +288,8 @@ public class CreateExamController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
-		else 
-		{
+
+		else {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("The fields marked red must be filled");
 			alert.setTitle("");
@@ -265,16 +299,15 @@ public class CreateExamController implements Initializable {
 	}
 
 	@Subscribe
-	public void setQuestionsToPage(ArrayList<Question> questions) 
-	{
+	public void setQuestionsToPage(ArrayList<Question> questions) {
 		this.questions = questions;
 		EventBus.getDefault().clearCaches();
 
 		Platform.runLater(() -> {
-			
-			while(show_questions.getChildren().get(3).getClass() != Button.class)
+
+			while (show_questions.getChildren().get(3).getClass() != Button.class)
 				show_questions.getChildren().remove(show_questions.getChildren().get(2));
-			
+
 			GridPane questionsGrid = new GridPane();
 			questionsGrid.setAlignment(Pos.CENTER);
 			show_questions.setVisible(true);
