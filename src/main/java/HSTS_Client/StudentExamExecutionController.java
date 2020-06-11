@@ -1,12 +1,16 @@
 package HSTS_Client;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -19,8 +23,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.impl.STTabJcImpl;
 
+import com.sun.glass.ui.Size;
+
 import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
+import HSTS_Entities.ExecutedExam;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
 import HSTS_Entities.StudentsExecutedExam;
@@ -50,8 +57,10 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -105,14 +114,18 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	private Button save_exam;
 
+	@FXML
+	private Button upload_exam;
+
+	@FXML
+	private Text fileName;
+
 	private HstsUser user;
 
 	private Exam exam;
 
-	StudentsExecutedExam studentsExecutedExam;
-
-	// private ExamForExec examForExec;
-
+	private StudentsExecutedExam studentsExecutedExam;
+	
 	private Integer startTime;// time for exam in minutes
 
 	private Integer hourTime;
@@ -121,11 +134,17 @@ public class StudentExamExecutionController implements Initializable {
 
 	private Integer secondsTime;
 
-	private boolean startSave = true;
+	private boolean startSave = false;
+
+	private Integer minutesLeft;
+
+	private File file;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
+		studentsExecutedExam = new StudentsExecutedExam();
+
 	}
 
 	@FXML
@@ -154,6 +173,7 @@ public class StudentExamExecutionController implements Initializable {
 		ExamForExec examForExec = new ExamForExec();
 		Message msg = new Message();
 		examForExec.setExamCode(enterExamCode.getText());
+		studentsExecutedExam.setExamCode(enterExamCode.getText());
 		msg.setExamForExec(examForExec);
 		msg.setAction("Enter code");
 
@@ -168,20 +188,23 @@ public class StudentExamExecutionController implements Initializable {
 	@Subscribe
 	public void setExamToPage(Exam exam) {
 		Platform.runLater(() -> {
+			studentsExecutedExam.setUser(this.user);
 			this.exam = exam;
+			studentsExecutedExam.setExamID(exam.getExamID());
 			System.out.println("num of question " + exam.getQuestions().size());
 			hourTime = (exam.getTime()) / 60;
+			minutesLeft = exam.getTime() % 60;
 			startTime = exam.getTime();
 			if (startTime < 60) {
 				minutesTime = startTime;
-				secondsTime = 59;
+				secondsTime = 0;
 				if (minutesTime == 1) {
 					minutesTime = 1;
 					secondsTime = 0;
 				}
 			} else {
-				minutesTime = 59;
-				secondsTime = 59;
+				minutesTime = minutesLeft;
+				secondsTime = 0;
 			}
 
 			if (exam == null) {
@@ -217,9 +240,13 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	void onDownlodeEvent(ActionEvent event) {
+
+		upload_exam.setVisible(true);
+		upload_exam.setDisable(false);
 		submit_btn.setVisible(false);
 		downlod_btn.setVisible(false);
 		save_exam.setVisible(true);
+		//studentsExecutedExam.setManual(false);
 		Timeline timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		Button submitExamBtn = new Button();
@@ -240,7 +267,7 @@ public class StudentExamExecutionController implements Initializable {
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
-		run.setText("instructions: " + exam.getInstructions());
+		run.setText("Instructions: " + exam.getInstructions());
 
 		for (int i = 0; i < exam.getQuestions().size(); i++) {
 			paragraph = document.createParagraph();
@@ -250,13 +277,13 @@ public class StudentExamExecutionController implements Initializable {
 			paragraph = document.createParagraph();
 			paragraph.setAlignment(ParagraphAlignment.RIGHT);
 			run = paragraph.createRun();
-			run.setText((i + 1) + ". " + exam.getQuestions().get(i).getQuestionContent());
+			run.setText((i + 1) + ".  " + exam.getQuestions().get(i).getQuestionContent());
 
 			for (int j = 0; j < 4; j++) {
 				paragraph = document.createParagraph();
 				paragraph.setAlignment(ParagraphAlignment.RIGHT);
 				run = paragraph.createRun();
-				run.setText("   " + (j + 1) + ". " + exam.getQuestions().get(i).getAnswer().get(j));
+				run.setText("   " + (j + 1) + ".  " + exam.getQuestions().get(i).getAnswer().get(j));
 			}
 
 		}
@@ -265,7 +292,10 @@ public class StudentExamExecutionController implements Initializable {
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
 		run.setText("Good Luck!");
-
+		exam_anchor.setDisable(true);
+		upload_exam.setLayoutX(270);
+		upload_exam.setLayoutY(320);
+		upload_exam.setDisable(false);
 		try {
 			FileOutputStream out = new FileOutputStream(new File("C:/Users/opal/Desktop/CoolTest.docx"));
 			try {
@@ -289,35 +319,39 @@ public class StudentExamExecutionController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				if (startTime == 1) {
-					secondsTime = 59;
-					minutesTime = 0;
-				}
-				startTime--;
+
 				time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 						+ secondsTime.toString());
-				if (startTime <= 0 && secondsTime <= 0) {
+				if (minutesTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
 					timeline.stop();
 					submitExamBtn.setVisible(false);
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setHeaderText("time is up!");
-					alert.show();
+					upload_exam.setVisible(false);
+
+					if (startSave == false) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setHeaderText("time is up!");
+						alert.show();
+						studentsExecutedExam.setExecTime(exam.getTime());
+
+					}
 				} else {
-					secondsTime--;
 					if (secondsTime == 0 && minutesTime > 0) {
-						secondsTime = 59;
+						secondsTime = 60;
 						minutesTime--;
 					}
 					if (minutesTime == 1 && secondsTime == 0) {
 						minutesTime = 0;
 						secondsTime = 59;
+						startTime--;
 					}
 					if (hourTime > 0 && secondsTime == 0 && minutesTime == 0) {
 						hourTime--;
 						minutesTime = 59;
 						secondsTime = 59;
+					} else {
+						secondsTime--;
 					}
+
 				}
 			}
 
@@ -327,7 +361,25 @@ public class StudentExamExecutionController implements Initializable {
 	}
 
 	@FXML
+	void uploadExam(ActionEvent event) {
+		// exam_anchor.getChildren().remove(0)
+		FileChooser fileChooser1 = new FileChooser();
+		fileChooser1.setTitle("Open file");
+		file = fileChooser1.showOpenDialog(null);
+
+		if (file != null) {
+			fileName.setText("");
+			// Text fileName = new Text();
+			fileName.setText(file.getName());
+			fileName.setLayoutX(53);
+			exam_anchor.getChildren().add(fileName);
+
+		}
+	}
+
+	@FXML
 	void startExam(ActionEvent event) {
+
 		if (enterIdForExam.getText().equals(user.getUserId())) {
 
 			for_multi_line1.setVisible(false);
@@ -356,7 +408,7 @@ public class StudentExamExecutionController implements Initializable {
 			questionsGrid.setAlignment(Pos.CENTER);
 			Text examTitle = new Text("Exam in subject " + exam.getSubject() + " in course " + exam.getCourse());
 			displayExam.getChildren().add(examTitle);
-
+			studentsExecutedExam.setManual(false);
 			for (int j = 0; j < exam.getQuestions().size(); j++) {
 				VBox questionBox = new VBox(15);
 				ToggleGroup answerGroup = new ToggleGroup();
@@ -427,14 +479,13 @@ public class StudentExamExecutionController implements Initializable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					if (startTime == 1) {
-						secondsTime = 59;
-						minutesTime = 0;
-					}
-					startTime--;
+					/*
+					 * if (startTime == 1) { secondsTime = 59; minutesTime = 0; }
+					 */
+					// startTime--;
 					time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 							+ secondsTime.toString());
-					if (startTime <= 0 && secondsTime <= 0) {
+					if (startTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
 
 						timeline.stop();
 						exam_anchor.setVisible(false);
@@ -448,19 +499,21 @@ public class StudentExamExecutionController implements Initializable {
 						}
 						startSave = false;
 					} else {
-						secondsTime--;
 						if (secondsTime == 0 && minutesTime > 0) {
-							secondsTime = 59;
+							secondsTime = 60;
 							minutesTime--;
 						}
 						if (minutesTime == 1 && secondsTime == 0) {
 							minutesTime = 0;
 							secondsTime = 59;
+							startTime--;
 						}
 						if (hourTime > 0 && secondsTime == 0 && minutesTime == 0) {
 							hourTime--;
 							minutesTime = 59;
 							secondsTime = 59;
+						} else {
+							secondsTime--;
 						}
 					}
 				}
@@ -470,23 +523,25 @@ public class StudentExamExecutionController implements Initializable {
 			timeline.playFromStart();
 
 		} else {
-
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("ID is incorrect! try again");
+			alert.show();
 		}
 
 	}
 
 	@FXML
-	void save(ActionEvent event) {
-
+	void saveExamContent(boolean isForced) {
 		startSave = true;
 		ArrayList<Integer> chosenAnswers = new ArrayList<Integer>();
 		int sizeOfAnswers = 0;
+//		studentsExecutedExam = new StudentsExecutedExam();
 		this.studentsExecutedExam.setExecTime(exam.getTime() - startTime);
-		this.studentsExecutedExam.setForcedFinish(false);
+		this.studentsExecutedExam.setForcedFinish(isForced);
+		this.studentsExecutedExam.setManual(false);
 
 		for (int i = 0; i < exam.getQuestions().size(); i++) {
 			VBox questionBox = (VBox) exam_anchor.getChildren().get(0);
-			System.out.println("hello in save!");
 			VBox answersBox = (VBox) questionBox.getChildren().get(2 + i);
 
 			for (int j = 0; j < 4; j++) {
@@ -510,7 +565,26 @@ public class StudentExamExecutionController implements Initializable {
 		save_exam.setVisible(false);
 		time_text.setVisible(false);
 		exam_anchor.setVisible(false);
+	}
 
+	@FXML
+	void timesUp() {
+
+		if (!exam.isManual()) {
+			saveExamContent(true);
+		}
+	}
+
+	@FXML
+	void save(ActionEvent event) {
+		if (!exam.isManual()) {
+			saveExamContent(false);
+		} else {
+			startSave = true;
+			studentsExecutedExam.setForcedFinish(false);
+			studentsExecutedExam.setExamFile(file);
+			studentsExecutedExam.setExecTime(exam.getTime() - startTime);
+		}
 	}
 
 	@Subscribe

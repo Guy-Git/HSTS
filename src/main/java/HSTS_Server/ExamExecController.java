@@ -62,7 +62,7 @@ public class ExamExecController {
 			Root<ExamForExec> rootEntry = criteriaQuery.from(ExamForExec.class);
 			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examCode"), msg.getExamForExec().getExamCode()));
 			TypedQuery<ExamForExec> query = session.createQuery(criteriaQuery);
-			examForExec = (ExamForExec) query.getResultList().get(0);
+			examForExec = (ExamForExec) query.getSingleResult();
 			
 			if (examForExec == null) 
 			{
