@@ -2,6 +2,7 @@ package HSTS_Server;
 
 import java.util.ArrayList;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,20 +24,18 @@ public class ExamExecController {
 
 	static SessionFactory sessionFactory = getSessionFactory();
 	private static Session session;
-	
-	public void addExamForExec(ExamForExec examForExec)
-	{
-		try 
-		{
+
+	public void addExamForExec(ExamForExec examForExec) {
+		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			
+
 			session.save(examForExec);
-			
+
 			session.flush();
 			session.getTransaction().commit(); // Save everything.
 		}
-		
+
 		catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -49,7 +48,7 @@ public class ExamExecController {
 	}
 
 	public Exam getExamForExec(Message msg) {
-		
+
 		ExamForExec examForExec = new ExamForExec();
 		Exam exam = new Exam();
 
@@ -60,15 +59,19 @@ public class ExamExecController {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ExamForExec> criteriaQuery = builder.createQuery(ExamForExec.class);
 			Root<ExamForExec> rootEntry = criteriaQuery.from(ExamForExec.class);
-			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examCode"), msg.getExamForExec().getExamCode()));
+			criteriaQuery.select(rootEntry)
+					.where(builder.equal(rootEntry.get("examCode"), msg.getExamForExec().getExamCode()));
 			TypedQuery<ExamForExec> query = session.createQuery(criteriaQuery);
-			examForExec = (ExamForExec) query.getResultList().get(0);
-			
-			if (examForExec == null) 
-			{
+			try {
+				examForExec = (ExamForExec) query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+
+			if (examForExec == null) {
 				exam = null;
-			} 
-			
+			}
+
 			else {
 				CriteriaQuery<Exam> criteriaQuery1 = builder.createQuery(Exam.class);
 				Root<Exam> rootEntry1 = criteriaQuery1.from(Exam.class);
