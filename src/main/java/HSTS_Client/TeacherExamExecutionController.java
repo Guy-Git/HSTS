@@ -12,7 +12,7 @@ import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
-import HSTS_Entities.TimeExtention;
+import HSTS_Entities.TimeExtension;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -62,12 +62,12 @@ public class TeacherExamExecutionController implements Initializable {
 
 	@FXML
 	void sendRequest(ActionEvent event) {
-		TimeExtention requestedTime = new TimeExtention(exam.getExamID(), reasons_text.getText(),
+		TimeExtension requestedTime = new TimeExtension(exam.getExamID(), exam.getSubject(), exam.getCourse(), reasons_text.getText(),
 				Integer.valueOf(enter_time_text.getText()), false, true);
 		Message msgToServer = new Message();
 
-		msgToServer.setAction("Request time extention");
-		msgToServer.setTimeExtention(requestedTime);
+		msgToServer.setAction("Request time extension");
+		msgToServer.setTimeExtension(requestedTime);
 
 		try {
 			AppsClient.getClient().sendToServer(msgToServer);

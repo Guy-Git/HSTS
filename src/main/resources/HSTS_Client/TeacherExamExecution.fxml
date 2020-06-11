@@ -13,10 +13,10 @@
          <font>
             <Font size="18.0" />
          </font></Text>
-      <Button fx:id="request_time_btn" layoutX="241.0" layoutY="467.0" mnemonicParsing="false" onAction="#sendRequest" text="Request time extention" />
+      <Button fx:id="request_time_btn" layoutX="241.0" layoutY="467.0" mnemonicParsing="false" onAction="#sendRequest" text="Request time extension" />
       <TextArea fx:id="reasons_text" layoutX="270.0" layoutY="280.0" prefHeight="100.0" prefWidth="240.0" />
-      <Text layoutX="116.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reasons for time extention:" />
-      <Text layoutX="198.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asked time:" />
+      <Text layoutX="116.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reasons for time extension:" />
+      <Text layoutX="146.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asked time (Minutes):" />
       <TextField fx:id="enter_time_text" layoutX="270.0" layoutY="403.0" prefHeight="25.0" prefWidth="100.0" />
    </children>
 </AnchorPane>

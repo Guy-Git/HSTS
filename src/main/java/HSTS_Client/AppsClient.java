@@ -38,6 +38,10 @@ public class AppsClient extends AbstractClient {
 		if (((Message) msg).getAction().contains("Identification")) {
 			EventBus.getDefault().post(((Message) msg));
 		}
+		
+		if (((Message) msg).getAction().contains("got time extensions")) {
+			EventBus.getDefault().post(((Message) msg).getTimeExtensionArr());
+		}
 
 		if (((Message) msg).getAction().contains("Show Questions"))
 		{
