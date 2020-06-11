@@ -2,6 +2,7 @@ package HSTS_Server;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -60,13 +61,15 @@ public class UserController {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
 			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("userId"), user.getUserId()), 
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userId"), user.getUserId()),
 					builder.equal(rootEntry.get("userPassword"), user.getUserPassword()));
 			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
-			foundUser = query.getResultList().get(0);
 
-			//System.out.println(foundUser.getUserId());
+			try {
+				foundUser = query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("User not found!");
+			}
 
 		} catch (Exception exception) {
 			if (session != null) {
