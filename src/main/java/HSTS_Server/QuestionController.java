@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,6 +27,8 @@ public class QuestionController
 {
 	static SessionFactory sessionFactory = getSessionFactory();
 	private static Session session;
+
+	private static int[] subjectCounter = new int[100];
 	
 	public ArrayList<Question> getQuestions(Message msg)
 	{
@@ -58,10 +61,44 @@ public class QuestionController
 	
 	public void addQuestion(Question question)
 	{
+		String questionID = "";
+		
+		int subjectCode = 0;
+		if(question.getSubject().equals("Math"))
+		{
+			subjectCode = 1;
+			subjectCounter[subjectCode]++;
+			questionID = "01";
+		}
+		
+		if(question.getSubject().equals("CS"))
+		{
+			subjectCode = 43;
+			subjectCounter[subjectCode]++;
+			questionID = "43";
+		}
+		
+		if(question.getSubject().equals("Biology"))
+		{
+			subjectCode = 78;
+			subjectCounter[subjectCode]++;
+			questionID = "78";
+		}
+		
+		if (subjectCounter[subjectCode] < 10) {
+			questionID = questionID + "00" + subjectCounter[subjectCode];
+		} else if (subjectCounter[subjectCode] < 100) {
+			questionID = questionID + "0" + subjectCounter[subjectCode];
+		} else {
+			questionID = questionID + subjectCounter[subjectCode];
+		}
+		
+		question.setQuestionID(questionID);
+		
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-
+			
 			session.save(question);
 			session.flush();
 			

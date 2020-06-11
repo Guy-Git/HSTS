@@ -39,9 +39,6 @@ public class Question implements Serializable {
 	private String subject;
 	private String questionID;
 	
-	@Transient
-	private static int[] subjectCounter = new int[100];
-	
 	public Question() {
 		// TODO Auto-generated constructor stub
 	}
@@ -53,37 +50,6 @@ public class Question implements Serializable {
 		this.rightAnswer = rightAnswer;
 		this.course = course;
 		this.subject = newSubject;
-		
-		int subjectCode = 0;
-		
-		if(subject.equals("Math"))
-		{
-			subjectCode = 1;
-			subjectCounter[subjectCode]++;
-			questionID = "01";
-		}
-		
-		if(subject.equals("CS"))
-		{
-			subjectCode = 43;
-			subjectCounter[subjectCode]++;
-			questionID = "43";
-		}
-		
-		if(subject.equals("Biology"))
-		{
-			subjectCode = 78;
-			subjectCounter[subjectCode]++;
-			questionID = "78";
-		}
-		
-		if (subjectCounter[subjectCode] < 10) {
-			questionID = questionID + "00" + subjectCounter[subjectCode];
-		} else if (subjectCounter[subjectCode] < 100) {
-			questionID = questionID + "0" + subjectCounter[subjectCode];
-		} else {
-			questionID = questionID + subjectCounter[subjectCode];
-		}
 		
 	}
 
