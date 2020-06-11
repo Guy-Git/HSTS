@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.PrincipalTimeExtensionController">
+   <children>
+      <Button fx:id="approve_btn" layoutX="266.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Approve" />
+      <VBox fx:id="time_ext_vbox" layoutX="135.0" layoutY="115.0" prefHeight="364.0" prefWidth="349.0">
+         <children>
+            <HBox fx:id="time_ext_hbox" prefHeight="100.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+      <AnchorPane layoutX="125.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+         <children>
+            <HBox alignment="CENTER" layoutX="85.0" layoutY="18.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <Button fx:id="time_ext_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Time extensions" />
+                  <Button fx:id="watch_reports_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Watch reports" />
+                  <Button fx:id="about_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="About" />
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <Text layoutX="163.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Showing all active time extension requests:">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

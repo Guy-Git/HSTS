@@ -36,7 +36,7 @@ public class AppsServer extends AbstractServer {
 	private UserController userController;
 	private ExamController examController;
 	private ExamExecController examExecController;
-	private TimeExtentionController timeExtentionController;
+	private TimeExtensionController timeExtensionController;
 	
 	Message serverMsg;
 
@@ -46,7 +46,7 @@ public class AppsServer extends AbstractServer {
 		userController = new UserController();
 		examController = new ExamController();
 		examExecController = new ExamExecController();
-		timeExtentionController = new TimeExtentionController();
+		timeExtensionController = new TimeExtensionController();
 	}
 
 	@Override
@@ -54,9 +54,21 @@ public class AppsServer extends AbstractServer {
 		
 		serverMsg = new Message();
 		
-		if(((Message)msg).getAction().equals("Request time extention"))
+		if(((Message)msg).getAction().equals("show time extensions")) // principal 
 		{
-			timeExtentionController.addTimeExtentionRequest(((Message)msg).getTimeExtention());
+			serverMsg.setTimeExtensionArr(timeExtensionController.getTimeExtensions());
+			serverMsg.setAction("got time extensions");
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(((Message)msg).getAction().equals("Request time extension")) // teacher
+		{
+			timeExtensionController.addTimeExtentionRequest(((Message)msg).getTimeExtension());
 		}
 		
 		if(((Message)msg).getAction().equals("Add Exam"))

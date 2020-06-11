@@ -19,22 +19,31 @@ public class Message implements Serializable
 	ArrayList<Exam> exams; //For report
 	ArrayList<String> subjects; //For report
 	ArrayList<String> courses; //For report
+	ArrayList<TimeExtension> timeExtensionsArr;
 	
 	ExamForExec examForExec;
 	
-	TimeExtention timeExtention;
+	TimeExtension timeExtension;
 	
 	public Message() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public TimeExtention getTimeExtention() {
-		return timeExtention;
+	public void setTimeExtensionArr(ArrayList<TimeExtension> timeExtensionsArr) {
+		this.timeExtensionsArr = timeExtensionsArr;
+	}
+	
+	public ArrayList<TimeExtension> getTimeExtensionArr() {
+		return timeExtensionsArr;
+	}
+	
+	public TimeExtension getTimeExtension() {
+		return timeExtension;
 	}
 
-	public void setTimeExtention(TimeExtention timeExtention) {
-		this.timeExtention = timeExtention;
+	public void setTimeExtension(TimeExtension timeExtension) {
+		this.timeExtension = timeExtension;
 	}
 
 	public ExamForExec getExamForExec() {
