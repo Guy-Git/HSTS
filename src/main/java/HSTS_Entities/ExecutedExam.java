@@ -36,6 +36,8 @@ public class ExecutedExam implements Serializable{
 
 	private String examID;
 	
+	private String examCode;
+	
 	public ExecutedExam() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -96,6 +98,14 @@ public class ExecutedExam implements Serializable{
 
 	public void setExamID(String examID) {
 		this.examID = examID;
+	}
+
+	public String getExamCode() {
+		return examCode;
+	}
+
+	public void setExamCode(String examCode) {
+		this.examCode = examCode;
 	}
 
 
