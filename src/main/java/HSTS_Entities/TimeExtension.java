@@ -10,12 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "time_extentions")
-public class TimeExtention implements Serializable 
+@Table(name = "time_extensions")
+public class TimeExtension implements Serializable 
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	private String subject;
+	
+	private String course;
 	
 	private String examID;
 	
@@ -28,9 +32,11 @@ public class TimeExtention implements Serializable
 	
 	private boolean status;
 
-	public TimeExtention(String examID, String reason, int requestedTime, boolean approved, boolean status) {
+	public TimeExtension(String examID, String subject, String course, String reason, int requestedTime, boolean approved, boolean status) {
 		super();
 		this.examID = examID;
+		this.subject = subject;
+		this.course = course;
 		this.reason = reason;
 		this.requestedTime = requestedTime;
 		this.approved = approved;
@@ -43,6 +49,22 @@ public class TimeExtention implements Serializable
 
 	public void setExamID(String examID) {
 		this.examID = examID;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	
+	public String getCourse() {
+		return course;
+	}
+
+	public void setCourse(String course) {
+		this.course = course;
 	}
 
 	public String getReason() {
