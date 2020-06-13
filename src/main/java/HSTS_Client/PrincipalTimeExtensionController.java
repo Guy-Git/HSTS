@@ -12,6 +12,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
+import HSTS_Entities.Question;
 import HSTS_Entities.TimeExtension;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -30,7 +31,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class PrincipalTimeExtensionController implements Initializable{
@@ -60,6 +65,9 @@ public class PrincipalTimeExtensionController implements Initializable{
 	@FXML
 	private HBox time_ext_hbox;
 	
+	@FXML
+    private Button approve_btn;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
@@ -72,7 +80,6 @@ public class PrincipalTimeExtensionController implements Initializable{
 			e.printStackTrace();
 		}		
 	}
-	
 	
 	@FXML
 	void menuClick(ActionEvent event) {
@@ -104,52 +111,87 @@ public class PrincipalTimeExtensionController implements Initializable{
 		Platform.runLater(() -> {
 			this.timeExtensionsArr = timeExtensionsArr;
 			EventBus.getDefault().clearCaches();
-			System.out.println("test");
-
-		//	while(time_ext_vbox.getChildren().get(3).getClass() != Button.class)
-			//	time_ext_vbox.getChildren().remove(time_ext_vbox.getChildren().get(2));
+			time_ext_vbox.getChildren().clear();
 			
 			GridPane timeExtensionGrid = new GridPane();
 			timeExtensionGrid.setAlignment(Pos.CENTER);
 			time_ext_vbox.setVisible(true);
-			time_ext_vbox.setMargin(time_ext_hbox, new Insets(0, 0, 10, 0));
+			time_ext_vbox.setSpacing(15);
+			time_ext_vbox.getChildren().clear();
+			
+			if(timeExtensionsArr.isEmpty()) {
+				Text noTimeExt = new Text("No new time extensions!");
+				noTimeExt.setFont(Font.font ("Century Gothic", 14));
+				time_ext_vbox.getChildren().add(noTimeExt);
+				time_ext_vbox.setAlignment(Pos.CENTER);
+			}
+			
+			else {
+				Text timeExt = new Text("Showing all active time extension requests:");
+				Text warning = new Text("unapproved time extensions are denied");
+				timeExt.setFont(Font.font ("Century Gothic", 14));
+				warning.setFont(Font.font ("Century Gothic", 11));
+				warning.setFill(Color.RED);
+				time_ext_vbox.getChildren().add(timeExt);
+				time_ext_vbox.getChildren().add(warning);
+				time_ext_vbox.setAlignment(Pos.CENTER);
+			}
 			
 			for (int i = 0; i < timeExtensionsArr.size(); i++) {
 				HBox chooseHB = new HBox();
-				chooseHB.setAlignment(Pos.CENTER);
+				chooseHB.setAlignment(Pos.TOP_CENTER);
 				CheckBox chooseTimeExtension = new CheckBox();
 				chooseHB.getChildren().add(chooseTimeExtension);
+				Text timeExtensionNumber = new Text("" + (i + 1) + ". ");
+				chooseHB.getChildren().add(timeExtensionNumber);
 				
 				VBox timeExtensionsBox = new VBox();
-				Text examID = new Text("" + (i + 1) + ". Exam ID: " + timeExtensionsArr.get(i).getExamID());
-				Text subject = new Text(" Subject: " + timeExtensionsArr.get(i).getSubject());
-				Text course = new Text(" Course: " + timeExtensionsArr.get(i).getCourse());
-				Text reason = new Text(" Reason " + timeExtensionsArr.get(i).getReason());
-				//Text requestedTime = new Text(" Requested time: " + timeExtensionsArr.get(i).getRequestedTime());
-				Text requestedTime = new Text(" Requested Time: ");
-				TextField time = new TextField();
+				TextFlow examID = new TextFlow();
+				examID.setPrefWidth(300);
+				Text examID1 = new Text(" Exam ID: ");
+				Text examID2 = new Text(timeExtensionsArr.get(i).getExamID());
+				examID.getChildren().addAll(examID1, examID2);
+				examID1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
+				examID2.setFont(Font.font("Century Gothic", 12));
+
+				TextFlow subject = new TextFlow();
+				subject.setPrefWidth(300);
+				Text subject1 = new Text(" Subject: ");
+				Text subject2 = new Text(timeExtensionsArr.get(i).getSubject());
+				subject.getChildren().addAll(subject1, subject2);
+				subject1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
+				subject2.setFont(Font.font("Century Gothic", 12));
 				
+				TextFlow course = new TextFlow();
+				course.setPrefWidth(300);
+				Text course1 = new Text(" Course: ");
+				Text course2 = new Text(timeExtensionsArr.get(i).getCourse());
+				course.getChildren().addAll(course1, course2);
+				course1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
+				course2.setFont(Font.font("Century Gothic", 12));
+				
+				TextFlow reason = new TextFlow();
+				reason.setPrefWidth(300);
+				Text reason1 = new Text(" Reason for time extension: ");
+				Text reason2 = new Text(timeExtensionsArr.get(i).getReason());
+				reason.getChildren().addAll(reason1, reason2);
+				reason1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
+				reason2.setFont(Font.font("Century Gothic", 12));
+				reason2.setWrappingWidth(320);
+				
+				TextFlow requestedTime = new TextFlow();
+				requestedTime.setPrefWidth(300);
+				Text requestedTime1 = new Text(" Requested time: ");
+				Text requestedTime2 = new Text("" + timeExtensionsArr.get(i).getRequestedTime());
+				requestedTime.getChildren().addAll(requestedTime1, requestedTime2);
+				requestedTime1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
+				requestedTime2.setFont(Font.font("Century Gothic", 12));
+
 				timeExtensionsBox.getChildren().add(examID);
 				timeExtensionsBox.getChildren().add(subject);
 				timeExtensionsBox.getChildren().add(course);
 				timeExtensionsBox.getChildren().add(reason);
 				timeExtensionsBox.getChildren().add(requestedTime);
-
-				HBox gradesHB = new HBox(); // change name
-				time.setPrefWidth(50);
-				time.setMaxWidth(50);
-				gradesHB.getChildren().add(requestedTime);
-				gradesHB.getChildren().add(time);
-				gradesHB.setSpacing(10);
-				timeExtensionsBox.getChildren().add(gradesHB);
-
-				timeExtensionsBox.setMargin(examID, new Insets(0, 0, 0, 5));
-				timeExtensionsBox.setMargin(reason, new Insets(0, 0, 0, 5));
-				timeExtensionsBox.setMargin(gradesHB, new Insets(0, 5, 0, 5));
-
-				//timeExtensionsBox.setMargin(answer1, new Insets(0, 0, 0, 35));
-				//timeExtensionsBox.setMargin(answer2, new Insets(0, 0, 0, 35));
-				
 
 				timeExtensionsBox.setSpacing(15);
 				timeExtensionGrid.setVgap(10);
@@ -160,11 +202,36 @@ public class PrincipalTimeExtensionController implements Initializable{
 				chooseHB.setSpacing(15);
 				time_ext_vbox.getChildren().add(chooseHB);
 			}
-
-		//	HBox switchHBox = (HBox) time_ext_vbox.getChildren().remove(2);
-		//	time_ext_vbox.getChildren().add(switchHBox);
-		//	Button switchButton = (Button) time_ext_vbox.getChildren().remove(2);
-		//	time_ext_vbox.getChildren().add(switchButton);
+			
+			if (!timeExtensionsArr.isEmpty()) {
+				approve_btn.setVisible(true);
+				approve_btn.setFont(Font.font ("Century Gothic", 12));
+				time_ext_vbox.getChildren().add(approve_btn);
+				time_ext_vbox.setAlignment(Pos.CENTER);
+			}
 		});
 	}
+	
+	@FXML
+	void approve(ActionEvent event) {
+		for (int j = 0; j < time_ext_vbox.getChildren().size() - 3; j++) {
+			if (((CheckBox) (((HBox) time_ext_vbox.getChildren().get(j + 2)).getChildren().get(0))).isSelected()) {
+				timeExtensionsArr.get(j).setApproved(true);				
+			}
+			timeExtensionsArr.get(j).setStatus(false);
+		}
+	
+		Message msg = new Message();
+		msg.setTimeExtensionArr(timeExtensionsArr);
+		msg.setAction("Update time extension requests");
+		
+		try {
+			AppsClient.getClient().sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

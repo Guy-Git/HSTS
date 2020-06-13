@@ -32,6 +32,11 @@ public class TimeExtension implements Serializable
 	
 	private boolean status;
 
+	public TimeExtension() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
 	public TimeExtension(String examID, String subject, String course, String reason, int requestedTime, boolean approved, boolean status) {
 		super();
 		this.examID = examID;

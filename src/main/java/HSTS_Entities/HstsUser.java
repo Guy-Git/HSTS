@@ -21,6 +21,7 @@ public class HstsUser implements Serializable {
 	String userPassword;
 	int userType; // 1.Student 2.Teacher 3.Principal
 	String fullName;
+	boolean connectionStatus;
 	
 	ArrayList<String> subjects; //Teacher's
 	
@@ -44,7 +45,8 @@ public class HstsUser implements Serializable {
 	
 	public HstsUser() {}
 	
-	public HstsUser(String userId, String userPassword, int userType, ArrayList<String> subjects, ArrayList<String> courses, String fullName)
+	public HstsUser(String userId, String userPassword, int userType, ArrayList<String> subjects, ArrayList<String> courses, 
+			String fullName, boolean connectionStatus)
 	{
 		super();
 		this.userId = userId;
@@ -53,6 +55,7 @@ public class HstsUser implements Serializable {
 		this.subjects = subjects;
 		this.courses = courses;
 		this.fullName = fullName;
+		this.connectionStatus = connectionStatus;
 	}
 
 	public String getFullName() {
@@ -101,6 +104,14 @@ public class HstsUser implements Serializable {
 
 	public void setCourses(ArrayList<String> courses) {
 		this.courses = courses;
+	}
+	
+	public boolean getConnectionStatus() {
+		return connectionStatus;
+	}
+
+	public void setConnectionStatus(boolean connectionStatus) {
+		this.connectionStatus = connectionStatus;
 	}
 	
 }

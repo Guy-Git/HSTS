@@ -50,6 +50,25 @@ public class UserController {
 		return foundUser;
 
 	}
+	
+	public void clientDisconnect(HstsUser user) {
+		HstsUser foundUser = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
+			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("userId"), user.getUserId()), 
+					builder.equal(rootEntry.get("userPassword"), user.getUserPassword()));
+			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
+			foundUser = query.getResultList().get(0);
+			
+			session.evict(foundUser);
+			//foundUser.
+		}
+	}
 
 	public HstsUser identification(HstsUser user) {
 		HstsUser foundUser = null;

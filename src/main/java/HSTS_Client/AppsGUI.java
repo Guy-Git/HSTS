@@ -2,6 +2,7 @@ package HSTS_Client;
 
 import java.io.IOException;
 
+import HSTS_Entities.Message;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,19 @@ public class AppsGUI extends Application {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+	}
+	
+	@Override
+	public void stop() {
+		Message msg = new Message();
+		msg.setAction("client disconnect");
+		msg.setUser(AppsClient.getUser());
+		try {
+			AppsClient.getClient().sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	static void setRoot(String fxml) throws IOException {

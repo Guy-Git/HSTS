@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
+import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 import ocsf_Client.AbstractClient;
@@ -14,6 +15,7 @@ public class AppsClient extends AbstractClient {
 	private static AppsClient client = null;
 	private static final Logger LOGGER = Logger.getLogger(AppsClient.class.getName());
 	private Message clientMessage;
+	private static HstsUser user;
 
 	public AppsClient(String host, int port) {
 		super(host, port);
@@ -33,9 +35,14 @@ public class AppsClient extends AbstractClient {
 		return client;
 	}
 
+	public static HstsUser getUser() {
+		return user;
+	}
+	
 	@Override
 	protected void handleMessageFromServer(Object msg) {
 		if (((Message) msg).getAction().contains("Identification")) {
+			this.user = ((Message) msg).getUser();
 			EventBus.getDefault().post(((Message) msg));
 		}
 		
