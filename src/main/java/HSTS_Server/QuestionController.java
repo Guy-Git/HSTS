@@ -47,6 +47,7 @@ public class QuestionController
 			TypedQuery<Question> query = session.createQuery(criteriaQuery);
 			questions = (ArrayList<Question>) query.getResultList();
 
+			
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();

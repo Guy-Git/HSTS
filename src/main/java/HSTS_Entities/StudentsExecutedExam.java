@@ -1,5 +1,6 @@
 package HSTS_Entities;
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -13,33 +14,37 @@ import javax.persistence.Table;
 
 import javafx.fxml.Initializable;
 
-
 @Entity
 @Table(name = "student_exec_exam")
-public class StudentsExecutedExam implements Serializable{
+public class StudentsExecutedExam implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	private boolean forcedFinish;
-	
+
 	private int execTime;
-	
+
 	HstsUser user;
-	
+
 	private ArrayList<Integer> answersForExam;
 
-	//public StudentsExecutedExam studentsExecutedExam;
+	private boolean isManual;
+
+	private File examFile;
 	
+	private String examID;
 	
+	private String examCode;
+
+	// public StudentsExecutedExam studentsExecutedExam;
+
 	public StudentsExecutedExam() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
 	public boolean isForcedFinish() {
 		return forcedFinish;
 	}
@@ -71,6 +76,38 @@ public class StudentsExecutedExam implements Serializable{
 	public void setAnswersForExam(ArrayList<Integer> answersForExam) {
 		this.answersForExam = answersForExam;
 	}
-	
+
+	public boolean isManual() {
+		return isManual;
+	}
+
+	public void setManual(boolean isManual) {
+		this.isManual = isManual;
+	}
+
+	public File getExamFile() {
+		return examFile;
+	}
+
+	public void setExamFile(File examFile) {
+		this.examFile = examFile;
+	}
+
+	public String getExamID() {
+		return examID;
+	}
+
+	public void setExamID(String examID) {
+		this.examID = examID;
+	}
+
+	public String getExamCode() {
+		return examCode;
+	}
+
+	public void setExamCode(String examCode) {
+		this.examCode = examCode;
+	}
+
 	
 }

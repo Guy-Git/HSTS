@@ -220,6 +220,24 @@ public class CreateExamController implements Initializable {
 			alert.show();
 			return;
 		}
+		
+		else 
+		{
+			int sumOfPoints = 0;
+			for(int i = 0; i < questionsPoints.size(); i++)
+			{
+				sumOfPoints += questionsPoints.get(i);
+			}
+			
+			if(sumOfPoints != 100)
+			{
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setHeaderText("Question Points must sum up to 100");
+				alert.setTitle("");
+				alert.show();
+				return;
+			}	
+		}
 
 		if (!badInput) {
 			Exam newExam = new Exam(examQuestions, instructions_text.getText(), notes_text.getText(),
@@ -248,7 +266,7 @@ public class CreateExamController implements Initializable {
 		
 		else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setHeaderText("The fields marked red must be filled");
+			alert.setHeaderText("The fields marked red\nare empty or illegal");
 			alert.setTitle("");
 			// alert.setContentText("The fields marked red must be filled");
 			alert.show();
