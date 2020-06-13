@@ -210,7 +210,8 @@ public class CreateQuestionController implements Initializable {
 			answer4Text.setStyle("-fx-background-color: #00bfff");
 		}
 
-		if (badInput == false) {
+		if (badInput == false) 
+		{
 			if (right_answer.getSelectedToggle() == rightAnswer1) {
 				rightAnswer = 1;
 			} else if (right_answer.getSelectedToggle() == rightAnswer2) {
