@@ -360,8 +360,8 @@ public class StartExamExecutionController implements Initializable {
 			subjects = user.getSubjects();
 			courses = user.getCourses();
 
-			if (subjects.get(0) != null && courses.get(0) != "") {
-				subjects.add(0, null);
+			if (subjects.get(0) != "" && courses.get(0) != "") {
+				subjects.add(0, "");
 				courses.add(0, "");
 			}
 
