@@ -109,6 +109,7 @@ public class TeacherExamExecutionController implements Initializable {
 
 			if (startTime < 60) {
 				minutesTime = startTime;
+				secondsTime = 59;
 				if (minutesTime == 1) {
 					minutesTime = 1;
 					secondsTime = 0;
