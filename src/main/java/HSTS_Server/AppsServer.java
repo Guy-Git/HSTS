@@ -39,6 +39,7 @@ public class AppsServer extends AbstractServer {
 	private ExamController examController;
 	private ExamExecController examExecController;
 	private TimeExtensionController timeExtensionController;
+	private ExecutedExamController executedExamController;
 	
 	Message serverMsg;
 
@@ -113,6 +114,12 @@ public class AppsServer extends AbstractServer {
 		if(((Message)msg).getAction().equals("Add Exam"))
 		{
 			examController.addExam(((Message)msg).getExam());
+		}
+		
+		if(((Message)msg).getAction().equals("Submit Student Exam"))
+		{
+			
+			executedExamController.checkExam(((Message)msg).getStudentsExecutedExam());
 		}
 	
 		if(((Message)msg).getAction().equals("Enter code") || ((Message)msg).getAction().equals("Pull exam by examCode"))

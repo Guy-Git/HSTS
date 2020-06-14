@@ -58,6 +58,10 @@ public class ExecutedExamController {
 		}
 	}
 
+	public void checkExam(StudentsExecutedExam studentsExecutedExam) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
