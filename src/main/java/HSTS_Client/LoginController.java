@@ -45,7 +45,7 @@ public class LoginController implements Initializable {
 
 	@FXML
 	void onClick(ActionEvent event) {
-		HstsUser user = new HstsUser(username_text.getText(), password_text.getText(), 0, null, null, "");
+		HstsUser user = new HstsUser(username_text.getText(), password_text.getText(), 0, null, null, "", false);
 		Message msg = new Message();
 		msg.setAction("Login");
 		msg.setUser(user);
@@ -69,58 +69,74 @@ public class LoginController implements Initializable {
 			}
 
 			else {
-				if (recieved.getUser().getUserType() == 1) {
-					Stage stage = (Stage) login_btn.getScene().getWindow();
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
-						stage.setTitle("High School Test System");
-						Scene scene = new Scene(root);
-						stage.setScene(scene);
-						stage.show();
-						EventBus.getDefault().post(((Message) recieved).getUser());
-						EventBus.getDefault().unregister(this);
+				if (recieved.getUser().getConnectionStatus() == true) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setHeaderText("User already connected!");
+					alert.setTitle("");
+					alert.show();
+				} else {
+					if (recieved.getUser().getUserType() == 1) {
+						Stage stage = (Stage) login_btn.getScene().getWindow();
+						try {
+							Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
+							stage.setTitle("High School Test System");
+							Scene scene = new Scene(root);
+							stage.setScene(scene);
+							stage.show();
+							EventBus.getDefault().post(((Message) recieved).getUser());
+							EventBus.getDefault().unregister(this);
 
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					else if (recieved.getUser().getUserType() == 2) {
+						Stage stage = (Stage) login_btn.getScene().getWindow();
+						try {
+							Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+							stage.setTitle("High School Test System");
+							Scene scene = new Scene(root);
+							stage.setScene(scene);
+							stage.show();
+							EventBus.getDefault().post(((Message) recieved).getUser());
+							EventBus.getDefault().unregister(this);
+
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					else if (recieved.getUser().getUserType() == 3) {
+						Stage stage = (Stage) login_btn.getScene().getWindow();
+						try {
+							Parent root = FXMLLoader
+									.load(getClass().getResource("/HSTS_Client/PrincipalMainPage.fxml"));
+							stage.setTitle("High School Test System");
+							Scene scene = new Scene(root);
+							stage.setScene(scene);
+							stage.show();
+							EventBus.getDefault().post(((Message) recieved).getUser());
+							EventBus.getDefault().unregister(this);
+
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					Message msg = new Message();
+					msg.setAction("user connected");
+					msg.setUser(((Message) recieved).getUser());
+					try {
+						AppsClient.getClient().sendToServer(msg);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 				
-				else if(recieved.getUser().getUserType() == 2)
-				{
-					Stage stage = (Stage) login_btn.getScene().getWindow();
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
-						stage.setTitle("High School Test System");
-						Scene scene = new Scene(root);
-						stage.setScene(scene);
-						stage.show();
-						EventBus.getDefault().post(((Message) recieved).getUser());
-						EventBus.getDefault().unregister(this);
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-				else if(recieved.getUser().getUserType() == 3)
-				{
-					Stage stage = (Stage) login_btn.getScene().getWindow();
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalMainPage.fxml"));
-						stage.setTitle("High School Test System");
-						Scene scene = new Scene(root);
-						stage.setScene(scene);
-						stage.show();
-						EventBus.getDefault().post(((Message) recieved).getUser());
-						EventBus.getDefault().unregister(this);
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
 			}
 		});
 	}
