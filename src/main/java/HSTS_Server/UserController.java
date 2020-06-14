@@ -8,6 +8,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -54,6 +56,11 @@ public class UserController {
 
 	public HstsUser identification(HstsUser user) {
 		HstsUser foundUser = null;
+		
+		String encryptPassword = user.getUserPassword();
+	    SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest256();
+	    byte[] digest = digestSHA3.digest(encryptPassword.getBytes());
+	    encryptPassword =  Hex.encodeHexString(digest);
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -62,7 +69,7 @@ public class UserController {
 			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
 			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
 			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userId"), user.getUserId()),
-					builder.equal(rootEntry.get("userPassword"), user.getUserPassword()));
+					builder.equal(rootEntry.get("userPassword"), encryptPassword));
 			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
 
 			try {

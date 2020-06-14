@@ -42,6 +42,9 @@ public class TeacherMainPageController implements Initializable {
 
 	@FXML
 	private Text time_text;
+	
+    @FXML
+    private Button edit_exam_btn;
 
 	private HstsUser user;
 
@@ -106,6 +109,22 @@ public class TeacherMainPageController implements Initializable {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StartExamExecution.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == edit_exam_btn) {
+			Stage stage = (Stage) edit_exam_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditExam.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);

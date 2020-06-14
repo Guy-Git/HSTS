@@ -56,6 +56,12 @@ public class AppsClient extends AbstractClient {
 		{
 			EventBus.getDefault().post(((Message) msg).getExam());
 		}
+		
+		if (((Message) msg).getAction().contains("Show Exams and Questions"))
+		{
+			EventBus.getDefault().post(((Message) msg));
+			
+		}
 
 		// if(((Message)msg).getAction().equals(""))
 		/*
