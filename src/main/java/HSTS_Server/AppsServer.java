@@ -54,9 +54,23 @@ public class AppsServer extends AbstractServer {
 		
 		serverMsg = new Message();
 		
-		if(((Message)msg).getAction().equals("client disconnect"))  
+		if(((Message)msg).getAction().equals("user log out"))  { // user log out without closing the client
+			userController.clientDisconnect(((Message)msg).getUser());
+		}
+		
+		if(((Message)msg).getAction().equals("user connected"))  {
+			userController.connectUser(((Message)msg).getUser());
+		}
+		
+		if(((Message)msg).getAction().equals("client disconnect"))   // user log out with closing the client
 		{
-			
+			userController.clientDisconnect(((Message)msg).getUser());
+			try {
+				client.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		if(((Message)msg).getAction().equals("Update time extension requests"))  

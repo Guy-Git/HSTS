@@ -27,6 +27,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -44,29 +45,29 @@ public class PrincipalTimeExtensionController implements Initializable{
 	
 	private HstsUser user;
 
-	@FXML
-	private Text enter_name_text;
+	 @FXML
+	 private Button time_ext_btn;
 
-	@FXML
-	private Text time_text;
+	 @FXML
+	 private Button watch_reports_btn;
 
-	@FXML
-	private Button time_ext_btn;
+	 @FXML
+	 private Button about_btn;
 
-	@FXML
-	private Button watch_reports_btn;
+	 @FXML
+	 private Button log_out_btn;
 
-	@FXML
-	private Button about_btn;
-	
-	@FXML
-	private VBox time_ext_vbox;
-	
-	@FXML
-	private HBox time_ext_hbox;
-	
-	@FXML
-    private Button approve_btn;
+	 @FXML
+	 private VBox time_ext_vbox;
+
+	 @FXML
+	 private HBox time_ext_hbox;
+
+	 @FXML
+	 private Button approve_btn;
+	 
+	 @FXML
+	 private ScrollPane scroll_bar;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -97,6 +98,32 @@ public class PrincipalTimeExtensionController implements Initializable{
 				e.printStackTrace();
 			}
 		}
+		
+		if (event.getSource() == log_out_btn) {
+			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				
+				Message msg = new Message();
+				msg.setAction("user log out");
+				msg.setUser(this.user);
+				try {
+					AppsClient.getClient().sendToServer(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
 	}
@@ -117,21 +144,24 @@ public class PrincipalTimeExtensionController implements Initializable{
 			timeExtensionGrid.setAlignment(Pos.CENTER);
 			time_ext_vbox.setVisible(true);
 			time_ext_vbox.setSpacing(15);
-			time_ext_vbox.getChildren().clear();
+			time_ext_vbox.getChildren().clear();		
 			
 			if(timeExtensionsArr.isEmpty()) {
-				Text noTimeExt = new Text("No new time extensions!");
-				noTimeExt.setFont(Font.font ("Century Gothic", 14));
+				Text noTimeExt = new Text("no new time extensions");
+				noTimeExt.setFill(Color.WHITE);
+				noTimeExt.setFont(Font.font ("Century Gothic", 16));
 				time_ext_vbox.getChildren().add(noTimeExt);
 				time_ext_vbox.setAlignment(Pos.CENTER);
 			}
 			
 			else {
-				Text timeExt = new Text("Showing all active time extension requests:");
+				Text timeExt = new Text("active time extension requests");
 				Text warning = new Text("unapproved time extensions are denied");
-				timeExt.setFont(Font.font ("Century Gothic", 14));
-				warning.setFont(Font.font ("Century Gothic", 11));
+				timeExt.setFont(Font.font ("Century Gothic", 18));
+				warning.setFont(Font.font ("Century Gothic", 14));
+				timeExt.setFill(Color.WHITE);
 				warning.setFill(Color.RED);
+
 				time_ext_vbox.getChildren().add(timeExt);
 				time_ext_vbox.getChildren().add(warning);
 				time_ext_vbox.setAlignment(Pos.CENTER);
@@ -143,6 +173,7 @@ public class PrincipalTimeExtensionController implements Initializable{
 				CheckBox chooseTimeExtension = new CheckBox();
 				chooseHB.getChildren().add(chooseTimeExtension);
 				Text timeExtensionNumber = new Text("" + (i + 1) + ". ");
+				timeExtensionNumber.setFill(Color.WHITE);
 				chooseHB.getChildren().add(timeExtensionNumber);
 				
 				VBox timeExtensionsBox = new VBox();
@@ -153,6 +184,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				examID.getChildren().addAll(examID1, examID2);
 				examID1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
 				examID2.setFont(Font.font("Century Gothic", 12));
+				examID1.setFill(Color.WHITE);
+				examID2.setFill(Color.WHITE);
 
 				TextFlow subject = new TextFlow();
 				subject.setPrefWidth(300);
@@ -161,6 +194,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				subject.getChildren().addAll(subject1, subject2);
 				subject1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
 				subject2.setFont(Font.font("Century Gothic", 12));
+				subject1.setFill(Color.WHITE);
+				subject2.setFill(Color.WHITE);
 				
 				TextFlow course = new TextFlow();
 				course.setPrefWidth(300);
@@ -169,6 +204,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				course.getChildren().addAll(course1, course2);
 				course1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
 				course2.setFont(Font.font("Century Gothic", 12));
+				course1.setFill(Color.WHITE);
+				course2.setFill(Color.WHITE);
 				
 				TextFlow reason = new TextFlow();
 				reason.setPrefWidth(300);
@@ -178,6 +215,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				reason1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
 				reason2.setFont(Font.font("Century Gothic", 12));
 				reason2.setWrappingWidth(320);
+				reason1.setFill(Color.WHITE);
+				reason2.setFill(Color.WHITE);
 				
 				TextFlow requestedTime = new TextFlow();
 				requestedTime.setPrefWidth(300);
@@ -186,6 +225,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				requestedTime.getChildren().addAll(requestedTime1, requestedTime2);
 				requestedTime1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 12));
 				requestedTime2.setFont(Font.font("Century Gothic", 12));
+				requestedTime1.setFill(Color.WHITE);
+				requestedTime2.setFill(Color.WHITE);
 
 				timeExtensionsBox.getChildren().add(examID);
 				timeExtensionsBox.getChildren().add(subject);
@@ -193,20 +234,22 @@ public class PrincipalTimeExtensionController implements Initializable{
 				timeExtensionsBox.getChildren().add(reason);
 				timeExtensionsBox.getChildren().add(requestedTime);
 
-				timeExtensionsBox.setSpacing(15);
+				timeExtensionsBox.setSpacing(20);
 				timeExtensionGrid.setVgap(10);
-				timeExtensionsBox.setStyle("-fx-background-color: #ADD8E6");
+				timeExtensionsBox.setStyle("-fx-background-color:  #3C3E63; -fx-background-radius: 5;");
 				timeExtensionGrid.add(timeExtensionsBox, 0, i + 1, 1, 1);
 
 				chooseHB.getChildren().add(timeExtensionsBox);
-				chooseHB.setSpacing(15);
+				chooseHB.setSpacing(30);
 				time_ext_vbox.getChildren().add(chooseHB);
 			}
 			
 			if (!timeExtensionsArr.isEmpty()) {
+				Text empty = new Text();
 				approve_btn.setVisible(true);
 				approve_btn.setFont(Font.font ("Century Gothic", 12));
 				time_ext_vbox.getChildren().add(approve_btn);
+				time_ext_vbox.getChildren().add(empty);
 				time_ext_vbox.setAlignment(Pos.CENTER);
 			}
 		});
@@ -214,7 +257,7 @@ public class PrincipalTimeExtensionController implements Initializable{
 	
 	@FXML
 	void approve(ActionEvent event) {
-		for (int j = 0; j < time_ext_vbox.getChildren().size() - 3; j++) {
+		for (int j = 0; j < time_ext_vbox.getChildren().size() - 4; j++) {
 			if (((CheckBox) (((HBox) time_ext_vbox.getChildren().get(j + 2)).getChildren().get(0))).isSelected()) {
 				timeExtensionsArr.get(j).setApproved(true);				
 			}
