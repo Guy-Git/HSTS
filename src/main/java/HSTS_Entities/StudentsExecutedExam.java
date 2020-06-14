@@ -41,6 +41,9 @@ public class StudentsExecutedExam implements Serializable {
 	private int grade;
 	
 	boolean checked;
+	
+	private ArrayList<Integer> checkedAnswers;
+
 
 	// public StudentsExecutedExam studentsExecutedExam;
 
@@ -128,7 +131,14 @@ public class StudentsExecutedExam implements Serializable {
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
-	
+
+	public ArrayList<Integer> getCheckedAnswers() {
+		return checkedAnswers;
+	}
+
+	public void setCheckedAnswers(ArrayList<Integer> checkedAnswers) {
+		this.checkedAnswers = checkedAnswers;
+	}
 	
 
 	
