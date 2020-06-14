@@ -51,7 +51,80 @@ public class UserController {
 		return foundUser;
 
 	}
+	
+	public void clientDisconnect(HstsUser user) {
+		HstsUser foundUser = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
 
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
+			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userId"), user.getUserId()),
+					builder.equal(rootEntry.get("userPassword"), user.getUserPassword()));
+			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
+			
+			try {
+				foundUser = query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("User not found!");
+			}
+			
+			session.evict(foundUser);
+			foundUser.setConnectionStatus(false);
+			session.update(foundUser);
+			session.flush();
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		
+	}
+	
+	public void connectUser(HstsUser user) {
+		HstsUser foundUser = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
+			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userId"), user.getUserId()),
+					builder.equal(rootEntry.get("userPassword"), user.getUserPassword()));
+			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
+
+			try {
+				foundUser = query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("User not found!");
+			}
+			
+			if(foundUser != null) {
+				session.evict(foundUser);
+				foundUser.setConnectionStatus(true);
+				session.update(foundUser);
+				session.flush();
+			}
+			
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+	
 	public HstsUser identification(HstsUser user) {
 		HstsUser foundUser = null;
 		try {
@@ -70,7 +143,7 @@ public class UserController {
 			} catch (NoResultException nre) {
 				System.out.println("User not found!");
 			}
-
+			
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();

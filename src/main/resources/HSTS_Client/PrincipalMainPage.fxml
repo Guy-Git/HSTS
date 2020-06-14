@@ -16,13 +16,14 @@
       <Text fx:id="time_text" layoutX="458.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" />
       <Text layoutX="192.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to HSTS - High School Test System" wrappingWidth="236.671875" />
       <Text layoutX="206.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please choose an action from the menu" />
-      <AnchorPane layoutX="125.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+      <AnchorPane layoutX="65.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
          <children>
             <HBox alignment="CENTER" layoutX="85.0" layoutY="18.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                <children>
                   <Button fx:id="time_ext_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Time extentions" />
                   <Button fx:id="watch_reports_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Watch reports" />
                   <Button fx:id="about_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="About" />
+                  <Button fx:id="log_out_btn" alignment="CENTER" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="110.0" text="Log out" />
                </children>
             </HBox>
          </children>

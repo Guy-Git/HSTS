@@ -38,6 +38,10 @@ public class PrincipalMainPageController implements Initializable {
 
 	@FXML
 	private Button about_btn;
+	
+	@FXML
+	private Button log_out_btn;
+
 
 	private HstsUser user;
 
@@ -81,6 +85,31 @@ public class PrincipalMainPageController implements Initializable {
 		}
 //			if (event.getSource() == watch_reports_btn) 
 //			if (event.getSource() == about_btn) 
+		if (event.getSource() == log_out_btn) {
+			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				
+				Message msg = new Message();
+				msg.setAction("user log out");
+				msg.setUser(this.user);
+				try {
+					AppsClient.getClient().sendToServer(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -89,6 +118,11 @@ public class PrincipalMainPageController implements Initializable {
 	public void onUserEvent(HstsUser user) {
 		this.user = user;
 		enter_name_text.setText(enter_name_text.getText() + user.getFullName());
+	}
+	
+	@Subscribe
+	public void onLogOut(HstsUser user) {
+		
 	}
 
 }
