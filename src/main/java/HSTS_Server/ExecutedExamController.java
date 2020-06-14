@@ -27,33 +27,26 @@ public class ExecutedExamController {
 	static SessionFactory sessionFactory = getSessionFactory();
 	private static Session session;
 
-	public void addExam(StudentsExecutedExam StudentExam) {
-
-		ExecutedExam executedExam = null;
+	public void addExectutedExam(ExecutedExam executedExam) {
 
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
+			System.out.println("kaki");
+			session.save(executedExam);
 
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
-			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
-			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examID"), StudentExam.getExamID()),
-					builder.equal(rootEntry.get("examCode"), StudentExam.getExamCode()));
-			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
-			try {
-				executedExam = (ExecutedExam) query.getSingleResult();
-			} catch (NoResultException nre) {
-				System.out.println("Executed Exam not found!");
-			}
+			session.flush();
+			session.getTransaction().commit(); // Save everything.
+		}
 
-			if (executedExam == null) {
-				executedExam = new ExecutedExam();
-				executedExam.setExamCode(StudentExam.getExamCode());
-				executedExam.setExamID(StudentExam.getExamID());
+		catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
 		}
 	}
 

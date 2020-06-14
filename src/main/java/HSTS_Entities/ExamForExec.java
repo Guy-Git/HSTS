@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "exec_exams")
+@Table(name = "exams_to_execute")
 public class ExamForExec implements Serializable
 {
 	@Id
