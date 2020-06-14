@@ -13,7 +13,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <AnchorPane prefWidth="620.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane prefHeight="51.0" prefWidth="620.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                <children>
@@ -29,5 +29,6 @@
       <Text fx:id="time_text" layoutX="458.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" />
       <Text layoutX="192.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to HSTS - High School Test System" wrappingWidth="236.671875" />
       <Text layoutX="206.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please choose an action from the menu" />
+      <Button fx:id="edit_exam_btn" layoutX="276.0" layoutY="58.0" mnemonicParsing="false" onAction="#menuClick" text="Edit exam" />
    </children>
 </AnchorPane>
