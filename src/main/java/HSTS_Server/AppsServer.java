@@ -93,7 +93,7 @@ public class AppsServer extends AbstractServer {
 			}
 		}
 		
-		if(((Message)msg).getAction().equals("Pull Exams and Questions")) // teacher
+		if(((Message)msg).getAction().equals("Pull Exams and Questions")) 
 		{
 			serverMsg.setExams(examController.getExams((Message)msg));
 			serverMsg.setQuestions(questionController.getQuestions((Message)msg));
@@ -118,7 +118,6 @@ public class AppsServer extends AbstractServer {
 		
 		if(((Message)msg).getAction().equals("Submit Student Exam"))
 		{
-			
 			executedExamController.checkExam(((Message)msg).getStudentsExecutedExam());
 		}
 	
