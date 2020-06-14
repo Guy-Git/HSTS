@@ -1,78 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="620.0" style="-fx-background-image: C:/Users/linoym/git/HSTS/src/main/resources/HSTS_Client/background.JPG;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.PrincipalTimeExtensionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.PrincipalTimeExtensionController">
    <children>
-      <HBox alignment="CENTER" prefHeight="71.0" prefWidth="628.0" style="-fx-background-color: #23253B;">
-         <children>
-            <AnchorPane fx:id="logo" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #E4344F; -fx-background-radius: 10;">
-               <HBox.margin>
-                  <Insets right="30.0" />
-               </HBox.margin>
+      <SplitPane layoutX="-5.0" layoutY="-6.0" prefHeight="572.0" prefWidth="193.0">
+         <items>
+            <AnchorPane prefHeight="558.0" prefWidth="183.0" styleClass="background" stylesheets="@‏‏bg2.css">
                <children>
-                  <Text fx:id="logo_text" fill="WHITE" layoutX="5.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HSTS.">
+                  <Button fx:id="about_btn" layoutX="8.0" layoutY="195.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: transparent; -fx-border-color: #3A495C;" text="About" textFill="WHITE" AnchorPane.leftAnchor="8.0">
                      <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Text>
-               </children>
-            </AnchorPane>
-            <Button fx:id="time_ext_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: transparent; -fx-background-radius: 10;" text="time extensions" textFill="WHITE">
-               <HBox.margin>
-                  <Insets left="10.0" right="5.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="Century Gothic" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="watch_reports_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: transparent; -fx-background-radius: 10;" text="watch reports" textFill="WHITE">
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="Century Gothic" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="about_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="35.0" prefWidth="65.0" style="-fx-background-color: transparent; -fx-background-radius: 10;" text="about" textFill="WHITE">
-               <font>
-                  <Font name="Century Gothic" size="12.0" />
-               </font>
-            </Button>
-            <AnchorPane prefHeight="100.0" prefWidth="39.0" />
-            <Button fx:id="log_out_btn" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: transparent; -fx-border-color: #E2223D; -fx-border-radius: 10;" text="log out" textFill="WHITE">
-               <font>
-                  <Font name="Century Gothic" size="12.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-      <ScrollPane fx:id="scroll_bar" layoutY="70.0" prefHeight="503.0" prefWidth="620.0" style="-fx-padding: 0;" styleClass="scroll-bar">
-         <content>
-            <AnchorPane blendMode="SRC_ATOP" prefHeight="506.0" prefWidth="630.0" style="-fx-background-color: #23253B; -fx-border-color: transparent;">
-               <children>
-                  <Button fx:id="approve_btn" layoutX="260.0" layoutY="399.0" mnemonicParsing="false" onAction="#approve" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: transparent; -fx-border-color: #E2223D; -fx-border-radius: 10;" text="approve" textFill="WHITE" visible="false">
-                     <font>
-                        <Font name="Century Gothic" size="12.0" />
+                        <Font name="Century Gothic" size="14.0" />
                      </font>
                   </Button>
-                  <VBox fx:id="time_ext_vbox" prefHeight="115.0" prefWidth="628.0">
+                  <Button fx:id="log_out_btn" layoutX="45.0" layoutY="482.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="102.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" text="Log Out" textFill="WHITE">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+                  <AnchorPane fx:id="logo" layoutX="59.0" layoutY="45.0" maxHeight="60.0" maxWidth="64.0" minHeight="50.0" minWidth="50.0" prefHeight="60.0" prefWidth="64.0" style="-fx-background-color: #53DDD0; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, derive(cadetblue, -20%), 10, 0, 2, 2);">
                      <children>
-                        <HBox fx:id="time_ext_hbox" prefHeight="115.0" prefWidth="660.0" />
+                        <Text fx:id="logo_text" fill="WHITE" layoutX="7.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HSTS.">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
                      </children>
-                  </VBox>
+                  </AnchorPane>
+                  <Button fx:id="time_ext_btn" layoutX="8.0" layoutY="227.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: transparent; -fx-border-color: #3A495C;" text="Time Extensions" textFill="WHITE" AnchorPane.leftAnchor="8.0">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+                  <Accordion layoutX="6.0" layoutY="257.0">
+                     <panes>
+                        <TitledPane alignment="CENTER" animated="false" contentDisplay="CENTER" prefHeight="60.0" prefWidth="180.0" style="-fx-base: #293340; -fx-border-color: transparent;" text="Watch Reports" textFill="WHITE">
+                           <content>
+                              <VBox prefHeight="40.0" prefWidth="176.0">
+                                 <children>
+                                    <Button fx:id="watch_reports_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" text="All Reports">
+                                       <font>
+                                          <Font name="Century Gothic" size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </content>
+                           <font>
+                              <Font name="Century Gothic" size="14.0" />
+                           </font>
+                        </TitledPane>
+                     </panes>
+                  </Accordion>
+                  <Button fx:id="main_page_btn" layoutX="8.0" layoutY="163.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: transparent; -fx-border-color: #3A495C;" text="Main Page" textFill="WHITE" AnchorPane.leftAnchor="8.0">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
+         </items>
+      </SplitPane>
+      <ScrollPane layoutX="185.0" prefHeight="579.0" prefWidth="436.0" style="-fx-padding: 0;">
+         <content>
+            <AnchorPane prefHeight="563.0" prefWidth="441.0" style="-fx-background-color: #293340;">
+               <children>
+                  <VBox fx:id="time_ext_vbox" layoutX="14.0" layoutY="38.0" prefHeight="113.0" prefWidth="413.0">
+                     <children>
+                        <HBox fx:id="time_ext_hbox" prefHeight="117.0" prefWidth="413.0" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="approve_btn" layoutX="160.0" layoutY="500.0" mnemonicParsing="false" onAction="#approve" prefHeight="30.0" prefWidth="121.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" text="Approve" textFill="WHITE" visible="false">
+                     <font>
+                        <Font name="Century Gothic Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children></AnchorPane>
          </content>
       </ScrollPane>
    </children>
