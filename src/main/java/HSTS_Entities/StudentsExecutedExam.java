@@ -37,6 +37,10 @@ public class StudentsExecutedExam implements Serializable {
 	private String examID;
 	
 	private String examCode;
+	
+	private int grade;
+	
+	boolean checked;
 
 	// public StudentsExecutedExam studentsExecutedExam;
 
@@ -108,6 +112,24 @@ public class StudentsExecutedExam implements Serializable {
 	public void setExamCode(String examCode) {
 		this.examCode = examCode;
 	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+	
+	
 
 	
 }

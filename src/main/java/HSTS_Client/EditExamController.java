@@ -92,7 +92,6 @@ public class EditExamController implements Initializable {
 
 	private ArrayList<String> allQuestions;
 
-	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
@@ -159,7 +158,7 @@ public class EditExamController implements Initializable {
 
 	@FXML
 	void pullExams(ActionEvent event) {
-		
+
 		System.out.println(user.getFullName());
 		boolean badInput = false;
 
@@ -202,13 +201,55 @@ public class EditExamController implements Initializable {
 
 	@FXML
 	void save(ActionEvent event) {
+
 		ArrayList<Question> chosenQuestions = new ArrayList<Question>();
 		ArrayList<Integer> questionsGrades = new ArrayList<Integer>();
 		TitledPane examToEdit = exams_container.getExpandedPane();
+		boolean badInput = false;
+		boolean noQuestionsChosen = false;
+
+		if (chooseSubject.getSelectionModel().isEmpty() || chooseSubject.getValue().equals("")) {
+			chooseSubject.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			chooseSubject.setStyle("-fx-background-color: #00bfff");
+		}
+
+		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
+			chooseCourse.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			chooseCourse.setStyle("-fx-background-color: #00bfff");
+		}
+
 		String instruction = ((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren()
 				.get(1)).getText();
+
+		if (instruction.isEmpty()) {
+			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
+					.setStyle("-fx-background-color: RED");
+			badInput = true;
+		}
+
+		else {
+			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
+					.setStyle("-fx-background-color: #00bfff");
+		}
+
 		String notes = ((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(1)).getChildren().get(1))
 				.getText();
+
+		if (notes.isEmpty()) {
+			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
+					.setStyle("-fx-background-color: RED");
+			badInput = true;
+		}
+
+		else {
+			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
+					.setStyle("-fx-background-color: #00bfff");
+		}
+
 		String chosenExamId = examToEdit.getText().substring(6);
 		Exam chosenExam = null;
 		Exam newExam = new Exam();
@@ -225,58 +266,125 @@ public class EditExamController implements Initializable {
 		}
 
 		for (i = 0; i < chosenExam.getQuestions().size(); i++) {
+
 			if (((CheckBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(0))
 					.isSelected()) {
 				chosenQuestions.add(chosenExam.getQuestions().get(i));
+
+				if ((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
+						.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText()).isEmpty()) {
+
+					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
+							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
+									.setStyle("-fx-background-color: RED");
+					badInput = true;
+
+				} else {
+					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
+							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
+									.setStyle("-fx-background-color: #00bfff");
+				}
+
 				questionsGrades.add(Integer.valueOf(
 						(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
 								.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText())));
 			}
 
 		}
+
+		if (((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
+				.getText().isEmpty()) {
+			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
+					.setStyle("-fx-background-color: RED");
+			badInput = true;
+		} else {
+			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
+					.setStyle("-fx-background-color: #00bfff");
+		}
+
 		newExam.setTime(Integer.valueOf(
 				((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
 						.getText()));
 
-		System.out.println(chosenExam.getQuestions().size());
 		for (int j = 0; j < (questions.size() - chosenExam.getQuestions().size()); j++) {
 			if (((CheckBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(4 + i + j)).getChildren().get(0))
 					.isSelected()) {
 				for (Question question : questions) {
 					if (question.getQuestionID().equals(allQuestions.get(j))) {
 						chosenQuestions.add(question);
-						questionsGrades.add(
-								Integer.valueOf((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent())
-										.getChildren().get(4 + i + j)).getChildren().get(1)).getChildren().get(6))
-												.getChildren().get(1)).getText())));
 
+						if ((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+								.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
+										.getText()).isEmpty()) {
+
+							(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+									.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
+											.setStyle("-fx-background-color: RED");
+							badInput = true;
+
+						} else {
+							(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+									.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
+											.setStyle("-fx-background-color: #00bfff");
+						}
+						if (((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+								.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
+										.getText().equals("")) {
+							questionsGrades.add(0);
+
+						} else {
+							questionsGrades.add(Integer
+									.valueOf((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent())
+											.getChildren().get(4 + i + j)).getChildren().get(1)).getChildren().get(6))
+													.getChildren().get(1)).getText())));
+						}
 					}
 				}
 			}
 
 		}
+		if (chosenQuestions.size() == 0) {
+			badInput = true;
+			noQuestionsChosen = true;
+		}
 
-		newExam.setQuestions(chosenQuestions);
-		newExam.setCourse(chosenExam.getCourse());
-		newExam.setSubject(chosenExam.getSubject());
-		newExam.setQuestionGrade(questionsGrades);
+		if (badInput == false) {
+			newExam.setQuestions(chosenQuestions);
+			newExam.setCourse(chosenExam.getCourse());
+			newExam.setSubject(chosenExam.getSubject());
+			newExam.setQuestionGrade(questionsGrades);
 
-		/*
-		 * ArrayList<Exam> exams = new ArrayList<Exam>(); exams.add(newExam);
-		 * 
-		 * for (Question question : chosenQuestions) { question.setExams(exams); }
-		 */
-		// newExam.setQuestions(chosenQuestions);
+			/*
+			 * ArrayList<Exam> exams = new ArrayList<Exam>(); exams.add(newExam);
+			 * 
+			 * for (Question question : chosenQuestions) { question.setExams(exams); }
+			 */
+			// newExam.setQuestions(chosenQuestions);
 
-		Message msgToServer = new Message();
+			Message msgToServer = new Message();
 
-		msgToServer.setAction("Add Exam");
-		msgToServer.setExam(newExam);
+			msgToServer.setAction("Add Exam");
+			msgToServer.setExam(newExam);
 
-		try {
-			AppsClient.getClient().sendToServer(msgToServer);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block e.printStackTrace();
+			try {
+				AppsClient.getClient().sendToServer(msgToServer);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block e.printStackTrace();
+			}
+		} else {
+			if (noQuestionsChosen == false) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setHeaderText("The fields marked red must be filled");
+				alert.setTitle("");
+				// alert.setContentText("The fields marked red must be filled");
+				alert.show();
+			} else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setHeaderText("Questions must be chosen");
+				alert.setTitle("");
+				// alert.setContentText("The fields marked red must be filled");
+				alert.show();
+			}
 		}
 	}
 

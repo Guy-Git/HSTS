@@ -9,6 +9,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -58,6 +60,19 @@ public class AppsServer extends AbstractServer {
 		{
 			serverMsg.setTimeExtensionArr(timeExtensionController.getTimeExtensions());
 			serverMsg.setAction("got time extensions");
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(((Message)msg).getAction().equals("Pull Exams and Questions")) // teacher
+		{
+			serverMsg.setExams(examController.getExams((Message)msg));
+			serverMsg.setQuestions(questionController.getQuestions((Message)msg));
+			serverMsg.setAction("Show Exams and Questions");
 			try {
 				client.sendToClient(serverMsg);
 			} catch (IOException e) {
@@ -302,12 +317,20 @@ public class AppsServer extends AbstractServer {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-
-			HstsUser student1 = new HstsUser("1111", "123456", 1, null, null, "Opal");
+			
+			String passwordInput = "123456";
+		    SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest256();
+		    byte[] digest = digestSHA3.digest(passwordInput.getBytes());
+		    			    
+			HstsUser student1 = new HstsUser("1111", Hex.encodeHexString(digest), 1, null, null, "Opal");
 			session.save(student1);
 			session.flush();
 			
-			HstsUser student2 = new HstsUser("2222", "1234", 1, null, null, "Guy");
+			passwordInput = "1234";
+		    SHA3.DigestSHA3 digestSHA3_1 = new SHA3.Digest256();
+		    byte[] digest1 = digestSHA3_1.digest(passwordInput.getBytes());
+		    
+			HstsUser student2 = new HstsUser("2222", Hex.encodeHexString(digest1), 1, null, null, "Guy");
 			session.save(student2);
 			session.flush();
 			
@@ -320,12 +343,19 @@ public class AppsServer extends AbstractServer {
 			courses.add("Introduction to CS");
 			courses.add("OS");
 			
-			
-			HstsUser teacher1 = new HstsUser("3333", "1234A", 2, subjects, courses, "Trachel");
+			passwordInput = "1234A";
+		    SHA3.DigestSHA3 digestSHA3_2 = new SHA3.Digest256();
+		    byte[] digest2 = digestSHA3_2.digest(passwordInput.getBytes());
+		    
+			HstsUser teacher1 = new HstsUser("3333", Hex.encodeHexString(digest2), 2, subjects, courses, "Trachel");
 			session.save(teacher1);
 			session.flush();
 			
-			HstsUser principal = new HstsUser("4444", "123ABC", 3, null, null, "Cheni");
+			passwordInput = "1234ABC";
+		    SHA3.DigestSHA3 digestSHA3_3 = new SHA3.Digest256();
+		    byte[] digest3 = digestSHA3_3.digest(passwordInput.getBytes());
+			
+			HstsUser principal = new HstsUser("4444", Hex.encodeHexString(digest3), 3, null, null, "Cheni");
 			session.save(principal);
 			session.flush();
 

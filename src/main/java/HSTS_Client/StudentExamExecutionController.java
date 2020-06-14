@@ -144,7 +144,6 @@ public class StudentExamExecutionController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
 		studentsExecutedExam = new StudentsExecutedExam();
-
 	}
 
 	@FXML
@@ -532,10 +531,11 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	void saveExamContent(boolean isForced) {
+		
+		this.studentsExecutedExam.setChecked(false);
 		startSave = true;
 		ArrayList<Integer> chosenAnswers = new ArrayList<Integer>();
 		int sizeOfAnswers = 0;
-//		studentsExecutedExam = new StudentsExecutedExam();
 		this.studentsExecutedExam.setExecTime(exam.getTime() - startTime);
 		this.studentsExecutedExam.setForcedFinish(isForced);
 		this.studentsExecutedExam.setManual(false);
@@ -565,6 +565,18 @@ public class StudentExamExecutionController implements Initializable {
 		save_exam.setVisible(false);
 		time_text.setVisible(false);
 		exam_anchor.setVisible(false);
+		
+		Message msg = new Message();
+		msg.setStudentsExecutedExam(this.studentsExecutedExam);
+		
+		msg.setAction("Submit Student Exam");
+
+		try {
+			AppsClient.getClient().sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
