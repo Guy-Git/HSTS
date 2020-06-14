@@ -12,6 +12,7 @@ import com.google.protobuf.Duration;
 
 import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
+import HSTS_Entities.ExecutedExam;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
@@ -246,9 +247,15 @@ public class StartExamExecutionController implements Initializable {
 					examType, exam_code_text.getText());
 
 			Message msgToServer = new Message();
+
+			ExecutedExam newExecutedExam = new ExecutedExam();
+			newExecutedExam.setExamCode(exam_code_text.getText());
+			newExecutedExam.setExamID(exams_container.getExpandedPane().getText().substring(6));
+
 			msgToServer.setAction("Add exam for execution");
 			msgToServer.setExamForExec(newExamForExec);
-
+			msgToServer.setExecutedExam(newExecutedExam);
+			
 			try {
 				AppsClient.getClient().sendToServer(msgToServer);
 			} catch (IOException e) {

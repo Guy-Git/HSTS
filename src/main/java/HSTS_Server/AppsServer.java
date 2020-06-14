@@ -50,6 +50,7 @@ public class AppsServer extends AbstractServer {
 		examController = new ExamController();
 		examExecController = new ExamExecController();
 		timeExtensionController = new TimeExtensionController();
+		executedExamController = new ExecutedExamController();
 	}
 
 	@Override
@@ -143,6 +144,7 @@ public class AppsServer extends AbstractServer {
 		if(((Message)msg).getAction().equals("Add exam for execution"))
 		{
 			examExecController.addExamForExec(((Message)(msg)).getExamForExec());
+			executedExamController.addExectutedExam(((Message)msg).getExecutedExam());
 		}
 		
 		if(((Message)msg).getAction().equals("Pull Exams"))
