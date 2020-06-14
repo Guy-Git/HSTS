@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="560.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.CreateQuestionController">
    <children>
-      <Text layoutX="48.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Question Content:" />
+      <Text layoutX="48.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter question content:" />
       <TextArea fx:id="contentText" layoutX="192.0" layoutY="118.0" prefHeight="82.0" prefWidth="379.0" wrapText="true" />
       <AnchorPane layoutX="158.0" layoutY="259.0" prefHeight="241.0" prefWidth="303.0">
          <children>
