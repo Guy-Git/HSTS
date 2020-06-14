@@ -1,7 +1,9 @@
 package HSTS_Server;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -46,7 +48,7 @@ public class TimeExtensionController
 	
 	public ArrayList<TimeExtension> getTimeExtensions()
 	{
-		ArrayList<TimeExtension> TimeExtensions = new ArrayList<TimeExtension>();
+		ArrayList<TimeExtension> timeExtensions = new ArrayList<TimeExtension>();
 		
 		try {
 			session = sessionFactory.openSession();
@@ -56,11 +58,10 @@ public class TimeExtensionController
 			CriteriaQuery<TimeExtension> criteriaQuery = builder.createQuery(TimeExtension.class);
 			Root<TimeExtension> rootEntry = criteriaQuery.from(TimeExtension.class);
 			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("status"), 1));
+					builder.equal(rootEntry.get("status"), true));
 			TypedQuery<TimeExtension> query = session.createQuery(criteriaQuery);
-			TimeExtensions = (ArrayList<TimeExtension>) query.getResultList();
-
-			//System.out.println(exams.get(0).getQuestions().get(0).getQuestionContent());
+			timeExtensions = (ArrayList<TimeExtension>) query.getResultList();
+			
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -70,7 +71,42 @@ public class TimeExtensionController
 		} finally {
 			session.close();
 		}
-		return TimeExtensions;
+		return timeExtensions;
+	}
+	
+	public void updateTimeExtensions(ArrayList<TimeExtension> timeExtensionsArr)
+	{	
+		ArrayList<TimeExtension> timeExtensions = new ArrayList<TimeExtension>();
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<TimeExtension> criteriaQuery = builder.createQuery(TimeExtension.class);
+			Root<TimeExtension> rootEntry = criteriaQuery.from(TimeExtension.class);
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("status"), true));
+			TypedQuery<TimeExtension> query = session.createQuery(criteriaQuery);
+			timeExtensions = (ArrayList<TimeExtension>) query.getResultList();
+			
+			for (int i = 0; i < timeExtensions.size(); i++) {
+				session.evict(timeExtensions.get(i));
+				timeExtensions.get(i).setStatus(timeExtensionsArr.get(i).isStatus());
+				timeExtensions.get(i).setApproved(timeExtensionsArr.get(i).isApproved());
+				session.update(timeExtensions.get(i));
+				session.flush();
+			}
+			session.getTransaction().commit(); 
+			
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return;
 	}
 	
 	private static SessionFactory getSessionFactory() throws HibernateException {

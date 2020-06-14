@@ -56,6 +56,30 @@ public class AppsServer extends AbstractServer {
 		
 		serverMsg = new Message();
 		
+		if(((Message)msg).getAction().equals("user log out"))  { // user log out without closing the client
+			userController.clientDisconnect(((Message)msg).getUser());
+		}
+		
+		if(((Message)msg).getAction().equals("user connected"))  {
+			userController.connectUser(((Message)msg).getUser());
+		}
+		
+		if(((Message)msg).getAction().equals("client disconnect"))   // user log out with closing the client
+		{
+			userController.clientDisconnect(((Message)msg).getUser());
+			try {
+				client.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(((Message)msg).getAction().equals("Update time extension requests"))  
+		{
+			timeExtensionController.updateTimeExtensions(((Message)msg).getTimeExtensionArr());
+		}
+		
 		if(((Message)msg).getAction().equals("show time extensions")) // principal 
 		{
 			serverMsg.setTimeExtensionArr(timeExtensionController.getTimeExtensions());
@@ -322,7 +346,8 @@ public class AppsServer extends AbstractServer {
 		    SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest256();
 		    byte[] digest = digestSHA3.digest(passwordInput.getBytes());
 		    			    
-			HstsUser student1 = new HstsUser("1111", Hex.encodeHexString(digest), 1, null, null, "Opal");
+			HstsUser student1 = new HstsUser("1111", Hex.encodeHexString(digest), 1, null, null, "Opal",false);
+
 			session.save(student1);
 			session.flush();
 			
@@ -330,7 +355,7 @@ public class AppsServer extends AbstractServer {
 		    SHA3.DigestSHA3 digestSHA3_1 = new SHA3.Digest256();
 		    byte[] digest1 = digestSHA3_1.digest(passwordInput.getBytes());
 		    
-			HstsUser student2 = new HstsUser("2222", Hex.encodeHexString(digest1), 1, null, null, "Guy");
+			HstsUser student2 = new HstsUser("2222", Hex.encodeHexString(digest1), 1, null, null, "Guy",false);
 			session.save(student2);
 			session.flush();
 			
@@ -347,7 +372,8 @@ public class AppsServer extends AbstractServer {
 		    SHA3.DigestSHA3 digestSHA3_2 = new SHA3.Digest256();
 		    byte[] digest2 = digestSHA3_2.digest(passwordInput.getBytes());
 		    
-			HstsUser teacher1 = new HstsUser("3333", Hex.encodeHexString(digest2), 2, subjects, courses, "Trachel");
+			HstsUser teacher1 = new HstsUser("3333", Hex.encodeHexString(digest2), 2, subjects, courses, "Trachel",false);
+
 			session.save(teacher1);
 			session.flush();
 			
@@ -355,7 +381,8 @@ public class AppsServer extends AbstractServer {
 		    SHA3.DigestSHA3 digestSHA3_3 = new SHA3.Digest256();
 		    byte[] digest3 = digestSHA3_3.digest(passwordInput.getBytes());
 			
-			HstsUser principal = new HstsUser("4444", Hex.encodeHexString(digest3), 3, null, null, "Cheni");
+			HstsUser principal = new HstsUser("4444", Hex.encodeHexString(digest3), 3, null, null, "Cheni",false);
+
 			session.save(principal);
 			session.flush();
 
