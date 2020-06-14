@@ -45,7 +45,7 @@ public class LoginController implements Initializable {
 
 	@FXML
 	void onClick(ActionEvent event) {
-		HstsUser user = new HstsUser(username_text.getText(), password_text.getText(), 0, null, null, "");
+		HstsUser user = new HstsUser(username_text.getText(), password_text.getText(), 0, null, null, "", false);
 		Message msg = new Message();
 		msg.setAction("Login");
 		msg.setUser(user);
