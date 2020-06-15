@@ -13,6 +13,7 @@ public class Message implements Serializable
 	String subject;
 	String execCode;
 	String userID;
+	int extendTime;
 	
 	ArrayList<Question> questions;
 
@@ -175,5 +176,14 @@ public class Message implements Serializable
 	public void setExecutedExam(ExecutedExam executedExam) {
 		this.executedExam = executedExam;
 	}
+
+	public int getExtendTime() {
+		return extendTime;
+	}
+
+	public void setExtendTime(int extendTime) {
+		this.extendTime = extendTime;
+	}
+	
 	
 }

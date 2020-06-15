@@ -117,6 +117,19 @@ public class AppsServer extends AbstractServer {
 			examController.addExam(((Message)msg).getExam());
 		}
 		
+		if(((Message)msg).getAction().equals("Check for extension"))
+		{
+			serverMsg.setExtendTime(timeExtensionController.getTimeExtension(((Message)msg).getExamForExec()));
+			serverMsg.setAction("Time extension result");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if(((Message)msg).getAction().equals("Submit Student Exam"))
 		{
 			executedExamController.checkExam(((Message)msg).getStudentsExecutedExam());
