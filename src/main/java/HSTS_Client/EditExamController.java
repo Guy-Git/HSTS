@@ -230,7 +230,6 @@ public class EditExamController implements Initializable {
 					.setStyle("-fx-background-color: RED");
 			badInput = true;
 		}
-
 		else {
 			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
 					.setStyle("-fx-background-color: #00bfff");
