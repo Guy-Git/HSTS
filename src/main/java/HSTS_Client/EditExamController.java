@@ -302,7 +302,7 @@ public class EditExamController implements Initializable {
 					.setStyle("-fx-background-color: #00bfff");
 		}
 
-		newExam.setTime(Integer.valueOf(
+		newExam.setExamTime(Integer.valueOf(
 				((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
 						.getText()));
 
@@ -475,7 +475,7 @@ public class EditExamController implements Initializable {
 				Text examDuration = new Text("Exam duration in minutes is: ");
 				TextField editTime = new TextField();
 				editTime.setPrefWidth(35);
-				editTime.setText(Integer.toString(exams.get(i).getTime()));
+				editTime.setText(Integer.toString(exams.get(i).getExamTime()));
 				HBox timeHBox = new HBox(15);
 				timeHBox.setAlignment(Pos.CENTER);
 				timeHBox.getChildren().add(examDuration);

@@ -39,6 +39,7 @@ public class AppsServer extends AbstractServer {
 	private ExamController examController;
 	private ExamExecController examExecController;
 	private TimeExtensionController timeExtensionController;
+	private ExecutedExamController executedExamController;
 	
 	Message serverMsg;
 
@@ -49,6 +50,7 @@ public class AppsServer extends AbstractServer {
 		examController = new ExamController();
 		examExecController = new ExamExecController();
 		timeExtensionController = new TimeExtensionController();
+		executedExamController = new ExecutedExamController();
 	}
 
 	@Override
@@ -92,7 +94,7 @@ public class AppsServer extends AbstractServer {
 			}
 		}
 		
-		if(((Message)msg).getAction().equals("Pull Exams and Questions")) // teacher
+		if(((Message)msg).getAction().equals("Pull Exams and Questions")) 
 		{
 			serverMsg.setExams(examController.getExams((Message)msg));
 			serverMsg.setQuestions(questionController.getQuestions((Message)msg));
@@ -114,10 +116,17 @@ public class AppsServer extends AbstractServer {
 		{
 			examController.addExam(((Message)msg).getExam());
 		}
+		
+		if(((Message)msg).getAction().equals("Submit Student Exam"))
+		{
+			executedExamController.checkExam(((Message)msg).getStudentsExecutedExam());
+			executedExamController.addStudentExectutedExam(((Message)msg).getStudentsExecutedExam());
+		}
 	
 		if(((Message)msg).getAction().equals("Enter code") || ((Message)msg).getAction().equals("Pull exam by examCode"))
 		{
 			serverMsg.setExam(examExecController.getExamForExec(((Message)msg)));
+			serverMsg.setExecutedExam(executedExamController.getExecutedExam(((Message)msg)));
 			if(serverMsg.getExam() == null)
 			{
 				serverMsg.setAction("Exam code invalid");
@@ -137,6 +146,7 @@ public class AppsServer extends AbstractServer {
 		if(((Message)msg).getAction().equals("Add exam for execution"))
 		{
 			examExecController.addExamForExec(((Message)(msg)).getExamForExec());
+			executedExamController.addExectutedExam(((Message)msg).getExecutedExam());
 		}
 		
 		if(((Message)msg).getAction().equals("Pull Exams"))
@@ -329,9 +339,9 @@ public class AppsServer extends AbstractServer {
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
-		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(HstsUser.class);
-		configuration.addAnnotatedClass(Exam.class);
+		//configuration.addAnnotatedClass(Exam.class);
+		//configuration.addAnnotatedClass(Question.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);

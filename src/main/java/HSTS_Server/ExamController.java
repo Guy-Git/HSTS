@@ -127,7 +127,7 @@ public class ExamController {
 			CriteriaQuery<Exam> criteriaQuery = builder.createQuery(Exam.class);
 			Root<Exam> rootEntry = criteriaQuery.from(Exam.class);
 			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("course"), msg.getCourse()),
-					builder.equal(rootEntry.get("subject"), msg.getSubject()));
+					builder.equal(rootEntry.get("examSubject"), msg.getSubject()));
 			TypedQuery<Exam> query = session.createQuery(criteriaQuery);
 			exams = (ArrayList<Exam>) query.getResultList();
 

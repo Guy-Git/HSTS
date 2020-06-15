@@ -19,6 +19,7 @@ import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
+import HSTS_Entities.StudentsExecutedExam;
 
 public class ExamExecController {
 
@@ -92,6 +93,7 @@ public class ExamExecController {
 		}
 		return exam;
 	}
+	
 
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
@@ -103,4 +105,8 @@ public class ExamExecController {
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
+
+
+
+
 }

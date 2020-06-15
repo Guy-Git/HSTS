@@ -123,8 +123,6 @@ public class StudentExamExecutionController implements Initializable {
 	private HstsUser user;
 
 	private Exam exam;
-
-	private StudentsExecutedExam studentsExecutedExam;
 	
 	private Integer startTime;// time for exam in minutes
 
@@ -133,17 +131,23 @@ public class StudentExamExecutionController implements Initializable {
 	private Integer minutesTime;
 
 	private Integer secondsTime;
-
+	
+	private Integer executeTime;
+	
 	private boolean startSave = false;
 
 	private Integer minutesLeft;
 
 	private File file;
+	
+	private ExecutedExam executedExam;
+	
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-		studentsExecutedExam = new StudentsExecutedExam();
+//		studentsExecutedExam = new StudentsExecutedExam();
 	}
 
 	@FXML
@@ -172,7 +176,6 @@ public class StudentExamExecutionController implements Initializable {
 		ExamForExec examForExec = new ExamForExec();
 		Message msg = new Message();
 		examForExec.setExamCode(enterExamCode.getText());
-		studentsExecutedExam.setExamCode(enterExamCode.getText());
 		msg.setExamForExec(examForExec);
 		msg.setAction("Enter code");
 
@@ -185,15 +188,14 @@ public class StudentExamExecutionController implements Initializable {
 	}
 
 	@Subscribe
-	public void setExamToPage(Exam exam) {
+	public void setExamToPage(Message msg) {
 		Platform.runLater(() -> {
-			studentsExecutedExam.setUser(this.user);
-			this.exam = exam;
-			studentsExecutedExam.setExamID(exam.getExamID());
-			System.out.println("num of question " + exam.getQuestions().size());
-			hourTime = (exam.getTime()) / 60;
-			minutesLeft = exam.getTime() % 60;
-			startTime = exam.getTime();
+			//studentsExecutedExam.setUserId(this.user.getUserId());
+			this.exam = msg.getExam();
+			this.executedExam = msg.getExecutedExam();
+			hourTime = (exam.getExamTime()) / 60;
+			minutesLeft = exam.getExamTime() % 60;
+			startTime = exam.getExamTime();
 			if (startTime < 60) {
 				minutesTime = startTime;
 				secondsTime = 0;
@@ -245,7 +247,6 @@ public class StudentExamExecutionController implements Initializable {
 		submit_btn.setVisible(false);
 		downlod_btn.setVisible(false);
 		save_exam.setVisible(true);
-		//studentsExecutedExam.setManual(false);
 		Timeline timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		Button submitExamBtn = new Button();
@@ -330,7 +331,7 @@ public class StudentExamExecutionController implements Initializable {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setHeaderText("time is up!");
 						alert.show();
-						studentsExecutedExam.setExecTime(exam.getTime());
+						//studentsExecutedExam.setExecTime(exam.getExamTime());
 
 					}
 				} else {
@@ -380,7 +381,7 @@ public class StudentExamExecutionController implements Initializable {
 	void startExam(ActionEvent event) {
 
 		if (enterIdForExam.getText().equals(user.getUserId())) {
-
+			
 			for_multi_line1.setVisible(false);
 			enterIdForExam.setVisible(false);
 			start_exam_btn.setVisible(false);
@@ -407,7 +408,6 @@ public class StudentExamExecutionController implements Initializable {
 			questionsGrid.setAlignment(Pos.CENTER);
 			Text examTitle = new Text("Exam in subject " + exam.getSubject() + " in course " + exam.getCourse());
 			displayExam.getChildren().add(examTitle);
-			studentsExecutedExam.setManual(false);
 			for (int j = 0; j < exam.getQuestions().size(); j++) {
 				VBox questionBox = new VBox(15);
 				ToggleGroup answerGroup = new ToggleGroup();
@@ -532,13 +532,11 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	void saveExamContent(boolean isForced) {
 		
-		this.studentsExecutedExam.setChecked(false);
+		executeTime = exam.getExamTime() - minutesTime;
+		//ExecutedExam newExecutedExam = new ExecutedExam(exam.getExamID(), enterExamCode.getText());
 		startSave = true;
 		ArrayList<Integer> chosenAnswers = new ArrayList<Integer>();
 		int sizeOfAnswers = 0;
-		this.studentsExecutedExam.setExecTime(exam.getTime() - startTime);
-		this.studentsExecutedExam.setForcedFinish(isForced);
-		this.studentsExecutedExam.setManual(false);
 
 		for (int i = 0; i < exam.getQuestions().size(); i++) {
 			VBox questionBox = (VBox) exam_anchor.getChildren().get(0);
@@ -557,17 +555,15 @@ public class StudentExamExecutionController implements Initializable {
 				chosenAnswers.add(0);// none of the answers was chosen
 			}
 		}
-
-		this.studentsExecutedExam.setExecTime(exam.getTime() - startTime);
-		this.studentsExecutedExam.setAnswersForExam(chosenAnswers);
-		this.studentsExecutedExam.setUser(this.user);
+		StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(isForced, executeTime, this.user.getUserId()
+				, chosenAnswers, false, false, this.executedExam);
 
 		save_exam.setVisible(false);
 		time_text.setVisible(false);
 		exam_anchor.setVisible(false);
 		
 		Message msg = new Message();
-		msg.setStudentsExecutedExam(this.studentsExecutedExam);
+		msg.setStudentsExecutedExam(studentsExecutedExam);
 		
 		msg.setAction("Submit Student Exam");
 
@@ -593,9 +589,9 @@ public class StudentExamExecutionController implements Initializable {
 			saveExamContent(false);
 		} else {
 			startSave = true;
-			studentsExecutedExam.setForcedFinish(false);
-			studentsExecutedExam.setExamFile(file);
-			studentsExecutedExam.setExecTime(exam.getTime() - startTime);
+		//	studentsExecutedExam.setForcedFinish(false);
+			//studentsExecutedExam.setExamFile(file);
+			//studentsExecutedExam.setExecTime(exam.getExamTime() - startTime);
 		}
 	}
 
