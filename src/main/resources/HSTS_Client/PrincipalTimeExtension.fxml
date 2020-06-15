@@ -15,14 +15,14 @@
    <children>
       <SplitPane layoutX="-5.0" layoutY="-6.0" prefHeight="572.0" prefWidth="193.0">
          <items>
-            <AnchorPane prefHeight="558.0" prefWidth="183.0" styleClass="background" stylesheets="@‏‏bg2.css">
+            <AnchorPane prefHeight="558.0" prefWidth="183.0" styleClass="pane" stylesheets="@../css/bg2.css">
                <children>
-                  <Button fx:id="about_btn" layoutX="8.0" layoutY="195.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: transparent; -fx-border-color: #3A495C;" text="About" textFill="WHITE" AnchorPane.leftAnchor="8.0">
+                  <Button fx:id="about_btn" layoutX="8.0" layoutY="195.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/bg2.css" text="About" textFill="WHITE" AnchorPane.leftAnchor="8.0">
                      <font>
                         <Font name="Century Gothic" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="log_out_btn" layoutX="45.0" layoutY="482.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="102.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" text="Log Out" textFill="WHITE">
+                  <Button fx:id="log_out_btn" layoutX="45.0" layoutY="516.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="102.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/bg2.css" text="Log Out" textFill="WHITE">
                      <font>
                         <Font name="Century Gothic" size="14.0" />
                      </font>
@@ -36,7 +36,7 @@
                         </Text>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="time_ext_btn" layoutX="8.0" layoutY="227.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: transparent; -fx-border-color: #3A495C;" text="Time Extensions" textFill="WHITE" AnchorPane.leftAnchor="8.0">
+                  <Button fx:id="time_ext_btn" layoutX="8.0" layoutY="227.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/bg2.css" text="Time Extensions" textFill="WHITE" AnchorPane.leftAnchor="8.0">
                      <font>
                         <Font name="Century Gothic" size="14.0" />
                      </font>
@@ -61,7 +61,7 @@
                         </TitledPane>
                      </panes>
                   </Accordion>
-                  <Button fx:id="main_page_btn" layoutX="8.0" layoutY="163.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: transparent; -fx-border-color: #3A495C;" text="Main Page" textFill="WHITE" AnchorPane.leftAnchor="8.0">
+                  <Button fx:id="main_page_btn" layoutX="8.0" layoutY="163.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/bg2.css" text="Main Page" textFill="WHITE" AnchorPane.leftAnchor="8.0">
                      <font>
                         <Font name="Century Gothic" size="14.0" />
                      </font>
@@ -79,7 +79,7 @@
                         <HBox fx:id="time_ext_hbox" prefHeight="117.0" prefWidth="413.0" />
                      </children>
                   </VBox>
-                  <Button fx:id="approve_btn" layoutX="160.0" layoutY="500.0" mnemonicParsing="false" onAction="#approve" prefHeight="30.0" prefWidth="121.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" text="Approve" textFill="WHITE" visible="false">
+                  <Button fx:id="approve_btn" layoutX="160.0" layoutY="500.0" mnemonicParsing="false" onAction="#approve" prefHeight="30.0" prefWidth="121.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/bg2.css" text="Approve" textFill="WHITE" visible="false">
                      <font>
                         <Font name="Century Gothic Bold" size="14.0" />
                      </font>

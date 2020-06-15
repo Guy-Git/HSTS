@@ -185,7 +185,7 @@ public class PrincipalTimeExtensionController implements Initializable{
 			if(timeExtensionsArr.isEmpty()) {
 				Text noTimeExt = new Text("No new time extension requests");
 				noTimeExt.setFill(Color.WHITE);
-				noTimeExt.setFont(Font.font ("Century Gothic", FontWeight.BOLD, 16));
+				noTimeExt.setFont(Font.font ("Century Gothic", 16));
 				time_ext_vbox.getChildren().add(noTimeExt);
 				time_ext_vbox.setAlignment(Pos.CENTER);
 			}
@@ -193,7 +193,7 @@ public class PrincipalTimeExtensionController implements Initializable{
 			else {
 				Text timeExt = new Text("Active time extension requests");
 				Text warning = new Text("Unapproved time extensions are denied");
-				timeExt.setFont(Font.font ("Century Gothic", FontWeight.BOLD, 18));
+				timeExt.setFont(Font.font ("Century Gothic", 18));
 				warning.setFont(Font.font ("Century Gothic", 14));
 				timeExt.setFill(Color.WHITE);
 				warning.setFill(Color.web("#5dcfde"));

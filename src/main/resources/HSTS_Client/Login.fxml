@@ -4,14 +4,44 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="560.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.LoginController">
+<AnchorPane prefHeight="560.0" prefWidth="620.0" styleClass="pane" stylesheets="@../css/bg2.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.LoginController">
    <children>
-      <Text layoutX="181.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" wrappingWidth="19.470031023025513" />
-      <TextField fx:id="username_text" layoutX="236.0" layoutY="188.0" />
-      <Text layoutX="165.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
-      <Button fx:id="login_btn" layoutX="271.0" layoutY="309.0" mnemonicParsing="false" onAction="#onClick" prefHeight="32.0" prefWidth="60.0" text="Login" />
-      <PasswordField fx:id="password_text" layoutX="236.0" layoutY="249.0" />
+      <Text fill="WHITE" layoutX="186.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" wrappingWidth="19.470031023025513">
+         <font>
+            <Font size="14.0" />
+         </font></Text>
+      <TextField fx:id="username_text" layoutX="217.0" layoutY="208.0" prefHeight="27.0" prefWidth="185.0" styleClass="text-input" stylesheets="@../css/bg2.css" style="-fx-background-color: transparent; -fx-border-color: #3F4E63; -fx-border-radius: 10;">
+         <font>
+            <Font name="Century Gothic" size="12.0" />
+         </font></TextField>
+      <Text fill="WHITE" layoutX="137.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font></Text>
+      <Button fx:id="login_btn" layoutX="271.0" layoutY="309.0" mnemonicParsing="false" onAction="#onClick" prefHeight="32.0" prefWidth="85.0" style="-fx-background-color: transparent; -fx-border-color: #5dcfde; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/bg2.css" text="Login" textFill="WHITE">
+         <font>
+            <Font name="Century Gothic" size="14.0" />
+         </font></Button>
+      <PasswordField fx:id="password_text" layoutX="217.0" layoutY="256.0" prefHeight="27.0" prefWidth="185.0" styleClass="text-input" stylesheets="@../css/bg2.css" style="-fx-background-color: transparent; -fx-border-color: #3F4E63; -fx-border-radius: 10;">
+         <font>
+            <Font name="Century Gothic" size="12.0" />
+         </font></PasswordField>
+      <AnchorPane fx:id="logo" layoutX="47.0" layoutY="39.0" maxHeight="60.0" maxWidth="64.0" minHeight="50.0" minWidth="50.0" prefHeight="60.0" prefWidth="64.0" style="-fx-background-color: #53DDD0; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, derive(cadetblue, -20%), 10, 0, 2, 2);">
+         <children>
+            <Text fx:id="logo_text" fill="WHITE" layoutX="7.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HSTS.">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <Text fill="WHITE" layoutX="150.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="High School Test System">
+         <font>
+            <Font name="Century Gothic" size="28.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
