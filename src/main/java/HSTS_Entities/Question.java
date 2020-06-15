@@ -16,11 +16,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "questions")
+@Table(name = "question")
 public class Question implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "questions_id")
+	@Column(name = "question_id")
 	private long id;
 	
 	@ManyToMany(
@@ -36,7 +36,7 @@ public class Question implements Serializable {
 	private int rightAnswer;
 	
 	private String course;
-	private String subject;
+	private String questionsSubject;
 	private String questionID;
 	
 	public Question() {
@@ -49,7 +49,7 @@ public class Question implements Serializable {
 		this.answer = answer;
 		this.rightAnswer = rightAnswer;
 		this.course = course;
-		this.subject = newSubject;
+		this.questionsSubject = newSubject;
 		
 	}
 
@@ -73,7 +73,7 @@ public class Question implements Serializable {
 	}
 
 	public void setSubject(String subject) {
-		this.subject = subject;
+		this.questionsSubject = subject;
 	}
 
 	public long getId() {
@@ -121,13 +121,13 @@ public class Question implements Serializable {
 	}
 
 	public String getSubject() {
-		return subject;
+		return questionsSubject;
 	}
 
 	@Override
 	public String toString() {
 		return "Question [id=" + id + ", questionContent=" + questionContent + ", answer=" + answer + ", rightAnswer="
-				+ rightAnswer + ", course=" + course + ", subject=" + subject + ", questionID=" + questionID + "]";
+				+ rightAnswer + ", course=" + course + ", subject=" + questionsSubject + ", questionID=" + questionID + "]";
 	}
 	
 	
