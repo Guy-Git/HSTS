@@ -19,28 +19,41 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PrincipalMainPageController implements Initializable {
 
 	@FXML
-	private Text enter_name_text;
+    private Button about_btn;
 
-	@FXML
-	private Text time_text;
+    @FXML
+    private Button log_out_btn;
 
-	@FXML
-	private Button time_ext_btn;
+    @FXML
+    private AnchorPane logo;
 
-	@FXML
-	private Button watch_reports_btn;
+    @FXML
+    private Text logo_text;
 
-	@FXML
-	private Button about_btn;
-	
-	@FXML
-	private Button log_out_btn;
+    @FXML
+    private Button time_ext_btn;
+
+    @FXML
+    private Button watch_reports_btn;
+
+    @FXML
+    private Text enter_name_text;
+
+    @FXML
+    private Text time_text;
+    
+    @FXML
+    private Text message_text;
+    
+    @FXML
+	private Button main_page_btn;
 
 
 	private HstsUser user;
@@ -68,6 +81,21 @@ public class PrincipalMainPageController implements Initializable {
 
 	@FXML
 	void menuClick(ActionEvent event) {
+		if (event.getSource() == main_page_btn) {
+			Stage stage = (Stage) main_page_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalMainPage.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (event.getSource() == time_ext_btn) {
 			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
 			try {
@@ -84,7 +112,22 @@ public class PrincipalMainPageController implements Initializable {
 			}
 		}
 //			if (event.getSource() == watch_reports_btn) 
-//			if (event.getSource() == about_btn) 
+
+		if (event.getSource() == about_btn) {
+			Stage stage = (Stage) about_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/About.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (event.getSource() == log_out_btn) {
 			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
 			try {
@@ -113,11 +156,16 @@ public class PrincipalMainPageController implements Initializable {
 
 	}
 
-	
 	@Subscribe
 	public void onUserEvent(HstsUser user) {
 		this.user = user;
-		enter_name_text.setText(enter_name_text.getText() + user.getFullName());
+		if (SimpleDateFormat.HOUR0_FIELD > 1 && SimpleDateFormat.HOUR0_FIELD < 12)
+			message_text.setText("Good Morning, ");
+		if (SimpleDateFormat.HOUR0_FIELD > 11 && SimpleDateFormat.HOUR0_FIELD < 18)
+			message_text.setText("Good Afternoon, ");
+		if (SimpleDateFormat.HOUR0_FIELD > 17)
+			message_text.setText("Good Night, ");
+		enter_name_text.setText(enter_name_text.getText() + user.getFullName() + ".");
 	}
 	
 	@Subscribe
