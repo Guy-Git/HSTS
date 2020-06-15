@@ -46,11 +46,11 @@ public class AppsClient extends AbstractClient {
 			EventBus.getDefault().post(((Message) msg));
 		}
 		
-		if (((Message) msg).getAction().contains("got time extensions")) {
+		if (((Message) msg).getAction().equals("got time extensions")) {
 			EventBus.getDefault().post(((Message) msg).getTimeExtensionArr());
 		}
 
-		if (((Message) msg).getAction().contains("Show Questions"))
+		if (((Message) msg).getAction().equals("Show Questions"))
 		{
 			EventBus.getDefault().post(((Message) msg).getQuestions());
 		}
@@ -64,11 +64,18 @@ public class AppsClient extends AbstractClient {
 			EventBus.getDefault().post(((Message) msg));
 		}
 		
-		if (((Message) msg).getAction().contains("Show Exams and Questions"))
+		if (((Message) msg).getAction().equals("Show Exams and Questions"))
 		{
 			EventBus.getDefault().post(((Message) msg));
 			
 		}
+		
+		if (((Message) msg).getAction().equals("Time extension result"))
+		{
+			EventBus.getDefault().post(((Message) msg));
+		}
+		
+		
 
 		// if(((Message)msg).getAction().equals(""))
 		/*

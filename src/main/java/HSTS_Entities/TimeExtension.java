@@ -23,6 +23,8 @@ public class TimeExtension implements Serializable
 	
 	private String examID;
 	
+	private String examCode;
+	
 	@Column(length = 100000)
 	private String reason;
 	
@@ -37,7 +39,7 @@ public class TimeExtension implements Serializable
 		// TODO Auto-generated constructor stub
 	}
 	
-	public TimeExtension(String examID, String subject, String course, String reason, int requestedTime, boolean approved, boolean status) {
+	public TimeExtension(String examID, String subject, String course, String reason, int requestedTime, boolean approved, boolean status, String examCode) {
 		super();
 		this.examID = examID;
 		this.subject = subject;
@@ -46,6 +48,7 @@ public class TimeExtension implements Serializable
 		this.requestedTime = requestedTime;
 		this.approved = approved;
 		this.status = status;
+		this.examCode = examCode;
 	}
 
 	public String getExamID() {
