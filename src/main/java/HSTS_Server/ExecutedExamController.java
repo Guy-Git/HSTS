@@ -19,6 +19,7 @@ import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
 import HSTS_Entities.ExecutedExam;
 import HSTS_Entities.HstsUser;
+import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 import HSTS_Entities.StudentsExecutedExam;
 
@@ -27,6 +28,29 @@ public class ExecutedExamController {
 	static SessionFactory sessionFactory = getSessionFactory();
 	private static Session session;
 
+	public void addStudentExectutedExam(StudentsExecutedExam studentExecutedExam) {
+
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(studentExecutedExam);
+
+			session.flush();
+			session.getTransaction().commit(); // Save everything.
+		}
+
+		catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+	
+	
 	public void addExectutedExam(ExecutedExam executedExam) {
 
 		try {
@@ -49,48 +73,77 @@ public class ExecutedExamController {
 			session.close();
 		}
 	}
+	
 
 	public void checkExam(StudentsExecutedExam studentsExecutedExam) {
 		// TODO Auto-generated method stub
 
-		Exam executedExam = null;
+		Exam exam = null;
 		ArrayList<Integer> answers = new ArrayList<Integer>();
 		int grade = 0;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
+			//System.out.println(studentsExecutedExam.getExamID());
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Exam> criteriaQuery = builder.createQuery(Exam.class);
 			Root<Exam> rootEntry = criteriaQuery.from(Exam.class);
 			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExamID()),
-					builder.equal(rootEntry.get("examCode"), studentsExecutedExam.getExamCode()));
-			TypedQuery<Exam> query = session.createQuery(criteriaQuery);
+					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExecutedExam().getExamID()));					
+					TypedQuery<Exam> query = session.createQuery(criteriaQuery);
 			try {
-				executedExam = (Exam) query.getSingleResult();
+				exam = (Exam) query.getSingleResult();
 			} catch (NoResultException nre) {
-				System.out.println("Executed Exam not found!");
+				System.out.println("Exam not found!");
 			}
 
-			for (int i = 0; i < executedExam.getQuestions().size(); i++) {
-				if (studentsExecutedExam.getAnswersForExam().get(i) == executedExam.getQuestions().get(i)
+			for (int i = 0; i < exam.getQuestions().size(); i++) {
+				if (studentsExecutedExam.getAnswersForExam().get(i) == exam.getQuestions().get(i)
 						.getRightAnswer()) {
-					grade += executedExam.getQuestionGrade().get(i);
-					answers.add(1);
-				} else {
-					answers.add(0);
-				}
+					grade += exam.getQuestionGrade().get(i);
 
+				} 
 			}
-			studentsExecutedExam.setCheckedAnswers(answers);
+			//studentsExecutedExam.setCheckedAnswers(answers);
 			studentsExecutedExam.setGrade(grade);
-			studentsExecutedExam.setChecked(true);
+			//studentsExecutedExam.setChecked(true);
 			addCheckedExam(studentsExecutedExam);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
+	}
+	
+	public ExecutedExam getExecutedExam(Message msg) {
+		// TODO Auto-generated method stub
+		ExecutedExam executedExam = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry)
+					.where(builder.equal(rootEntry.get("examCode"), msg.getExamForExec().getExamCode()));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				executedExam = (ExecutedExam) query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}	
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return executedExam;
 	}
 
 	private void addCheckedExam(StudentsExecutedExam studentsExecutedExam) {
@@ -105,8 +158,8 @@ public class ExecutedExamController {
 			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
 			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
 			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExamID()),
-					builder.equal(rootEntry.get("examCode"), studentsExecutedExam.getExamCode()));
+					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExecutedExam().getExamID()),
+					builder.equal(rootEntry.get("examCode"), studentsExecutedExam.getExecutedExam().getExamCode()));
 			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
 			
 			try {
@@ -114,6 +167,12 @@ public class ExecutedExamController {
 			} catch (NoResultException nre) {
 				System.out.println("Executed Exam not found!");
 			}
+			session.close();
+			
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			//System.out.println(executedExam);
 			session.evict(executedExam);
 			executedExam.getStudentsExecutedExams().add(studentsExecutedExam);
 			executedExam.setNumOfStudents(executedExam.getNumOfStudents() + 1);
@@ -127,7 +186,7 @@ public class ExecutedExamController {
 			
 			session.update(executedExam);
 			session.flush();
-			session.getTransaction().commit(); 
+			//session.getTransaction().commit(); 
 
 		}catch (Exception exception) {
 			if (session != null) {
@@ -155,4 +214,7 @@ public class ExecutedExamController {
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
+
+
+
 }

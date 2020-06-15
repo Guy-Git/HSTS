@@ -61,7 +61,7 @@ public class AppsClient extends AbstractClient {
 		if (((Message) msg).getAction().equals("Exam code invalid")
 				|| ((Message) msg).getAction().equals("Exam for exec"))
 		{
-			EventBus.getDefault().post(((Message) msg).getExam());
+			EventBus.getDefault().post(((Message) msg));
 		}
 		
 		if (((Message) msg).getAction().contains("Show Exams and Questions"))

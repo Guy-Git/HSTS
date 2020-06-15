@@ -7,17 +7,17 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "exams")
+@Table(name = "exam")
 public class Exam implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "exams_id")
+	@Column(name = "exam_id")
 	private long id;
 
 	@ManyToMany(fetch = FetchType.EAGER, 
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE }, 
 			targetEntity = Question.class)
-	@JoinTable(name = "exams_questions", joinColumns = @JoinColumn(name = "exams_id"), inverseJoinColumns = @JoinColumn(name = "questions_id"))
+	@JoinTable(name = "exam_question", joinColumns = @JoinColumn(name = "exam_id"), inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions;
 
 	private String examID;
@@ -29,10 +29,10 @@ public class Exam implements Serializable {
 	private String notes;
 	
 	private String teacherName;
-	private int time;
+	private int examTime;
 	private boolean manual;
 	private ArrayList<Integer> questionGrade;
-	String subject;
+	String examSubject;
 	String course;
 
 	public Exam() {
@@ -40,16 +40,16 @@ public class Exam implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Exam(List<Question> questions, String instructions, String notes, String teacherName, int time,
+	public Exam(List<Question> questions, String instructions, String notes, String teacherName, int examTime,
 			ArrayList<Integer> questionGrade, String subject, String course) {
 		super();
 		this.questions = new ArrayList<Question>();
 		this.instructions = instructions;
 		this.notes = notes;
 		this.teacherName = teacherName;
-		this.time = time;
+		this.examTime = examTime;
 		this.questionGrade = questionGrade;
-		this.subject = subject;
+		this.examSubject = subject;
 		this.course = course;
 
 	}
@@ -81,12 +81,12 @@ public class Exam implements Serializable {
 		this.teacherName = teacherName;
 	}
 
-	public int getTime() {
-		return time;
+	public int getExamTime() {
+		return examTime;
 	}
 
-	public void setTime(int time) {
-		this.time = time;
+	public void setExamTime(int examTime) {
+		this.examTime = examTime;
 	}
 
 	public ArrayList<Integer> getQuestionGrade() {
@@ -114,11 +114,11 @@ public class Exam implements Serializable {
 	}
 
 	public String getSubject() {
-		return subject;
+		return examSubject;
 	}
 
 	public void setSubject(String subject) {
-		this.subject = subject;
+		this.examSubject = subject;
 	}
 
 	public String getCourse() {

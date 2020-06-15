@@ -16,6 +16,7 @@ import HSTS_Entities.ExecutedExam;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
+import HSTS_Entities.StudentsExecutedExam;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -251,6 +252,8 @@ public class StartExamExecutionController implements Initializable {
 			ExecutedExam newExecutedExam = new ExecutedExam();
 			newExecutedExam.setExamCode(exam_code_text.getText());
 			newExecutedExam.setExamID(exams_container.getExpandedPane().getText().substring(6));
+			ArrayList<StudentsExecutedExam> studentsExecutedExams = new ArrayList<StudentsExecutedExam>();
+			newExecutedExam.setStudentsExecutedExams(studentsExecutedExams);
 
 			msgToServer.setAction("Add exam for execution");
 			msgToServer.setExamForExec(newExamForExec);
@@ -349,7 +352,7 @@ public class StartExamExecutionController implements Initializable {
 					displayExam.getChildren().add(questionBox);
 				}
 
-				Text examDuration = new Text("Exam duration is: " + exams.get(i).getTime() + " Minutes");
+				Text examDuration = new Text("Exam duration is: " + exams.get(i).getExamTime() + " Minutes");
 
 				displayExam.getChildren().add(examDuration);
 

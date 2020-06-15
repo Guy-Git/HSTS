@@ -43,7 +43,7 @@ public class QuestionController
 			Root<Question> rootEntry = criteriaQuery.from(Question.class);
 			criteriaQuery.select(rootEntry).where(
 					builder.equal(rootEntry.get("course"), msg.getCourse()), 
-					builder.equal(rootEntry.get("subject"), msg.getSubject()));
+					builder.equal(rootEntry.get("questionsSubject"), msg.getSubject()));
 			TypedQuery<Question> query = session.createQuery(criteriaQuery);
 			questions = (ArrayList<Question>) query.getResultList();
 

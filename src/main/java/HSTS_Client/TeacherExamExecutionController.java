@@ -54,6 +54,7 @@ public class TeacherExamExecutionController implements Initializable {
 	private Integer minutesTime;
 	private Integer secondsTime;
 	private Integer startTime;
+	private Integer minutesLeft;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -98,25 +99,26 @@ public class TeacherExamExecutionController implements Initializable {
 	}
 
 	@Subscribe
-	public void onExamEvent(Exam exam) {
+	public void onExamEvent(Message msg) {
 		Platform.runLater(() -> {
-			this.exam = exam;
+			this.exam = msg.getExam();
 
-			startTime = exam.getTime();
-			hourTime = exam.getTime() / 60;
+			startTime = exam.getExamTime();
+			hourTime = exam.getExamTime() / 60;
+			minutesLeft = exam.getExamTime() % 60;
 
 			System.out.println(hourTime);
 
 			if (startTime < 60) {
 				minutesTime = startTime;
-				secondsTime = 59;
+				secondsTime = 0;
 				if (minutesTime == 1) {
 					minutesTime = 1;
 					secondsTime = 0;
 				}
 			} else {
-				minutesTime = 59;
-				secondsTime = 59;
+				minutesTime = minutesLeft;
+				secondsTime = 0;
 			}
 
 			Timeline timeline = new Timeline();
@@ -131,32 +133,34 @@ public class TeacherExamExecutionController implements Initializable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					if (startTime == 1) {
+				/*	if (startTime == 1) {
 						secondsTime = 59;
 						minutesTime = 0;
-					}
-					startTime--;
+					}*/
+					//startTime--;
 					time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 							+ secondsTime.toString());
-					if (startTime <= 0 && secondsTime <= 0) {
+					if (minutesTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
 						timeline.stop();
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setHeaderText("time is up!");
 						alert.show();
 					} else {
-						secondsTime--;
 						if (secondsTime == 0 && minutesTime > 0) {
-							secondsTime = 59;
+							secondsTime = 60;
 							minutesTime--;
 						}
 						if (minutesTime == 1 && secondsTime == 0) {
 							minutesTime = 0;
 							secondsTime = 59;
+							startTime--;
 						}
 						if (hourTime > 0 && secondsTime == 0 && minutesTime == 0) {
 							hourTime--;
 							minutesTime = 59;
 							secondsTime = 59;
+						} else {
+							secondsTime--;
 						}
 					}
 				}

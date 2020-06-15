@@ -6,27 +6,35 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import javafx.fxml.Initializable;
 
 @Entity
-@Table(name = "student_exec_exam")
+@Table(name = "students_exam")
 public class StudentsExecutedExam implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Column(name = "student_exec_id")
 	private int id;
 
 	private boolean forcedFinish;
 
 	private int execTime;
 
-	HstsUser user;
+	private String userId;
 
 	private ArrayList<Integer> answersForExam;
 
@@ -34,23 +42,32 @@ public class StudentsExecutedExam implements Serializable {
 
 	private File examFile;
 	
-	private String examID;
+	private int examGrade;
 	
-	private String examCode;
+	boolean isChecked;
 	
-	private int grade;
-	
-	boolean checked;
-	
-	private ArrayList<Integer> checkedAnswers;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "executed_exam_id")
+	private ExecutedExam executedExam;
 
+	public StudentsExecutedExam(boolean forcedFinish, int execTime, String userId, ArrayList<Integer> answersForExam,
+			boolean isManual, boolean checked, ExecutedExam executedExam) {
+		super();
+		this.forcedFinish = forcedFinish;
+		this.execTime = execTime;
+		this.userId = userId;
+		this.answersForExam = answersForExam;
+		this.isManual = isManual;
+		this.isChecked = checked;
+		setExecutedExam(executedExam);
+	}
 
-	// public StudentsExecutedExam studentsExecutedExam;
 
 	public StudentsExecutedExam() {
-		super();
+	//	super();
 		// TODO Auto-generated constructor stub
 	}
+	
 
 	public boolean isForcedFinish() {
 		return forcedFinish;
@@ -66,14 +83,6 @@ public class StudentsExecutedExam implements Serializable {
 
 	public void setExecTime(int execTime) {
 		this.execTime = execTime;
-	}
-
-	public HstsUser getUser() {
-		return user;
-	}
-
-	public void setUser(HstsUser user) {
-		this.user = user;
 	}
 
 	public ArrayList<Integer> getAnswersForExam() {
@@ -100,46 +109,41 @@ public class StudentsExecutedExam implements Serializable {
 		this.examFile = examFile;
 	}
 
-	public String getExamID() {
-		return examID;
-	}
-
-	public void setExamID(String examID) {
-		this.examID = examID;
-	}
-
-	public String getExamCode() {
-		return examCode;
-	}
-
-	public void setExamCode(String examCode) {
-		this.examCode = examCode;
-	}
-
 	public int getGrade() {
-		return grade;
+		return examGrade;
 	}
 
-	public void setGrade(int grade) {
-		this.grade = grade;
+	public void setGrade(int examGrade) {
+		this.examGrade = examGrade;
 	}
 
 	public boolean isChecked() {
-		return checked;
+		return isChecked;
 	}
 
 	public void setChecked(boolean checked) {
-		this.checked = checked;
+		this.isChecked = checked;
 	}
 
-	public ArrayList<Integer> getCheckedAnswers() {
-		return checkedAnswers;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setCheckedAnswers(ArrayList<Integer> checkedAnswers) {
-		this.checkedAnswers = checkedAnswers;
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+
+	public ExecutedExam getExecutedExam() {
+		return executedExam;
+	}
+
+
+	public void setExecutedExam(ExecutedExam executedExam) {
+		this.executedExam = executedExam;
+		executedExam.getStudentsExecutedExams().add(this);
+		}
 	}
 	
-
 	
-}
+
