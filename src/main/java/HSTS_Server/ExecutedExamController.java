@@ -200,7 +200,7 @@ public class ExecutedExamController {
 		return;
 
 	}
-
+	
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
