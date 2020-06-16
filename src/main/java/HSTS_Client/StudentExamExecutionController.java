@@ -123,7 +123,7 @@ public class StudentExamExecutionController implements Initializable {
 	private HstsUser user;
 
 	private Exam exam;
-	
+
 	private Integer startTime;// time for exam in minutes
 
 	private Integer hourTime;
@@ -131,18 +131,20 @@ public class StudentExamExecutionController implements Initializable {
 	private Integer minutesTime;
 
 	private Integer secondsTime;
-	
+
 	private Integer executeTime;
-	
+
 	private boolean startSave = false;
 
 	private Integer minutesLeft;
 
 	private File file;
-	
+
 	private ExecutedExam executedExam;
-	
-	
+
+	private boolean checkedExtentions = false;
+
+	ExamForExec examForExec;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -173,7 +175,7 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	void enterSubmit(ActionEvent event) {
 
-		ExamForExec examForExec = new ExamForExec();
+		examForExec = new ExamForExec();
 		Message msg = new Message();
 		examForExec.setExamCode(enterExamCode.getText());
 		msg.setExamForExec(examForExec);
@@ -190,50 +192,65 @@ public class StudentExamExecutionController implements Initializable {
 	@Subscribe
 	public void setExamToPage(Message msg) {
 		Platform.runLater(() -> {
-			//studentsExecutedExam.setUserId(this.user.getUserId());
-			this.exam = msg.getExam();
-			this.executedExam = msg.getExecutedExam();
-			hourTime = (exam.getExamTime()) / 60;
-			minutesLeft = exam.getExamTime() % 60;
-			startTime = exam.getExamTime();
-			if (startTime < 60) {
-				minutesTime = startTime;
-				secondsTime = 0;
-				if (minutesTime == 1) {
-					minutesTime = 1;
-					secondsTime = 0;
+			// studentsExecutedExam.setUserId(this.user.getUserId());
+
+			if (checkedExtentions == true) {
+				System.out.println("KAKI");
+				minutesLeft = (5 + msg.getExtendTime()) % 60;
+				startTime += msg.getExtendTime();
+				hourTime = minutesLeft / 60;
+				if (startTime < 60) {
+					System.out.println(msg.getExtendTime());
+					System.out.println("minutes" + minutesTime + "start" + startTime);
+					minutesTime = startTime;
+				} else {
+					minutesTime = minutesLeft;
 				}
 			} else {
-				minutesTime = minutesLeft;
-				secondsTime = 0;
-			}
-
-			if (exam == null) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setHeaderText("Exam code is incorrect! \nTry again!");
-				alert.setTitle("");
-				alert.show();
-			}
-
-			else {
-
-				enterExamCode.setVisible(false);
-				for_multi_line.setVisible(false);
-				submit_btn.setDisable(false);
-				submit_btn.setVisible(true);
-
-				if (!exam.isManual()) {
-					submit_btn.setVisible(false);
-					start_exam_btn.setDisable(false);
-					for_multi_line1.setVisible(true);
-					enterIdForExam.setVisible(true);
-					enterIdForExam.setDisable(false);
-					start_exam_btn.setVisible(true);
-					start_exam_btn.setLayoutY(225);
-
+				this.exam = msg.getExam();
+				this.executedExam = msg.getExecutedExam();
+				hourTime = (exam.getExamTime()) / 60;
+				minutesLeft = exam.getExamTime() % 60;
+				startTime = exam.getExamTime();
+				if (startTime < 60) {
+					minutesTime = startTime;
+					secondsTime = 0;
+					if (minutesTime == 1) {
+						minutesTime = 1;
+						secondsTime = 0;
+					}
 				} else {
-					submit_btn.setVisible(false);
-					downlod_btn.setVisible(true);
+					minutesTime = minutesLeft;
+					secondsTime = 0;
+				}
+
+				if (exam == null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setHeaderText("Exam code is incorrect! \nTry again!");
+					alert.setTitle("");
+					alert.show();
+				}
+
+				else {
+
+					enterExamCode.setVisible(false);
+					for_multi_line.setVisible(false);
+					submit_btn.setDisable(false);
+					submit_btn.setVisible(true);
+
+					if (!exam.isManual()) {
+						submit_btn.setVisible(false);
+						start_exam_btn.setDisable(false);
+						for_multi_line1.setVisible(true);
+						enterIdForExam.setVisible(true);
+						enterIdForExam.setDisable(false);
+						start_exam_btn.setVisible(true);
+						start_exam_btn.setLayoutY(225);
+
+					} else {
+						submit_btn.setVisible(false);
+						downlod_btn.setVisible(true);
+					}
 				}
 			}
 		});
@@ -247,6 +264,7 @@ public class StudentExamExecutionController implements Initializable {
 		submit_btn.setVisible(false);
 		downlod_btn.setVisible(false);
 		save_exam.setVisible(true);
+		save_exam.setDisable(true);
 		Timeline timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		Button submitExamBtn = new Button();
@@ -319,9 +337,29 @@ public class StudentExamExecutionController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-
+				
+				
 				time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 						+ secondsTime.toString());
+				
+				if (minutesTime == 5 && secondsTime == 0 && hourTime == 0 && checkedExtentions == false) {
+					// timeline.stop();
+					ExamForExec newExemExamForExec = new ExamForExec(exam.getExamID(),true, examForExec.getExamCode());
+					checkedExtentions = true;
+					Message msgToServer = new Message();
+					msgToServer.setAction("Check for extension");
+					examForExec.setExamID(exam.getExamID());
+					msgToServer.setExamForExec(newExemExamForExec);
+
+					try {
+						AppsClient.getClient().sendToServer(msgToServer);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+
 				if (minutesTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
 					timeline.stop();
 					submitExamBtn.setVisible(false);
@@ -337,6 +375,8 @@ public class StudentExamExecutionController implements Initializable {
 					if (secondsTime == 0 && minutesTime > 0) {
 						secondsTime = 60;
 						minutesTime--;
+						startTime--;
+
 					}
 					if (minutesTime == 1 && secondsTime == 0) {
 						minutesTime = 0;
@@ -347,6 +387,8 @@ public class StudentExamExecutionController implements Initializable {
 						hourTime--;
 						minutesTime = 59;
 						secondsTime = 59;
+						startTime--;
+
 					} else {
 						secondsTime--;
 					}
@@ -362,9 +404,11 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	void uploadExam(ActionEvent event) {
 		// exam_anchor.getChildren().remove(0)
+
 		FileChooser fileChooser1 = new FileChooser();
 		fileChooser1.setTitle("Open file");
 		file = fileChooser1.showOpenDialog(null);
+		save_exam.setDisable(false);
 
 		if (file != null) {
 			fileName.setText("");
@@ -380,7 +424,7 @@ public class StudentExamExecutionController implements Initializable {
 	void startExam(ActionEvent event) {
 
 		if (enterIdForExam.getText().equals(user.getUserId())) {
-			
+
 			for_multi_line1.setVisible(false);
 			enterIdForExam.setVisible(false);
 			start_exam_btn.setVisible(false);
@@ -480,6 +524,23 @@ public class StudentExamExecutionController implements Initializable {
 
 					time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 							+ secondsTime.toString());
+					
+					if (minutesTime == 5 && secondsTime == 0 && hourTime == 0 && checkedExtentions == false) {
+						// timeline.stop();
+						ExamForExec newExemExamForExec = new ExamForExec(exam.getExamID(),true, examForExec.getExamCode());
+						checkedExtentions = true;
+						Message msgToServer = new Message();
+						msgToServer.setAction("Check for extension");
+						examForExec.setExamID(exam.getExamID());
+						msgToServer.setExamForExec(newExemExamForExec);
+
+						try {
+							AppsClient.getClient().sendToServer(msgToServer);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					if (startTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
 
 						timeline.stop();
@@ -490,6 +551,7 @@ public class StudentExamExecutionController implements Initializable {
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setHeaderText("time is up!");
 							alert.show();
+							timesUp();
 
 						}
 						startSave = false;
@@ -497,6 +559,7 @@ public class StudentExamExecutionController implements Initializable {
 						if (secondsTime == 0 && minutesTime > 0) {
 							secondsTime = 60;
 							minutesTime--;
+							startTime--;
 						}
 						if (minutesTime == 1 && secondsTime == 0) {
 							minutesTime = 0;
@@ -507,6 +570,7 @@ public class StudentExamExecutionController implements Initializable {
 							hourTime--;
 							minutesTime = 59;
 							secondsTime = 59;
+							startTime--;
 						} else {
 							secondsTime--;
 						}
@@ -527,9 +591,10 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	void saveExamContent(boolean isForced) {
-		
+
 		executeTime = exam.getExamTime() - minutesTime;
-		//ExecutedExam newExecutedExam = new ExecutedExam(exam.getExamID(), enterExamCode.getText());
+		// ExecutedExam newExecutedExam = new ExecutedExam(exam.getExamID(),
+		// enterExamCode.getText());
 		startSave = true;
 		ArrayList<Integer> chosenAnswers = new ArrayList<Integer>();
 		int sizeOfAnswers = 0;
@@ -551,16 +616,16 @@ public class StudentExamExecutionController implements Initializable {
 				chosenAnswers.add(0);// none of the answers was chosen
 			}
 		}
-		StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(isForced, executeTime, this.user.getUserId()
-				, chosenAnswers, false, false, this.executedExam);
+		StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(isForced, executeTime,
+				this.user.getUserId(), chosenAnswers, false, false, this.executedExam);
 
 		save_exam.setVisible(false);
 		time_text.setVisible(false);
 		exam_anchor.setVisible(false);
-		
+
 		Message msg = new Message();
 		msg.setStudentsExecutedExam(studentsExecutedExam);
-		
+
 		msg.setAction("Submit Student Exam");
 
 		try {
@@ -576,15 +641,13 @@ public class StudentExamExecutionController implements Initializable {
 
 		if (!exam.isManual()) {
 			saveExamContent(true);
-		}
-		else { 
+		} else {
 			file = null;
 			executeTime = exam.getExamTime() - minutesTime;
-			StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(true, exam.getExamTime(), this.user.getUserId()
-					, file, true, this.executedExam);
+			StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(true, exam.getExamTime(),
+					this.user.getUserId(), file, true, this.executedExam);
 			saveManualExam(studentsExecutedExam);
-			
-			
+
 		}
 	}
 
@@ -594,19 +657,25 @@ public class StudentExamExecutionController implements Initializable {
 			saveExamContent(false);
 		} else {
 			startSave = true;
-			StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(false,  exam.getExamTime() - minutesTime, this.user.getUserId()
-					, file, true, this.executedExam);
+			save_exam.setVisible(false);
+			save_exam.setDisable(true);
+			time_text.setVisible(false);
+			upload_exam.setVisible(false);
+			upload_exam.setDisable(true);
+			startSave = true;
+			StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(false,
+					exam.getExamTime() - minutesTime, this.user.getUserId(), file, true, this.executedExam);
 			saveManualExam(studentsExecutedExam);
 		}
 	}
-	
+
 	@FXML
 	void saveManualExam(StudentsExecutedExam studentsExecutedExam) {
-		
+
 		Message msg = new Message();
 		msg.setStudentsExecutedExam(studentsExecutedExam);
 		msg.setAction("Submit Student Manual Exam");
-		
+
 		try {
 			AppsClient.getClient().sendToServer(msg);
 		} catch (IOException e) {
