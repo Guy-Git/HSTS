@@ -331,8 +331,7 @@ public class StudentExamExecutionController implements Initializable {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setHeaderText("time is up!");
 						alert.show();
-						//studentsExecutedExam.setExecTime(exam.getExamTime());
-
+						timesUp();
 					}
 				} else {
 					if (secondsTime == 0 && minutesTime > 0) {
@@ -478,10 +477,7 @@ public class StudentExamExecutionController implements Initializable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					/*
-					 * if (startTime == 1) { secondsTime = 59; minutesTime = 0; }
-					 */
-					// startTime--;
+
 					time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 							+ secondsTime.toString());
 					if (startTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
@@ -581,6 +577,15 @@ public class StudentExamExecutionController implements Initializable {
 		if (!exam.isManual()) {
 			saveExamContent(true);
 		}
+		else { 
+			file = null;
+			executeTime = exam.getExamTime() - minutesTime;
+			StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(true, exam.getExamTime(), this.user.getUserId()
+					, file, true, this.executedExam);
+			saveManualExam(studentsExecutedExam);
+			
+			
+		}
 	}
 
 	@FXML
@@ -589,9 +594,24 @@ public class StudentExamExecutionController implements Initializable {
 			saveExamContent(false);
 		} else {
 			startSave = true;
-		//	studentsExecutedExam.setForcedFinish(false);
-			//studentsExecutedExam.setExamFile(file);
-			//studentsExecutedExam.setExecTime(exam.getExamTime() - startTime);
+			StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(false,  exam.getExamTime() - minutesTime, this.user.getUserId()
+					, file, true, this.executedExam);
+			saveManualExam(studentsExecutedExam);
+		}
+	}
+	
+	@FXML
+	void saveManualExam(StudentsExecutedExam studentsExecutedExam) {
+		
+		Message msg = new Message();
+		msg.setStudentsExecutedExam(studentsExecutedExam);
+		msg.setAction("Submit Student Manual Exam");
+		
+		try {
+			AppsClient.getClient().sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
