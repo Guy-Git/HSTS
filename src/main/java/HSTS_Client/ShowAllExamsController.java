@@ -46,7 +46,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class EditExamController implements Initializable {
+public class ShowAllExamsController implements Initializable {
 
 	@FXML
 	private Button create_question_btn;
@@ -81,11 +81,6 @@ public class EditExamController implements Initializable {
 	@FXML
 	private RadioButton com_exam;
 
-	@FXML
-	private Button saveBtn;
-
-	private boolean showQuestion = false;
-
 	private HstsUser user;
 
 	private ArrayList<Exam> exams;
@@ -97,7 +92,7 @@ public class EditExamController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-		saveBtn.setText("Save Exam");
+		
 	}
 
 	@FXML
@@ -201,208 +196,6 @@ public class EditExamController implements Initializable {
 		}
 	}
 
-	@FXML
-	void save(ActionEvent event) {
-
-		ArrayList<Question> chosenQuestions = new ArrayList<Question>();
-		ArrayList<Integer> questionsGrades = new ArrayList<Integer>();
-		TitledPane examToEdit = exams_container.getExpandedPane();
-		boolean badInput = false;
-		boolean noQuestionsChosen = false;
-
-		if (chooseSubject.getSelectionModel().isEmpty() || chooseSubject.getValue().equals("")) {
-			chooseSubject.setStyle("-fx-background-color: RED");
-			badInput = true;
-		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
-		}
-
-		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
-			chooseCourse.setStyle("-fx-background-color: RED");
-			badInput = true;
-		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
-		}
-
-		String instruction = ((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren()
-				.get(1)).getText();
-
-		if (instruction.isEmpty()) {
-			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: RED");
-			badInput = true;
-		} else {
-			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: #00bfff");
-		}
-
-		String notes = ((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(1)).getChildren().get(1))
-				.getText();
-
-		((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(1)).getChildren().get(1))
-				.setStyle("-fx-background-color: #00bfff");
-
-		String chosenExamId = examToEdit.getText().substring(6);
-		Exam chosenExam = null;
-		Exam newExam = new Exam();
-
-		newExam.setInstructions(instruction);
-		newExam.setNotes(notes);
-		newExam.setTeacherName(user.getFullName());
-		;
-		int i = 0;
-		for (Exam exam : exams) {
-			if (exam.getExamID().equals(chosenExamId)) {
-				chosenExam = exam;
-			}
-		}
-	
-		ArrayList<Integer> questionsPoints = new ArrayList<Integer>();
-
-		for (i = 0; i < chosenExam.getQuestions().size(); i++) {
-		
-			String questionGrade = (((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
-					.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText());
-					
-			if (((CheckBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(0))
-					.isSelected()) {
-				chosenQuestions.add(chosenExam.getQuestions().get(i));
-
-				if ((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
-						.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText()).isEmpty()||
-						!(questionGrade.matches("[0-9]+") && Integer.valueOf(questionGrade) > 0
-						&& Integer.valueOf(questionGrade) <= 100)) {
-
-					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
-							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
-									.setStyle("-fx-background-color: RED");
-					badInput = true;
-
-				} else {
-					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
-							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
-									.setStyle("-fx-background-color: #00bfff");
-					questionsPoints.add(Integer.valueOf(questionGrade));
-					questionsGrades.add(Integer.valueOf(
-						(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
-								.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText())));
-
-				}
-
-
-			}
-
-		}
-
-		if (((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
-				.getText().isEmpty()) {
-			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
-					.setStyle("-fx-background-color: RED");
-			badInput = true;
-		} else {
-			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
-					.setStyle("-fx-background-color: #00bfff");
-			newExam.setExamTime(Integer.valueOf(
-				((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
-						.getText()));
-		}
-
-
-		if (showQuestion == true) {
-			
-			for (int j = 0; j < (questions.size() - chosenExam.getQuestions().size()); j++) {
-				
-				String questionGrade = (((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-						.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
-						.getText());
-						
-				if (((CheckBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(4 + i + j)).getChildren()
-						.get(0)).isSelected()) {
-					for (Question question : questions) {
-						if (question.getQuestionID().equals(allQuestions.get(j))) {
-							chosenQuestions.add(question);
-
-							if ((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-									.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
-											.getText()).isEmpty()||!(questionGrade.matches("[0-9]+") && Integer.valueOf(questionGrade) > 0
-													&& Integer.valueOf(questionGrade) <= 100)) {
-
-								(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-										.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren()
-												.get(1))).setStyle("-fx-background-color: RED");
-								badInput = true;
-
-							} else {
-								(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-										.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren()
-												.get(1))).setStyle("-fx-background-color: #00bfff");
-								questionsPoints.add(Integer.valueOf(questionGrade));
-								questionsGrades.add(Integer
-										.valueOf((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent())
-												.getChildren().get(4 + i + j)).getChildren().get(1)).getChildren()
-													.get(6)).getChildren().get(1)).getText())));
-							}
-							}
-						}
-					}
-				}
-
-			}
-		
-		if (chosenQuestions.size() == 0) {
-			badInput = true;
-			noQuestionsChosen = true;
-		}
-		
-		int sumOfPoints = 0;
-		for(int k = 0; k < questionsPoints.size(); k++)
-		{
-			sumOfPoints += questionsPoints.get(k);
-		}
-		
-		if(sumOfPoints != 100)
-		{
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setHeaderText("Question Points must sum up to 100");
-			alert.setTitle("");
-			alert.show();
-			return;
-		}
-
-		if (badInput == false) {
-			newExam.setQuestions(chosenQuestions);
-			newExam.setCourse(chosenExam.getCourse());
-			newExam.setSubject(chosenExam.getSubject());
-			newExam.setQuestionGrade(questionsGrades);
-			
-			showQuestion = false;
-
-			Message msgToServer = new Message();
-
-			msgToServer.setAction("Add Exam");
-			msgToServer.setExam(newExam);
-
-			try {
-				AppsClient.getClient().sendToServer(msgToServer);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block e.printStackTrace();
-			}
-		} else {
-			if (noQuestionsChosen == false) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setHeaderText("The fields marked red must be filled");
-				alert.setTitle("");
-				// alert.setContentText("The fields marked red must be filled");
-				alert.show();
-			} else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setHeaderText("Questions must be chosen");
-				alert.setTitle("");
-				// alert.setContentText("The fields marked red must be filled");
-				alert.show();
-			}
-		}
-	}
 
 	@Subscribe
 	public void setExamsToPage(Message msg) {
@@ -416,25 +209,20 @@ public class EditExamController implements Initializable {
 
 			for (int i = 0; i < exams.size(); i++) {
 				VBox displayExam = new VBox(15);
+
 				displayExam.setAlignment(Pos.CENTER);
 				HBox instructionsHBox = new HBox();
 				instructionsHBox.setSpacing(10);
 				instructionsHBox.setAlignment(Pos.CENTER);
-				Label instructions = new Label("Instructions: ");
-				TextArea editInstructionsArea = new TextArea(exams.get(i).getInstructions());
-				editInstructionsArea.setPrefWidth(320);
-				editInstructionsArea.setPrefHeight(100);
-				instructionsHBox.getChildren().addAll(instructions, editInstructionsArea);
+			//	Label instructions = new Label("Instructions:");
+				Text editInstructionsArea = new Text("Instructions: "+exams.get(i).getInstructions());
+				instructionsHBox.getChildren().add(editInstructionsArea);
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.CENTER);
-				Label notes = new Label("Notes: ");
-				TextArea editNotesArea = new TextArea(exams.get(i).getNotes());
-				editNotesArea.setPrefWidth(320);
-				editNotesArea.setPrefHeight(100);
+				Label notes = new Label("Notes:");
+				Text editNotesArea = new Text(exams.get(i).getNotes());
+				if (editNotesArea.getText()!="")
 				notesHBox.getChildren().addAll(notes, editNotesArea);
-			//	instructionsHBox.setMargin(instructions, new Insets(0, 35, 0, 0));
-				instructionsHBox.setMargin(editInstructionsArea, new Insets(0, 34, 0, 0));
-				
 
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
@@ -446,8 +234,6 @@ public class EditExamController implements Initializable {
 					VBox questionBox = new VBox(15);
 					HBox questionHBox = new HBox(15);
 					questionHBox.setAlignment(Pos.CENTER);
-					CheckBox chosenBoxQuestion = new CheckBox();
-					chosenBoxQuestion.setSelected(true);
 					Text questionContent = new Text(
 							"" + (j + 1) + ". " + exams.get(i).getQuestions().get(j).getQuestionContent());
 					Text answer1 = new Text("1. " + exams.get(i).getQuestions().get(j).getAnswer().get(0));
@@ -456,8 +242,8 @@ public class EditExamController implements Initializable {
 					Text answer4 = new Text("4. " + exams.get(i).getQuestions().get(j).getAnswer().get(3));
 					Text rightAnswer = new Text("The right answer is: "
 							+ String.valueOf(exams.get(i).getQuestions().get(j).getRightAnswer()));
-					Text gradeText = new Text("Add grade for chosen question: ");
-					TextField gradeTextField = new TextField(Integer.toString(exams.get(i).getQuestionGrade().get(j)));
+					//Text gradeText = new Text("points:");
+					Text gradeTextField = new Text("  Points: "+Integer.toString(exams.get(i).getQuestionGrade().get(j)));
 
 					questionBox.getChildren().add(questionContent);
 					questionBox.getChildren().add(answer1);
@@ -467,13 +253,10 @@ public class EditExamController implements Initializable {
 					questionBox.getChildren().add(rightAnswer);
 
 					HBox gradesHB = new HBox();
-					gradeTextField.setPrefWidth(50);
-					gradeTextField.setMaxWidth(50);
-					gradesHB.getChildren().add(gradeText);
+				//	gradesHB.getChildren().add(gradeText);
 					gradesHB.getChildren().add(gradeTextField);
 					gradesHB.setSpacing(10);
 					questionBox.getChildren().add(gradesHB);
-					questionHBox.getChildren().add(chosenBoxQuestion);
 					questionHBox.getChildren().add(questionBox);
 
 					questionBox.setMargin(questionContent, new Insets(0, 0, 0, 5));
@@ -488,23 +271,23 @@ public class EditExamController implements Initializable {
 					questionBox.setSpacing(15);
 
 					questionBox.setStyle("-fx-background-color: #ADD8E6");
+					questionBox.setPrefWidth(250);
 					displayExam.getChildren().add(questionHBox);
 				}
 
-				Text examDuration = new Text("Exam duration in minutes is: ");
-				TextField editTime = new TextField();
-				editTime.setPrefWidth(35);
-				editTime.setText(Integer.toString(exams.get(i).getExamTime()));
+	//	        Text examDuration = new Text("Exam duration in minutes is:");
+				Text editTime = new Text();
+				editTime.setText("Exam duration in minutes is: "+Integer.toString(exams.get(i).getTime()));
 				HBox timeHBox = new HBox(15);
 				timeHBox.setAlignment(Pos.CENTER);
-				timeHBox.getChildren().add(examDuration);
+    //		    timeHBox.getChildren().add(examDuration);
 				timeHBox.getChildren().add(editTime);
 				displayExam.getChildren().add(timeHBox);
-				Button addQuestionBtn = new Button("Add question");
-				displayExam.getChildren().add(addQuestionBtn);
+	//			Button addQuestionBtn = new Button("Add question");
+	//			displayExam.getChildren().add(addQuestionBtn);
 				// displayExam.getChildren().add(saveBtn);
 				exams_container.getPanes().add(new TitledPane("Exam #" + exams.get(i).getExamID(), displayExam));
-				addQuestionBtn.setOnAction(event);
+	//			addQuestionBtn.setOnAction(event);
 
 			}
 		});
@@ -518,7 +301,6 @@ public class EditExamController implements Initializable {
 
 	public void setQuestionsToPage(ArrayList<Question> questions) {
 
-		showQuestion = true;
 		TitledPane chosenExamPane = exams_container.getExpandedPane();
 		String chosenExamId = chosenExamPane.getText().substring(6);
 		VBox examBox = (VBox) chosenExamPane.getContent();
@@ -558,8 +340,8 @@ public class EditExamController implements Initializable {
 					Text answer4 = new Text("4. " + questions.get(i).getAnswer().get(3));
 					Text rightAnswer = new Text(
 							"The right answer is: " + String.valueOf(questions.get(i).getRightAnswer()));
-					Text gradeText = new Text("Add grade for chosen question: ");
-					TextField gradeTextField = new TextField();
+					Text gradeText = new Text("Add grade for chosen question:");
+					Text gradeTextField = new Text();
 
 					questionBox.getChildren().add(questionContent);
 					questionBox.getChildren().add(answer1);
@@ -569,8 +351,6 @@ public class EditExamController implements Initializable {
 					questionBox.getChildren().add(rightAnswer);
 
 					HBox gradesHB = new HBox();
-					gradeTextField.setPrefWidth(50);
-					gradeTextField.setMaxWidth(50);
 					gradesHB.getChildren().add(gradeText);
 					gradesHB.getChildren().add(gradeTextField);
 					gradesHB.setSpacing(10);
@@ -618,3 +398,4 @@ public class EditExamController implements Initializable {
 	}
 
 }
+

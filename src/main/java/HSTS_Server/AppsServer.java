@@ -117,9 +117,27 @@ public class AppsServer extends AbstractServer {
 			examController.addExam(((Message)msg).getExam());
 		}
 		
+		if(((Message)msg).getAction().equals("Check for extension"))
+		{
+			serverMsg.setExtendTime(timeExtensionController.getTimeExtension(((Message)msg).getExamForExec()));
+			serverMsg.setAction("Time extension result");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if(((Message)msg).getAction().equals("Submit Student Exam"))
 		{
 			executedExamController.checkExam(((Message)msg).getStudentsExecutedExam());
+			executedExamController.addStudentExectutedExam(((Message)msg).getStudentsExecutedExam());
+		}
+		
+		if(((Message)msg).getAction().equals("Submit Student Manual Exam"))
+		{
 			executedExamController.addStudentExectutedExam(((Message)msg).getStudentsExecutedExam());
 		}
 	
@@ -387,11 +405,20 @@ public class AppsServer extends AbstractServer {
 			session.save(teacher1);
 			session.flush();
 			
-			passwordInput = "1234ABC";
+			passwordInput = "1234A";
 		    SHA3.DigestSHA3 digestSHA3_3 = new SHA3.Digest256();
 		    byte[] digest3 = digestSHA3_3.digest(passwordInput.getBytes());
+		    
+			subjects.add("Biology");
+			courses.add("Algebra 101");
+			courses.add("Introduction to Probability");
+			courses.add("Data structures");
+			courses.add("OS");
+			courses.add("Anatomy");
+			courses.add("Stem Cells");
+			courses.add("Biostructure");
 			
-			HstsUser principal = new HstsUser("4444", Hex.encodeHexString(digest3), 3, null, null, "Cheni",false);
+			HstsUser principal = new HstsUser("4444", Hex.encodeHexString(digest3), 3, subjects, courses, "Chen",false);
 
 			session.save(principal);
 			session.flush();
