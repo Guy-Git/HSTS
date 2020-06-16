@@ -14,6 +14,7 @@ public class Message implements Serializable
 	String execCode;
 	String userID;
 	int extendTime;
+	String time;
 	
 	ArrayList<Question> questions;
 
@@ -184,6 +185,16 @@ public class Message implements Serializable
 	public void setExtendTime(int extendTime) {
 		this.extendTime = extendTime;
 	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+	
+	
 	
 	
 }
