@@ -105,9 +105,7 @@ public class ExecutedExamController {
 
 				} 
 			}
-			//studentsExecutedExam.setCheckedAnswers(answers);
 			studentsExecutedExam.setGrade(grade);
-			//studentsExecutedExam.setChecked(true);
 			addCheckedExam(studentsExecutedExam);
 		} catch (Exception e) {
 			// TODO: handle exception

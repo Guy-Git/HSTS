@@ -84,6 +84,8 @@ public class EditExamController implements Initializable {
 	@FXML
 	private Button saveBtn;
 
+	private boolean showQuestion = false;
+
 	private HstsUser user;
 
 	private ArrayList<Exam> exams;
@@ -229,9 +231,7 @@ public class EditExamController implements Initializable {
 			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
 					.setStyle("-fx-background-color: RED");
 			badInput = true;
-		}
-
-		else {
+		} else {
 			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
 					.setStyle("-fx-background-color: #00bfff");
 		}
@@ -239,16 +239,8 @@ public class EditExamController implements Initializable {
 		String notes = ((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(1)).getChildren().get(1))
 				.getText();
 
-		if (notes.isEmpty()) {
-			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: RED");
-			badInput = true;
-		}
-
-		else {
-			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: #00bfff");
-		}
+		((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(1)).getChildren().get(1))
+				.setStyle("-fx-background-color: #00bfff");
 
 		String chosenExamId = examToEdit.getText().substring(6);
 		Exam chosenExam = null;
@@ -264,15 +256,22 @@ public class EditExamController implements Initializable {
 				chosenExam = exam;
 			}
 		}
+	
+		ArrayList<Integer> questionsPoints = new ArrayList<Integer>();
 
 		for (i = 0; i < chosenExam.getQuestions().size(); i++) {
-
+		
+			String questionGrade = (((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
+					.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText());
+					
 			if (((CheckBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(0))
 					.isSelected()) {
 				chosenQuestions.add(chosenExam.getQuestions().get(i));
 
 				if ((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
-						.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText()).isEmpty()) {
+						.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText()).isEmpty()||
+						!(questionGrade.matches("[0-9]+") && Integer.valueOf(questionGrade) > 0
+						&& Integer.valueOf(questionGrade) <= 100)) {
 
 					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
 							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
@@ -283,11 +282,14 @@ public class EditExamController implements Initializable {
 					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
 							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
 									.setStyle("-fx-background-color: #00bfff");
-				}
-
-				questionsGrades.add(Integer.valueOf(
+					questionsPoints.add(Integer.valueOf(questionGrade));
+					questionsGrades.add(Integer.valueOf(
 						(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
 								.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)).getText())));
+
+				}
+
+
 			}
 
 		}
@@ -300,52 +302,71 @@ public class EditExamController implements Initializable {
 		} else {
 			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
 					.setStyle("-fx-background-color: #00bfff");
-		}
-
-		newExam.setExamTime(Integer.valueOf(
+			newExam.setExamTime(Integer.valueOf(
 				((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
 						.getText()));
+		}
 
-		for (int j = 0; j < (questions.size() - chosenExam.getQuestions().size()); j++) {
-			if (((CheckBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(4 + i + j)).getChildren().get(0))
-					.isSelected()) {
-				for (Question question : questions) {
-					if (question.getQuestionID().equals(allQuestions.get(j))) {
-						chosenQuestions.add(question);
 
-						if ((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-								.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
-										.getText()).isEmpty()) {
+		if (showQuestion == true) {
+			
+			for (int j = 0; j < (questions.size() - chosenExam.getQuestions().size()); j++) {
+				
+				String questionGrade = (((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+						.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
+						.getText());
+						
+				if (((CheckBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(4 + i + j)).getChildren()
+						.get(0)).isSelected()) {
+					for (Question question : questions) {
+						if (question.getQuestionID().equals(allQuestions.get(j))) {
+							chosenQuestions.add(question);
 
-							(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-									.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
-											.setStyle("-fx-background-color: RED");
-							badInput = true;
+							if ((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+									.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
+											.getText()).isEmpty()||!(questionGrade.matches("[0-9]+") && Integer.valueOf(questionGrade) > 0
+													&& Integer.valueOf(questionGrade) <= 100)) {
 
-						} else {
-							(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-									.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
-											.setStyle("-fx-background-color: #00bfff");
-						}
-						if (((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
-								.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren().get(1))
-										.getText().equals("")) {
-							questionsGrades.add(0);
+								(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+										.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren()
+												.get(1))).setStyle("-fx-background-color: RED");
+								badInput = true;
 
-						} else {
-							questionsGrades.add(Integer
-									.valueOf((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent())
-											.getChildren().get(4 + i + j)).getChildren().get(1)).getChildren().get(6))
-													.getChildren().get(1)).getText())));
+							} else {
+								(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
+										.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren()
+												.get(1))).setStyle("-fx-background-color: #00bfff");
+								questionsPoints.add(Integer.valueOf(questionGrade));
+								questionsGrades.add(Integer
+										.valueOf((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent())
+												.getChildren().get(4 + i + j)).getChildren().get(1)).getChildren()
+													.get(6)).getChildren().get(1)).getText())));
+							}
+							}
 						}
 					}
 				}
-			}
 
-		}
+			}
+		
 		if (chosenQuestions.size() == 0) {
 			badInput = true;
 			noQuestionsChosen = true;
+		}
+		
+		int sumOfPoints = 0;
+		for(int k = 0; k < questionsPoints.size(); k++)
+		{
+			sumOfPoints += questionsPoints.get(k);
+		}
+		
+		if(sumOfPoints != 100)
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Question Points must sum up to 100");
+			alert.setTitle("");
+			alert.show();
+			return;
 		}
 
 		if (badInput == false) {
@@ -353,13 +374,8 @@ public class EditExamController implements Initializable {
 			newExam.setCourse(chosenExam.getCourse());
 			newExam.setSubject(chosenExam.getSubject());
 			newExam.setQuestionGrade(questionsGrades);
-
-			/*
-			 * ArrayList<Exam> exams = new ArrayList<Exam>(); exams.add(newExam);
-			 * 
-			 * for (Question question : chosenQuestions) { question.setExams(exams); }
-			 */
-			// newExam.setQuestions(chosenQuestions);
+			
+			showQuestion = false;
 
 			Message msgToServer = new Message();
 
@@ -416,6 +432,9 @@ public class EditExamController implements Initializable {
 				editNotesArea.setPrefWidth(320);
 				editNotesArea.setPrefHeight(100);
 				notesHBox.getChildren().addAll(notes, editNotesArea);
+			//	instructionsHBox.setMargin(instructions, new Insets(0, 35, 0, 0));
+				instructionsHBox.setMargin(editInstructionsArea, new Insets(0, 34, 0, 0));
+				
 
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
@@ -499,6 +518,7 @@ public class EditExamController implements Initializable {
 
 	public void setQuestionsToPage(ArrayList<Question> questions) {
 
+		showQuestion = true;
 		TitledPane chosenExamPane = exams_container.getExpandedPane();
 		String chosenExamId = chosenExamPane.getText().substring(6);
 		VBox examBox = (VBox) chosenExamPane.getContent();

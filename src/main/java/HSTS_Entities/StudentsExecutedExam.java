@@ -61,6 +61,17 @@ public class StudentsExecutedExam implements Serializable {
 		this.isChecked = checked;
 		setExecutedExam(executedExam);
 	}
+	
+	public StudentsExecutedExam(boolean forcedFinish, int execTime, String userId, File examFile,
+			boolean isManual, ExecutedExam executedExam) {
+		super();
+		this.forcedFinish = forcedFinish;
+		this.execTime = execTime;
+		this.userId = userId;
+		this.examFile = examFile;
+		this.isManual = isManual;
+		setExecutedExam(executedExam);
+	}
 
 
 	public StudentsExecutedExam() {

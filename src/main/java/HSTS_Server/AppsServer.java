@@ -135,6 +135,11 @@ public class AppsServer extends AbstractServer {
 			executedExamController.checkExam(((Message)msg).getStudentsExecutedExam());
 			executedExamController.addStudentExectutedExam(((Message)msg).getStudentsExecutedExam());
 		}
+		
+		if(((Message)msg).getAction().equals("Submit Student Manual Exam"))
+		{
+			executedExamController.addStudentExectutedExam(((Message)msg).getStudentsExecutedExam());
+		}
 	
 		if(((Message)msg).getAction().equals("Enter code") || ((Message)msg).getAction().equals("Pull exam by examCode"))
 		{
