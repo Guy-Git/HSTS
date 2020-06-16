@@ -76,10 +76,11 @@
                <children>
                   <VBox fx:id="time_ext_vbox" layoutX="14.0" layoutY="38.0" prefHeight="113.0" prefWidth="413.0">
                      <children>
+                        <Text fx:id="time_ext_text" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="413.4700164794922" />
                         <HBox fx:id="time_ext_hbox" prefHeight="117.0" prefWidth="413.0" />
                      </children>
                   </VBox>
-                  <Button fx:id="approve_btn" layoutX="160.0" layoutY="500.0" mnemonicParsing="false" onAction="#approve" prefHeight="30.0" prefWidth="121.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/bg2.css" text="Approve" textFill="WHITE" visible="false">
+                  <Button fx:id="approve_btn" layoutX="160.0" layoutY="500.0" mnemonicParsing="false" onAction="#approve" prefHeight="30.0" prefWidth="121.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/bg2.css" text="Send" textFill="WHITE" visible="false">
                      <font>
                         <Font name="Century Gothic Bold" size="14.0" />
                      </font>

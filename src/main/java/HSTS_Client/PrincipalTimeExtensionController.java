@@ -25,10 +25,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -38,8 +41,10 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class PrincipalTimeExtensionController implements Initializable{
 
@@ -74,7 +79,12 @@ public class PrincipalTimeExtensionController implements Initializable{
 	 @FXML
 	 private Button main_page_btn;
 
+	 @FXML
+	 private Text time_ext_text;
 	 
+	 @FXML
+	 private AnchorPane logo;
+
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -183,22 +193,27 @@ public class PrincipalTimeExtensionController implements Initializable{
 			time_ext_vbox.getChildren().clear();		
 			
 			if(timeExtensionsArr.isEmpty()) {
-				Text noTimeExt = new Text("No new time extension requests");
-				noTimeExt.setFill(Color.WHITE);
-				noTimeExt.setFont(Font.font ("Century Gothic", 16));
-				time_ext_vbox.getChildren().add(noTimeExt);
+				time_ext_text.setText("No new time extension requests");
+				time_ext_text.setFill(Color.WHITE);
+				time_ext_text.setFont(Font.font ("Century Gothic", 16));
+				time_ext_text.setTextAlignment(TextAlignment.CENTER);
+				
+				time_ext_vbox.getChildren().add(time_ext_text);
 				time_ext_vbox.setAlignment(Pos.CENTER);
 			}
 			
 			else {
-				Text timeExt = new Text("Active time extension requests");
-				Text warning = new Text("Unapproved time extensions are denied");
-				timeExt.setFont(Font.font ("Century Gothic", 18));
+				time_ext_text.setText("Active time extension requests");
+				time_ext_text.setFont(Font.font ("Century Gothic", 18));
+				time_ext_text.setFill(Color.WHITE);
+				time_ext_text.setTextAlignment(TextAlignment.CENTER);
+				
+				Text warning = new Text("Please check requests you want to approve. \nUchecked requests are denied.\n");
 				warning.setFont(Font.font ("Century Gothic", 14));
-				timeExt.setFill(Color.WHITE);
 				warning.setFill(Color.web("#5dcfde"));
-
-				time_ext_vbox.getChildren().add(timeExt);
+				warning.setTextAlignment(TextAlignment.CENTER);
+				
+				time_ext_vbox.getChildren().add(time_ext_text);
 				time_ext_vbox.getChildren().add(warning);
 				time_ext_vbox.setAlignment(Pos.CENTER);
 			}
@@ -313,6 +328,25 @@ public class PrincipalTimeExtensionController implements Initializable{
 		
 		try {
 			AppsClient.getClient().sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Stage stage = (Stage) main_page_btn.getScene().getWindow();
+		try {
+			
+			//Alert alert = new Alert(AlertType.INFORMATION);
+			//alert.setHeaderText("Done!");
+			//alert.setTitle("");
+			//alert.show();
+			
+			Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalTimeExtension.fxml"));
+			stage.setTitle("High School Test System");
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.show();
+			EventBus.getDefault().post(user);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

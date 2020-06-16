@@ -3,6 +3,7 @@ package HSTS_Client;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -159,18 +160,16 @@ public class PrincipalMainPageController implements Initializable {
 	@Subscribe
 	public void onUserEvent(HstsUser user) {
 		this.user = user;
-		if (SimpleDateFormat.HOUR0_FIELD > 1 && SimpleDateFormat.HOUR0_FIELD < 12)
+		LocalDateTime localDateTime = LocalDateTime.now();
+		if (localDateTime.getHour() >= 1 && localDateTime.getHour() <= 12)
 			message_text.setText("Good Morning, ");
-		if (SimpleDateFormat.HOUR0_FIELD > 11 && SimpleDateFormat.HOUR0_FIELD < 18)
+		if (localDateTime.getHour() > 12 && localDateTime.getHour() <= 18)
 			message_text.setText("Good Afternoon, ");
-		if (SimpleDateFormat.HOUR0_FIELD > 17)
+		if (localDateTime.getHour() > 18)
 			message_text.setText("Good Night, ");
 		enter_name_text.setText(enter_name_text.getText() + user.getFullName() + ".");
 	}
 	
-	@Subscribe
-	public void onLogOut(HstsUser user) {
-		
-	}
+	
 
 }
