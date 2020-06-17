@@ -55,6 +55,9 @@ public class PrincipalMainPageController implements Initializable {
     
     @FXML
 	private Button main_page_btn;
+    
+    @FXML
+    private AnchorPane menu_anchor_pane;
 
 
 	private HstsUser user;
@@ -62,7 +65,7 @@ public class PrincipalMainPageController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-
+		menu_anchor_pane.setStyle("-fx-background-image: url('file:C:/Users/linoym/git/HSTS/src/main/resources/background.png');");
 		Thread timerThread = new Thread(() -> {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			while (true) {
@@ -91,6 +94,8 @@ public class PrincipalMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -106,7 +111,8 @@ public class PrincipalMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-				
+				EventBus.getDefault().unregister(this);
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -123,6 +129,8 @@ public class PrincipalMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -138,7 +146,8 @@ public class PrincipalMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-				
+				EventBus.getDefault().unregister(this);
+
 				Message msg = new Message();
 				msg.setAction("user log out");
 				msg.setUser(this.user);
@@ -166,7 +175,7 @@ public class PrincipalMainPageController implements Initializable {
 		if (localDateTime.getHour() > 12 && localDateTime.getHour() <= 18)
 			message_text.setText("Good Afternoon, ");
 		if (localDateTime.getHour() > 18)
-			message_text.setText("Good Night, ");
+			message_text.setText("Good Evening, ");
 		enter_name_text.setText(enter_name_text.getText() + user.getFullName() + ".");
 	}
 	

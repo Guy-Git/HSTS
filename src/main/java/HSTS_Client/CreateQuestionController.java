@@ -127,6 +127,7 @@ public class CreateQuestionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -143,6 +144,7 @@ public class CreateQuestionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -159,6 +161,7 @@ public class CreateQuestionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -175,6 +178,7 @@ public class CreateQuestionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -245,7 +249,8 @@ public class CreateQuestionController implements Initializable {
 					stage.setScene(scene);
 					stage.show();
 					EventBus.getDefault().post(user);
-					
+					EventBus.getDefault().unregister(this);
+
 					Message msg = new Message();
 					msg.setAction("user log out");
 					msg.setUser(this.user);
@@ -261,8 +266,6 @@ public class CreateQuestionController implements Initializable {
 					e.printStackTrace();
 				}
 			}
-
-		EventBus.getDefault().unregister(this);
 	}
 
 	@FXML
@@ -274,53 +277,53 @@ public class CreateQuestionController implements Initializable {
 
 		if (chooseSubject.getSelectionModel().isEmpty()
 				|| chooseSubject.getValue().isEmpty()) {
-			chooseSubject.setStyle("-fx-background-color: RED");
+			chooseSubject.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
+			chooseSubject.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
 				|| chooseCourse.getValue().isEmpty()) {
-			chooseCourse.setStyle("-fx-background-color: RED");
+			chooseCourse.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
+			chooseCourse.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (contentText.getText().isEmpty()) {
-			contentText.setStyle("-fx-background-color: RED");
+			contentText.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			contentText.setStyle("-fx-background-color: #00bfff");
+			contentText.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (answer1Text.getText().isEmpty()) {
-			answer1Text.setStyle("-fx-background-color: RED");
+			answer1Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer1Text.setStyle("-fx-background-color: #00bfff");
+			answer1Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (answer2Text.getText().isEmpty()) {
-			answer2Text.setStyle("-fx-background-color: RED");
+			answer2Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer2Text.setStyle("-fx-background-color: #00bfff");
+			answer2Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (answer3Text.getText().isEmpty()) {
-			answer3Text.setStyle("-fx-background-color: RED");
+			answer3Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer3Text.setStyle("-fx-background-color: #00bfff");
+			answer3Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (answer4Text.getText().isEmpty()) {
-			answer4Text.setStyle("-fx-background-color: RED");
+			answer4Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer4Text.setStyle("-fx-background-color: #00bfff");
+			answer4Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (badInput == false) 
@@ -363,14 +366,6 @@ public class CreateQuestionController implements Initializable {
 
 	@FXML
 	void clear(ActionEvent event) {
-		//contentText.clear();
-		//answer1Text.clear();
-		//answer2Text.clear();
-		//answer3Text.clear();
-		//answer4Text.clear();
-		//right_answer.selectToggle(rightAnswer1);
-		//chooseSubject.setValue("");
-		//chooseCourse.setValue("");
 		Stage stage = (Stage) create_question_btn.getScene().getWindow();
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateQuestion.fxml"));

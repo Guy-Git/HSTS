@@ -48,14 +48,14 @@ public class LoginController implements Initializable {
 			username_text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10");
 			badInput = true;
 		} else {
-			username_text.setStyle("-fx-background-color: #00bfff");
+			username_text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (password_text.getText().isEmpty()) {
 			password_text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10");
 			badInput = true;
 		} else {
-			password_text.setStyle("-fx-background-color: #00bfff");
+			password_text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
 		}
 
 		if (badInput == false) {

@@ -31,6 +31,16 @@
 -fx-font-family: "Century Gothic";
 }
 
+.choice-box .context-menu { 
+-fx-background-color: white; 
+-fx-background-radius: 10;
+}
+
+.choice-box .menu-item:focused { 
+-fx-background-color: #5dcfde; 
+-fx-background-radius: 10; 
+}
+
 .choice-box > .label {
 -fx-text-fill: white; 
 }
