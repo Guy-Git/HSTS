@@ -117,7 +117,7 @@ public class PrincipalMainPageController implements Initializable {
 		if (event.getSource() == about_btn) {
 			Stage stage = (Stage) about_btn.getScene().getWindow();
 			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/About.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalAboutPage.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
@@ -130,7 +130,7 @@ public class PrincipalMainPageController implements Initializable {
 		}
 		
 		if (event.getSource() == log_out_btn) {
-			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
+			Stage stage = (Stage) log_out_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
 				stage.setTitle("High School Test System");

@@ -20,7 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class AboutController implements Initializable {
+public class PrincipalAboutController implements Initializable {
 
 	private HstsUser user;
 	
