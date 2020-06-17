@@ -48,6 +48,9 @@ public class ExecutedExamController {
 		} finally {
 			session.close();
 		}
+		
+		if(studentExecutedExam.isManual())
+			addCheckedExam(studentExecutedExam);
 	}
 	
 	
@@ -73,6 +76,61 @@ public class ExecutedExamController {
 			session.close();
 		}
 	}
+	
+	/*public void addFinishedManualExam(StudentsExecutedExam studentsExecutedExam) {
+		
+		ExecutedExam executedExam = null;
+		
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExecutedExam().getExamID()),
+					builder.equal(rootEntry.get("examCode"), studentsExecutedExam.getExecutedExam().getExamCode()));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			
+			try {
+				executedExam = (ExecutedExam) query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("Executed Exam not found!");
+			}
+			session.close();
+			
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			//System.out.println(executedExam);
+			session.evict(executedExam);
+			executedExam.getStudentsExecutedExams().add(studentsExecutedExam);
+			executedExam.setNumOfStudents(executedExam.getNumOfStudents() + 1);
+			if(studentsExecutedExam.isForcedFinish())
+			{
+				executedExam.setNumForced(executedExam.getNumForced() + 1);
+			}
+			else {
+				executedExam.setNumUnforced(executedExam.getNumUnforced() + 1);
+			}
+			
+			session.update(executedExam);
+			session.flush();
+			//session.getTransaction().commit(); 
+
+		}catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return;
+
+
+	}*/
 	
 
 	public void checkExam(StudentsExecutedExam studentsExecutedExam) {
@@ -198,7 +256,7 @@ public class ExecutedExamController {
 		return;
 
 	}
-
+	
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
@@ -212,7 +270,5 @@ public class ExecutedExamController {
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
-
-
 
 }

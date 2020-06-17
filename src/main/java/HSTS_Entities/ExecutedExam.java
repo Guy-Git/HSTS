@@ -30,7 +30,7 @@ public class ExecutedExam implements Serializable{
 	
 	private int numOfStudents;
 	
-	private int timeAndDate;
+	private String timeAndDate;
 	
 	private int numForced;
 	
@@ -73,11 +73,11 @@ public class ExecutedExam implements Serializable{
 		this.numOfStudents = numOfStudents;
 	}
 
-	public int getTimeAndDate() {
+	public String getTimeAndDate() {
 		return timeAndDate;
 	}
 
-	public void setTimeAndDate(int timeAndDate) {
+	public void setTimeAndDate(String timeAndDate) {
 		this.timeAndDate = timeAndDate;
 	}
 
