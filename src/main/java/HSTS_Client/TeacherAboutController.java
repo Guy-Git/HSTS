@@ -3,14 +3,12 @@ package HSTS_Client;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ResourceBundle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import HSTS_Entities.HstsUser;
-import HSTS_Entities.Message;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class TeacherMainPageController implements Initializable {
+public class TeacherAboutController implements Initializable {
 
 	@FXML
     private Button about_btn;
@@ -73,23 +71,6 @@ public class TeacherMainPageController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) 
 	{
 		EventBus.getDefault().register(this);
-		
-		Thread timerThread = new Thread(() -> 
-		{
-	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	        while (true) {
-	            final String time = simpleDateFormat.format(new Date());
-	            Platform.runLater(() -> {
-	                time_text.setText(time);
-	            });
-	            try {
-	            	Thread.sleep(1000); //1 second
-	            } catch (InterruptedException e) {
-	            	e.printStackTrace();
-	            }
-	        }
-	    });   
-		timerThread.start();
 	}
 
 	@FXML
@@ -209,44 +190,12 @@ public class TeacherMainPageController implements Initializable {
 				}
 			}
 			
-			if (event.getSource() == log_out_btn) {
-				Stage stage = (Stage) log_out_btn.getScene().getWindow();
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
-					stage.setTitle("High School Test System");
-					Scene scene = new Scene(root);
-					stage.setScene(scene);
-					stage.show();
-					EventBus.getDefault().post(user);
-					
-					Message msg = new Message();
-					msg.setAction("user log out");
-					msg.setUser(this.user);
-					try {
-						AppsClient.getClient().sendToServer(msg);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 
 	}
 
+	@Subscribe
 	public void onUserEvent(HstsUser user) {
 		this.user = user;
-		LocalDateTime localDateTime = LocalDateTime.now();
-		if (localDateTime.getHour() >= 1 && localDateTime.getHour() <= 12)
-			message_text.setText("Good Morning, ");
-		if (localDateTime.getHour() > 12 && localDateTime.getHour() <= 18)
-			message_text.setText("Good Afternoon, ");
-		if (localDateTime.getHour() > 18)
-			message_text.setText("Good Night, ");
-		enter_name_text.setText(enter_name_text.getText() + user.getFullName());
 	}
 
 }
