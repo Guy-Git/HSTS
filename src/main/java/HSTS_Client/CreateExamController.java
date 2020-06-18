@@ -29,15 +29,41 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import HSTS_Entities.Message;
 
 public class CreateExamController implements Initializable {
 
+    @FXML
+    private Button log_out_btn;
+
+    @FXML
+    private AnchorPane logo;
+
+    @FXML
+    private Text logo_text;
+
+    @FXML
+    private Button edit_question_btn;
+
+    @FXML
+    private Button edit_exam_btn;
+
+    @FXML
+    private Button main_page_btn;
+	
 	@FXML
 	private Button create_question_btn;
 
@@ -83,6 +109,9 @@ public class CreateExamController implements Initializable {
 	@FXML
 	private TextArea notes_text;
 
+	@FXML
+	private Text notes;
+
 	private HstsUser user;
 
 	private ArrayList<Question> questions;
@@ -90,8 +119,6 @@ public class CreateExamController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-		for_multi_line.setText("Instructions for\nthe students:");
-		for_multi_line.setWrappingWidth(80);
 	}
 
 	@FXML
@@ -105,6 +132,7 @@ public class CreateExamController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -121,13 +149,14 @@ public class CreateExamController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
@@ -137,18 +166,108 @@ public class CreateExamController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		if (event.getSource() == edit_exam_btn) {
+			Stage stage = (Stage) edit_exam_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditExam.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
-//		if (event.getSource() == exam_execution_btn) 
-//		if (event.getSource() == watch_reports_btn) 
-//		if (event.getSource() == about_btn) 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+			if (event.getSource() == edit_question_btn) {
+				Stage stage = (Stage) edit_question_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditQuestion.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
 
-		EventBus.getDefault().unregister(this);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == main_page_btn) {
+				Stage stage = (Stage) main_page_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == about_btn) {
+				Stage stage = (Stage) about_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAboutPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == log_out_btn) {
+				Stage stage = (Stage) log_out_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+					Message msg = new Message();
+					msg.setAction("user log out");
+					msg.setUser(this.user);
+					try {
+						AppsClient.getClient().sendToServer(msg);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 	}
 
 	@FXML
@@ -158,53 +277,52 @@ public class CreateExamController implements Initializable {
 		
 		if (chooseSubject.getSelectionModel().isEmpty()
 				|| chooseSubject.getValue().equals("")) {
-			chooseSubject.setStyle("-fx-background-color: RED");
+			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
 				|| chooseCourse.getValue().equals("")) {
-			chooseCourse.setStyle("-fx-background-color: RED");
+			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (instructions_text.getText().isEmpty()) {
-			instructions_text.setStyle("-fx-background-color: RED");
+			instructions_text.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			instructions_text.setStyle("-fx-background-color: #00bfff");
+			instructions_text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (time_text.getText().isEmpty() || !time_text.getText().matches("[0-9]+")) {
-			time_text.setStyle("-fx-background-color: RED");
+			time_text.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			time_text.setStyle("-fx-background-color: #00bfff");
+			time_text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		ArrayList<Question> examQuestions = new ArrayList<Question>();
 		ArrayList<Integer> questionsPoints = new ArrayList<Integer>();
 		int chosenQuestions = 0;
 
-		for (int j = 2; j < show_questions.getChildren().size() - 2; j++) {
+		for (int j = 5; j < show_questions.getChildren().size() - 2; j++) {
 			HBox chooseQuestion = (HBox) show_questions.getChildren().get(j);
 			VBox questionBox = (VBox) chooseQuestion.getChildren().get(1);
 			HBox gradesBox = (HBox) questionBox.getChildren().get(6);
 			String questionPoints = ((TextField) gradesBox.getChildren().get(1)).getText();
-
+			
 			if (((CheckBox) (((HBox) show_questions.getChildren().get(j)).getChildren().get(0))).isSelected()) {
 				chosenQuestions++;
-				examQuestions.add(questions.get(j - 2));
+				examQuestions.add(questions.get(j - 5));
 				if (questionPoints.matches("[0-9]+") && Integer.valueOf(questionPoints) > 0
 						&& Integer.valueOf(questionPoints) <= 100)
 					questionsPoints.add(Integer.valueOf(questionPoints));
 			}
 		}
-
 		if (chosenQuestions == 0) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("Please choose questions!");
@@ -279,18 +397,18 @@ public class CreateExamController implements Initializable {
 
 		if (chooseSubject.getSelectionModel().isEmpty()
 				|| chooseSubject.getValue().equals("")) {
-			chooseSubject.setStyle("-fx-background-color: RED");
+			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
 				|| chooseCourse.getValue().equals("")) {
-			chooseCourse.setStyle("-fx-background-color: RED");
+			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (badInput == false) {
@@ -323,30 +441,70 @@ public class CreateExamController implements Initializable {
 
 		Platform.runLater(() -> {
 
-			while (show_questions.getChildren().get(3).getClass() != Button.class)
-				show_questions.getChildren().remove(show_questions.getChildren().get(2));
-
+			while (show_questions.getChildren().get(6).getClass() != Button.class)
+				show_questions.getChildren().remove(show_questions.getChildren().get(5));
+			
 			GridPane questionsGrid = new GridPane();
 			questionsGrid.setAlignment(Pos.CENTER);
 			show_questions.setVisible(true);
+			show_questions.setSpacing(15);
 			show_questions.setMargin(instructions_box, new Insets(0, 0, 10, 0));
-
+				
+			
 			for (int i = 0; i < questions.size(); i++) {
 
 				HBox chooseHB = new HBox();
-				chooseHB.setAlignment(Pos.CENTER);
+				chooseHB.setAlignment(Pos.TOP_CENTER);
 				CheckBox chooseQuestion = new CheckBox();
 				chooseHB.getChildren().add(chooseQuestion);
-
+				Line line = new Line();
+				line.setEndX(250);
+				line.setStroke(Color.web("#3A495C"));
+				line.setStrokeWidth(1);
+				line.setStrokeLineCap(StrokeLineCap.ROUND);
+				
 				VBox questionBox = new VBox();
-				Text questionContent = new Text("" + (i + 1) + ". " + questions.get(i).getQuestionContent());
+				TextFlow questionContent = new TextFlow();
+				Text questionContent1 = new Text("" + (i + 1) + ".    ");
+				Text questionContent2 = new Text(questions.get(i).getQuestionContent());
 				Text answer1 = new Text("1. " + questions.get(i).getAnswer().get(0));
 				Text answer2 = new Text("2. " + questions.get(i).getAnswer().get(1));
 				Text answer3 = new Text("3. " + questions.get(i).getAnswer().get(2));
 				Text answer4 = new Text("4. " + questions.get(i).getAnswer().get(3));
-				Text rightAnswer = new Text(
-						"The right answer is: " + String.valueOf(questions.get(i).getRightAnswer()));
-				Text gradeText = new Text("Add grade for chosen question: ");
+				questionContent1.setFont(Font.font("Century Gothic",FontWeight.BOLD, 14));
+				questionContent1.setFill(Color.WHITE);
+				questionContent2.setFont(Font.font("Century Gothic", 14));
+				questionContent2.setFill(Color.WHITE);
+				questionContent.getChildren().add(questionContent1);
+				questionContent.getChildren().add(questionContent2);
+				
+				answer1.setFont(Font.font("Century Gothic", 14));
+				answer1.setFill(Color.WHITE);
+				answer2.setFont(Font.font("Century Gothic", 14));
+				answer2.setFill(Color.WHITE);
+				answer3.setFont(Font.font("Century Gothic", 14));
+				answer3.setFill(Color.WHITE);
+				answer4.setFont(Font.font("Century Gothic", 14));
+				answer4.setFill(Color.WHITE);
+				
+				
+				TextFlow rightAnswer = new TextFlow();
+				rightAnswer.setPrefWidth(300);
+				Text rightAnswer1 = new Text("    The right answer is: ");
+				Text rightAnswer2 = new Text(String.valueOf(questions.get(i).getRightAnswer()));
+				rightAnswer.getChildren().addAll(rightAnswer1, rightAnswer2);
+				rightAnswer1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+				rightAnswer2.setFont(Font.font("Century Gothic", 14));
+				rightAnswer1.setFill(Color.WHITE);
+				rightAnswer2.setFill(Color.WHITE);
+				
+				//Text rightAnswer = new Text(
+					//	"The right answer is: " + String.valueOf(questions.get(i).getRightAnswer()));
+				
+				Text gradeText = new Text("    Add grade for chosen question: ");
+				gradeText.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+				gradeText.setFill(Color.WHITE);
+				
 				TextField gradeTextField = new TextField();
 
 				questionBox.getChildren().add(questionContent);
@@ -355,7 +513,7 @@ public class CreateExamController implements Initializable {
 				questionBox.getChildren().add(answer3);
 				questionBox.getChildren().add(answer4);
 				questionBox.getChildren().add(rightAnswer);
-
+				
 				HBox gradesHB = new HBox();
 				gradeTextField.setPrefWidth(50);
 				gradeTextField.setMaxWidth(50);
@@ -363,6 +521,8 @@ public class CreateExamController implements Initializable {
 				gradesHB.getChildren().add(gradeTextField);
 				gradesHB.setSpacing(10);
 				questionBox.getChildren().add(gradesHB);
+				questionBox.getChildren().add(line);
+
 
 				questionBox.setMargin(questionContent, new Insets(0, 0, 0, 5));
 				questionBox.setMargin(rightAnswer, new Insets(0, 0, 0, 5));
@@ -376,7 +536,7 @@ public class CreateExamController implements Initializable {
 				questionBox.setSpacing(15);
 
 				questionsGrid.setVgap(10);
-				questionBox.setStyle("-fx-background-color: #ADD8E6");
+				//questionBox.setStyle("-fx-background-color: #344152; -fx-background-radius: 10;");
 				questionsGrid.add(questionBox, 0, i + 1, 1, 1);
 
 				chooseHB.getChildren().add(questionBox);
@@ -384,9 +544,9 @@ public class CreateExamController implements Initializable {
 				show_questions.getChildren().add(chooseHB);
 			}
 
-			HBox switchHBox = (HBox) show_questions.getChildren().remove(2);
+			HBox switchHBox = (HBox) show_questions.getChildren().remove(5);
 			show_questions.getChildren().add(switchHBox);
-			Button switchButton = (Button) show_questions.getChildren().remove(2);
+			Button switchButton = (Button) show_questions.getChildren().remove(5);
 			show_questions.getChildren().add(switchButton);
 		});
 	}

@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.PrincipalTimeExtensionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.PrincipalTimeExtensionController">
    <children>
       <SplitPane layoutX="-5.0" layoutY="-6.0" prefHeight="572.0" prefWidth="193.0">
          <items>
@@ -43,11 +43,11 @@
                   </Button>
                   <Accordion layoutX="6.0" layoutY="257.0">
                      <panes>
-                        <TitledPane alignment="CENTER" animated="false" contentDisplay="CENTER" prefHeight="60.0" prefWidth="180.0" style="-fx-base: #293340; -fx-border-color: transparent;" text="Watch Reports" textFill="WHITE" styleClass="menuButton" stylesheets="@../css/app.css">
+                        <TitledPane alignment="CENTER" animated="false" contentDisplay="CENTER" prefHeight="60.0" prefWidth="180.0" style="-fx-base: #293340; -fx-border-color: transparent;" text="Watch Reports" textFill="WHITE">
                            <content>
                               <VBox prefHeight="40.0" prefWidth="176.0">
                                  <children>
-                                    <Button fx:id="watch_reports_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" stylesheets="@../css/app.css" text="All Reports">
+                                    <Button fx:id="watch_reports_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" styleClass="menuButton" stylesheets="@../css/app.css" text="All Reports">
                                        <font>
                                           <Font name="Century Gothic" size="12.0" />
                                        </font>
@@ -70,17 +70,17 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <ScrollPane layoutX="185.0" prefHeight="579.0" prefWidth="436.0" style="-fx-padding: 0;">
+      <ScrollPane layoutX="185.0" prefHeight="579.0" prefWidth="595.0" style="-fx-padding: 0;">
          <content>
-            <AnchorPane prefHeight="563.0" prefWidth="441.0" style="-fx-background-color: #293340;">
+            <AnchorPane prefHeight="563.0" prefWidth="611.0" style="-fx-background-color: #293340;">
                <children>
-                  <VBox fx:id="time_ext_vbox" layoutX="14.0" layoutY="38.0" prefHeight="113.0" prefWidth="413.0">
+                  <VBox fx:id="time_ext_vbox" layoutX="106.0" layoutY="35.0" prefHeight="113.0" prefWidth="413.0">
                      <children>
                         <Text fx:id="time_ext_text" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="413.4700164794922" />
                         <HBox fx:id="time_ext_hbox" prefHeight="117.0" prefWidth="413.0" />
                      </children>
                   </VBox>
-                  <Button fx:id="approve_btn" layoutX="160.0" layoutY="500.0" mnemonicParsing="false" onAction="#approve" prefHeight="30.0" prefWidth="121.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/app.css" text="Send" textFill="WHITE" visible="false">
+                  <Button fx:id="approve_btn" layoutX="258.0" layoutY="499.0" mnemonicParsing="false" onAction="#approve" prefHeight="30.0" prefWidth="121.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/app.css" text="Send" textFill="WHITE" visible="false">
                      <font>
                         <Font name="Century Gothic Bold" size="14.0" />
                      </font>

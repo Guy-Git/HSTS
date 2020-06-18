@@ -9,8 +9,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.ietf.jgss.Oid;
 
-//import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import HSTS_Entities.Exam;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
@@ -40,14 +38,39 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class EditExamController implements Initializable {
 
+    @FXML
+    private Button log_out_btn;
+
+    @FXML
+    private AnchorPane logo;
+
+    @FXML
+    private Text logo_text;
+
+    @FXML
+    private Button edit_question_btn;
+
+    @FXML
+    private Button edit_exam_btn;
+
+    @FXML
+    private Button main_page_btn;
+	
 	@FXML
 	private Button create_question_btn;
 
@@ -79,9 +102,6 @@ public class EditExamController implements Initializable {
 	private Accordion exams_container;
 
 	@FXML
-	private RadioButton com_exam;
-
-	@FXML
 	private Button saveBtn;
 
 	private boolean showQuestion = false;
@@ -102,7 +122,6 @@ public class EditExamController implements Initializable {
 
 	@FXML
 	void menuClick(ActionEvent event) {
-
 		if (event.getSource() == create_question_btn) {
 			Stage stage = (Stage) create_question_btn.getScene().getWindow();
 			try {
@@ -112,6 +131,7 @@ public class EditExamController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -128,13 +148,14 @@ public class EditExamController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
@@ -144,18 +165,111 @@ public class EditExamController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		if (event.getSource() == edit_exam_btn) {
+			Stage stage = (Stage) edit_exam_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditExam.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
-//			if (event.getSource() == exam_execution_btn) 
-//			if (event.getSource() == watch_reports_btn) 
-//			if (event.getSource() == about_btn) 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+			if (event.getSource() == edit_question_btn) 
+			{
+				Stage stage = (Stage) edit_question_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditQuestion.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
 
-		EventBus.getDefault().unregister(this);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == main_page_btn) 
+			{
+				Stage stage = (Stage) main_page_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == about_btn) 
+			{
+				Stage stage = (Stage) about_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAboutPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == log_out_btn) {
+				Stage stage = (Stage) log_out_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+					Message msg = new Message();
+					msg.setAction("user log out");
+					msg.setUser(this.user);
+					try {
+						AppsClient.getClient().sendToServer(msg);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 	}
 
 	@FXML
@@ -165,17 +279,17 @@ public class EditExamController implements Initializable {
 		boolean badInput = false;
 
 		if (chooseSubject.getSelectionModel().isEmpty() || chooseSubject.getValue().equals("")) {
-			chooseSubject.setStyle("-fx-background-color: RED");
+			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
-			chooseCourse.setStyle("-fx-background-color: RED");
+			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (!badInput) {
@@ -211,17 +325,17 @@ public class EditExamController implements Initializable {
 		boolean noQuestionsChosen = false;
 
 		if (chooseSubject.getSelectionModel().isEmpty() || chooseSubject.getValue().equals("")) {
-			chooseSubject.setStyle("-fx-background-color: RED");
+			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
-			chooseCourse.setStyle("-fx-background-color: RED");
+			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		String instruction = ((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren()
@@ -229,18 +343,18 @@ public class EditExamController implements Initializable {
 
 		if (instruction.isEmpty()) {
 			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: RED");
+					.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
 			((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: #00bfff");
+					.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		String notes = ((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(1)).getChildren().get(1))
 				.getText();
 
 		((TextArea) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(1)).getChildren().get(1))
-				.setStyle("-fx-background-color: #00bfff");
+				.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 
 		String chosenExamId = examToEdit.getText().substring(6);
 		Exam chosenExam = null;
@@ -275,13 +389,13 @@ public class EditExamController implements Initializable {
 
 					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
 							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
-									.setStyle("-fx-background-color: RED");
+									.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 					badInput = true;
 
 				} else {
 					(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
 							.getChildren().get(1)).getChildren().get(6)).getChildren().get(1)))
-									.setStyle("-fx-background-color: #00bfff");
+									.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 					questionsPoints.add(Integer.valueOf(questionGrade));
 					questionsGrades.add(Integer.valueOf(
 						(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i))
@@ -297,11 +411,11 @@ public class EditExamController implements Initializable {
 		if (((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
 				.getText().isEmpty()) {
 			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
-					.setStyle("-fx-background-color: RED");
+					.setStyle("--fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
 			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
-					.setStyle("-fx-background-color: #00bfff");
+					.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 			newExam.setExamTime(Integer.valueOf(
 				((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
 						.getText()));
@@ -329,13 +443,13 @@ public class EditExamController implements Initializable {
 
 								(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
 										.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren()
-												.get(1))).setStyle("-fx-background-color: RED");
+												.get(1))).setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 								badInput = true;
 
 							} else {
 								(((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent()).getChildren()
 										.get(4 + i + j)).getChildren().get(1)).getChildren().get(6)).getChildren()
-												.get(1))).setStyle("-fx-background-color: #00bfff");
+												.get(1))).setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 								questionsPoints.add(Integer.valueOf(questionGrade));
 								questionsGrades.add(Integer
 										.valueOf((((TextField) ((HBox) ((VBox) ((HBox) ((VBox) examToEdit.getContent())
@@ -412,7 +526,8 @@ public class EditExamController implements Initializable {
 		EventBus.getDefault().clearCaches();
 
 		Platform.runLater(() -> {
-			exams_box.setVisible(true);
+			if(exams.size() != 0)
+				exams_box.setVisible(true);
 
 			for (int i = 0; i < exams.size(); i++) {
 				VBox displayExam = new VBox(15);
@@ -421,21 +536,28 @@ public class EditExamController implements Initializable {
 				instructionsHBox.setSpacing(10);
 				instructionsHBox.setAlignment(Pos.CENTER);
 				Label instructions = new Label("Instructions: ");
+				
 				TextArea editInstructionsArea = new TextArea(exams.get(i).getInstructions());
-				editInstructionsArea.setPrefWidth(320);
-				editInstructionsArea.setPrefHeight(100);
+				editInstructionsArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14;");
+				editInstructionsArea.setPrefWidth(350);
+				editInstructionsArea.setPrefHeight(300);
+				editInstructionsArea.setWrapText(true);
+
 				instructionsHBox.getChildren().addAll(instructions, editInstructionsArea);
+				
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.CENTER);
 				Label notes = new Label("Notes: ");
+				
 				TextArea editNotesArea = new TextArea(exams.get(i).getNotes());
-				editNotesArea.setPrefWidth(320);
-				editNotesArea.setPrefHeight(100);
+				editNotesArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14;");
+				editNotesArea.setPrefWidth(350);
+				editNotesArea.setPrefHeight(300);
+				editNotesArea.setWrapText(true);
 				notesHBox.getChildren().addAll(notes, editNotesArea);
 			//	instructionsHBox.setMargin(instructions, new Insets(0, 35, 0, 0));
 				instructionsHBox.setMargin(editInstructionsArea, new Insets(0, 34, 0, 0));
 				
-
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
 
@@ -445,20 +567,45 @@ public class EditExamController implements Initializable {
 				for (int j = 0; j < exams.get(i).getQuestions().size(); j++) {
 					VBox questionBox = new VBox(15);
 					HBox questionHBox = new HBox(15);
-					questionHBox.setAlignment(Pos.CENTER);
+					questionHBox.setAlignment(Pos.TOP_CENTER);
 					CheckBox chosenBoxQuestion = new CheckBox();
 					chosenBoxQuestion.setSelected(true);
-					Text questionContent = new Text(
-							"" + (j + 1) + ". " + exams.get(i).getQuestions().get(j).getQuestionContent());
+					
+					TextFlow questionContent = new TextFlow();
+					Text questionContent1 = new Text("" + (j + 1) + ".    ");
+					Text questionContent2 = new Text(exams.get(i).getQuestions().get(j).getQuestionContent());
 					Text answer1 = new Text("1. " + exams.get(i).getQuestions().get(j).getAnswer().get(0));
 					Text answer2 = new Text("2. " + exams.get(i).getQuestions().get(j).getAnswer().get(1));
 					Text answer3 = new Text("3. " + exams.get(i).getQuestions().get(j).getAnswer().get(2));
 					Text answer4 = new Text("4. " + exams.get(i).getQuestions().get(j).getAnswer().get(3));
-					Text rightAnswer = new Text("The right answer is: "
+					
+					
+					questionContent1.setFont(Font.font("Century Gothic",FontWeight.BOLD, 14));
+					questionContent1.setFill(Color.WHITE);
+					questionContent2.setFont(Font.font("Century Gothic", 14));
+					questionContent2.setFill(Color.WHITE);
+					questionContent.getChildren().add(questionContent1);
+					questionContent.getChildren().add(questionContent2);
+					answer1.setFont(Font.font("Century Gothic", 14));
+					answer1.setFill(Color.WHITE);
+					answer2.setFont(Font.font("Century Gothic", 14));
+					answer2.setFill(Color.WHITE);
+					answer3.setFont(Font.font("Century Gothic", 14));
+					answer3.setFill(Color.WHITE);
+					answer4.setFont(Font.font("Century Gothic", 14));
+					answer4.setFill(Color.WHITE);
+					
+					Text rightAnswer = new Text("   The right answer is: "
 							+ String.valueOf(exams.get(i).getQuestions().get(j).getRightAnswer()));
-					Text gradeText = new Text("Add grade for chosen question: ");
+					Text gradeText = new Text("    Grade for chosen question: ");
 					TextField gradeTextField = new TextField(Integer.toString(exams.get(i).getQuestionGrade().get(j)));
-
+					
+					rightAnswer.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+					rightAnswer.setFill(Color.WHITE);
+					gradeText.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+					gradeText.setFill(Color.WHITE);
+					gradeTextField.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white;");
+					
 					questionBox.getChildren().add(questionContent);
 					questionBox.getChildren().add(answer1);
 					questionBox.getChildren().add(answer2);
@@ -487,22 +634,35 @@ public class EditExamController implements Initializable {
 
 					questionBox.setSpacing(15);
 
-					questionBox.setStyle("-fx-background-color: #ADD8E6");
+					//questionBox.setStyle("-fx-background-color: #ADD8E6");
 					displayExam.getChildren().add(questionHBox);
+					
+					Line line = new Line();
+					line.setEndX(250);
+					line.setStroke(Color.web("#1E242E"));
+					line.setStrokeWidth(1);
+					line.setStrokeLineCap(StrokeLineCap.ROUND);
+					//displayExam.getChildren().add(line);
+
 				}
 
-				Text examDuration = new Text("Exam duration in minutes is: ");
+				Text examDuration = new Text("Exam time (minutes): ");
+				examDuration.setFont(Font.font("Century Gothic", 14));
+				examDuration.setFill(Color.WHITE);
 				TextField editTime = new TextField();
-				editTime.setPrefWidth(35);
+				editTime.setPrefWidth(60);
 				editTime.setText(Integer.toString(exams.get(i).getExamTime()));
+				editTime.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white;");
+				
 				HBox timeHBox = new HBox(15);
 				timeHBox.setAlignment(Pos.CENTER);
 				timeHBox.getChildren().add(examDuration);
 				timeHBox.getChildren().add(editTime);
+				
 				displayExam.getChildren().add(timeHBox);
-				Button addQuestionBtn = new Button("Add question");
+				Button addQuestionBtn = new Button("Add questions");
+				addQuestionBtn.setStyle("-fx-background-radius: 10; -fx-border-radius:10;");
 				displayExam.getChildren().add(addQuestionBtn);
-				// displayExam.getChildren().add(saveBtn);
 				exams_container.getPanes().add(new TitledPane("Exam #" + exams.get(i).getExamID(), displayExam));
 				addQuestionBtn.setOnAction(event);
 
@@ -513,6 +673,7 @@ public class EditExamController implements Initializable {
 	EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent e) {
 			setQuestionsToPage(questions);
+	
 		}
 	};
 
@@ -521,7 +682,7 @@ public class EditExamController implements Initializable {
 		showQuestion = true;
 		TitledPane chosenExamPane = exams_container.getExpandedPane();
 		String chosenExamId = chosenExamPane.getText().substring(6);
-		VBox examBox = (VBox) chosenExamPane.getContent();
+		VBox examBox = (VBox) chosenExamPane.getContent();		
 		Exam chosenExam = null;
 		allQuestions = new ArrayList<String>();
 		for (Exam exam : exams) {
@@ -533,6 +694,8 @@ public class EditExamController implements Initializable {
 
 		if (questions.size() == chosenExam.getQuestionGrade().size()) {
 			Text emptyQuestions = new Text("There are no additional questions to add to the exam!");
+			emptyQuestions.setFont(Font.font("Century Gothic", 14));
+			emptyQuestions.setFill(Color.WHITE);
 			examBox.getChildren().add(emptyQuestions);
 		} else {
 			for (int i = 0; i < questions.size(); i++) {
@@ -543,24 +706,48 @@ public class EditExamController implements Initializable {
 					}
 				}
 				if (toAdd) {
-					System.out.println(questions.get(i).getQuestionID());
 					allQuestions.add(questions.get(i).getQuestionID());
 					HBox chooseHB = new HBox();
-					chooseHB.setAlignment(Pos.CENTER);
+					chooseHB.setAlignment(Pos.TOP_CENTER);
 					CheckBox chooseQuestion = new CheckBox();
 					chooseHB.getChildren().add(chooseQuestion);
 
 					VBox questionBox = new VBox();
-					Text questionContent = new Text("" + (i + 1) + ". " + questions.get(i).getQuestionContent());
+					TextFlow questionContent = new TextFlow();
+					Text questionContent1 = new Text("" + (i + 1) + ".    ");
+					Text questionContent2 = new Text(questions.get(i).getQuestionContent());
 					Text answer1 = new Text("1. " + questions.get(i).getAnswer().get(0));
 					Text answer2 = new Text("2. " + questions.get(i).getAnswer().get(1));
 					Text answer3 = new Text("3. " + questions.get(i).getAnswer().get(2));
 					Text answer4 = new Text("4. " + questions.get(i).getAnswer().get(3));
-					Text rightAnswer = new Text(
-							"The right answer is: " + String.valueOf(questions.get(i).getRightAnswer()));
-					Text gradeText = new Text("Add grade for chosen question: ");
+					
+					
+					questionContent1.setFont(Font.font("Century Gothic",FontWeight.BOLD, 14));
+					questionContent1.setFill(Color.WHITE);
+					questionContent2.setFont(Font.font("Century Gothic", 14));
+					questionContent2.setFill(Color.WHITE);
+					questionContent.getChildren().add(questionContent1);
+					questionContent.getChildren().add(questionContent2);
+					answer1.setFont(Font.font("Century Gothic", 14));
+					answer1.setFill(Color.WHITE);
+					answer2.setFont(Font.font("Century Gothic", 14));
+					answer2.setFill(Color.WHITE);
+					answer3.setFont(Font.font("Century Gothic", 14));
+					answer3.setFill(Color.WHITE);
+					answer4.setFont(Font.font("Century Gothic", 14));
+					answer4.setFill(Color.WHITE);
+					
+					Text rightAnswer = new Text("   The right answer is: "
+							+ String.valueOf(questions.get(i).getRightAnswer()));
+					Text gradeText = new Text("    Grade for chosen question: ");
 					TextField gradeTextField = new TextField();
-
+					
+					rightAnswer.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+					rightAnswer.setFill(Color.WHITE);
+					gradeText.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+					gradeText.setFill(Color.WHITE);
+					gradeTextField.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white;");					
+					
 					questionBox.getChildren().add(questionContent);
 					questionBox.getChildren().add(answer1);
 					questionBox.getChildren().add(answer2);
@@ -585,11 +772,18 @@ public class EditExamController implements Initializable {
 					questionBox.setMargin(answer3, new Insets(0, 0, 0, 35));
 					questionBox.setMargin(answer4, new Insets(0, 0, 0, 35));
 
+					Line line = new Line();
+					line.setEndX(250);
+					line.setStroke(Color.web("#1E242E"));
+					line.setStrokeWidth(1);
+					line.setStrokeLineCap(StrokeLineCap.ROUND);
+					
 					questionBox.setSpacing(15);
-					questionBox.setStyle("-fx-background-color: #ADD8E6");
 					chooseHB.getChildren().add(questionBox);
 					chooseHB.setSpacing(15);
 					examBox.getChildren().add(chooseHB);
+					//examBox.getChildren().add(line);
+
 				}
 			}
 		}

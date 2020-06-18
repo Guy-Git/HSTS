@@ -106,6 +106,7 @@ public class TeacherMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -122,6 +123,7 @@ public class TeacherMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -138,6 +140,7 @@ public class TeacherMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -154,6 +157,7 @@ public class TeacherMainPageController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -228,7 +232,8 @@ public class TeacherMainPageController implements Initializable {
 					stage.setScene(scene);
 					stage.show();
 					EventBus.getDefault().post(user);
-					
+					EventBus.getDefault().unregister(this);
+
 					Message msg = new Message();
 					msg.setAction("user log out");
 					msg.setUser(this.user);
@@ -247,6 +252,7 @@ public class TeacherMainPageController implements Initializable {
 
 	}
 
+	@Subscribe
 	public void onUserEvent(HstsUser user) {
 		this.user = user;
 		LocalDateTime localDateTime = LocalDateTime.now();
@@ -255,7 +261,7 @@ public class TeacherMainPageController implements Initializable {
 		if (localDateTime.getHour() > 12 && localDateTime.getHour() <= 18)
 			message_text.setText("Good Afternoon, ");
 		if (localDateTime.getHour() > 18)
-			message_text.setText("Good Night, ");
+			message_text.setText("Good Evening, ");
 		enter_name_text.setText(enter_name_text.getText() + user.getFullName());
 	}
 

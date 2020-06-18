@@ -110,6 +110,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -125,6 +127,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -140,6 +144,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -155,7 +161,8 @@ public class PrincipalTimeExtensionController implements Initializable{
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
-				
+				EventBus.getDefault().unregister(this);
+
 				Message msg = new Message();
 				msg.setAction("user log out");
 				msg.setUser(this.user);
@@ -204,7 +211,7 @@ public class PrincipalTimeExtensionController implements Initializable{
 			
 			else {
 				time_ext_text.setText("Active time extension requests");
-				time_ext_text.setFont(Font.font ("Century Gothic", 18));
+				time_ext_text.setFont(Font.font ("Century Gothic", 20));
 				time_ext_text.setFill(Color.WHITE);
 				time_ext_text.setTextAlignment(TextAlignment.CENTER);
 				
@@ -277,7 +284,7 @@ public class PrincipalTimeExtensionController implements Initializable{
 				
 				TextFlow requestedTime = new TextFlow();
 				requestedTime.setPrefWidth(300);
-				Text requestedTime1 = new Text(" Requested time: ");
+				Text requestedTime1 = new Text(" Requested time (minutes): ");
 				Text requestedTime2 = new Text("" + timeExtensionsArr.get(i).getRequestedTime());
 				requestedTime.getChildren().addAll(requestedTime1, requestedTime2);
 				requestedTime1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
