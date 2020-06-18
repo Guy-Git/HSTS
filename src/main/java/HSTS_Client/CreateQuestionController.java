@@ -280,7 +280,7 @@ public class CreateQuestionController implements Initializable {
 			chooseSubject.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseSubject.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
@@ -288,42 +288,42 @@ public class CreateQuestionController implements Initializable {
 			chooseCourse.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseCourse.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (contentText.getText().isEmpty()) {
 			contentText.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			contentText.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			contentText.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer1Text.getText().isEmpty()) {
 			answer1Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer1Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			answer1Text.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer2Text.getText().isEmpty()) {
 			answer2Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer2Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			answer2Text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer3Text.getText().isEmpty()) {
 			answer3Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer3Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			answer3Text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer4Text.getText().isEmpty()) {
 			answer4Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer4Text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			answer4Text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (badInput == false) 

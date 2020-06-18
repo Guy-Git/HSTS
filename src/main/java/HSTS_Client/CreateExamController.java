@@ -280,7 +280,7 @@ public class CreateExamController implements Initializable {
 			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
@@ -288,21 +288,21 @@ public class CreateExamController implements Initializable {
 			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (instructions_text.getText().isEmpty()) {
 			instructions_text.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			instructions_text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			instructions_text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (time_text.getText().isEmpty() || !time_text.getText().matches("[0-9]+")) {
 			time_text.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			time_text.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			time_text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		ArrayList<Question> examQuestions = new ArrayList<Question>();
@@ -400,7 +400,7 @@ public class CreateExamController implements Initializable {
 			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
@@ -408,7 +408,7 @@ public class CreateExamController implements Initializable {
 			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (badInput == false) {

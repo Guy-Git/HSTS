@@ -259,14 +259,14 @@ public class EditQuestionController implements Initializable {
 			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
 			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (badInput == false) {
@@ -302,14 +302,14 @@ public class EditQuestionController implements Initializable {
 			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
 			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #3F4E63; -fx-background-radius: 10;");
+			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		String content = ((TextArea) ((HBox) ((VBox) questionToEdit.getContent()).getChildren().get(0)).getChildren()
@@ -317,11 +317,11 @@ public class EditQuestionController implements Initializable {
 
 		if (content.isEmpty()) {
 			((TextArea) ((HBox) ((VBox) questionToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: RED");
+					.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
 			((TextArea) ((HBox) ((VBox) questionToEdit.getContent()).getChildren().get(0)).getChildren().get(1))
-					.setStyle("-fx-background-color: #00bfff");
+					.setStyle("-fx-inner-background-color: #1E242E; -fx-text-inner-color: white;  -fx-background-radius: 10;");
 		}
 
 		ArrayList<String> answers = new ArrayList<String>();
@@ -335,11 +335,11 @@ public class EditQuestionController implements Initializable {
 					.getChildren().get(i)).getChildren().get(2)).getText().isEmpty()) 
 			{
 				((TextField) ((HBox) ((VBox) ((VBox) questionToEdit.getContent()).getChildren().get(1))
-						.getChildren().get(i)).getChildren().get(2)).setStyle("-fx-background-color: RED");
+						.getChildren().get(i)).getChildren().get(2)).setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 				badInput = true;
 			} else {
 				((TextField) ((HBox) ((VBox) ((VBox) questionToEdit.getContent()).getChildren().get(1))
-						.getChildren().get(i)).getChildren().get(2)).setStyle("-fx-background-color: #00bfff");
+						.getChildren().get(i)).getChildren().get(2)).setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 			}
 			
 			answers.add(((TextField) ((HBox) ((VBox) ((VBox) questionToEdit.getContent()).getChildren().get(1))
@@ -397,7 +397,7 @@ public class EditQuestionController implements Initializable {
 				contentText.setFill(Color.WHITE);
 				content.getChildren().add(contentText);
 				TextArea contentTextArea = new TextArea(questions.get(i).getQuestionContent());
-				contentTextArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 13;");
+				contentTextArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14;");
 				
 				contentTextArea.setWrapText(true);
 				contentTextArea.setPrefWidth(380);
