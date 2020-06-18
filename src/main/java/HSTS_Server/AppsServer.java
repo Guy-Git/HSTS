@@ -122,6 +122,7 @@ public class AppsServer extends AbstractServer {
 		{
 			serverMsg.setExtendTime(timeExtensionController.getTimeExtension(((Message)msg).getExamForExec()));
 			serverMsg.setAction("Time extension result");
+			timeExtensionController.cancelTimeExtensions(((Message)msg).getExamForExec());
 			
 			try {
 				client.sendToClient(serverMsg);
@@ -444,6 +445,10 @@ public class AppsServer extends AbstractServer {
 
 			session.save(principal);
 			session.flush();
+			
+			passwordInput = "1234A";
+		    SHA3.DigestSHA3 digestSHA3_4 = new SHA3.Digest256();
+		    byte[] digest4 = digestSHA3_4.digest(passwordInput.getBytes());
 
 			session.getTransaction().commit(); // Save everything.
 		} catch (Exception exception) {

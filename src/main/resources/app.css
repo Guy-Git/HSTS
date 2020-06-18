@@ -1,0 +1,42 @@
+.pane{
+//-fx-background-position: center;
+-fx-background-image: url('file:C:/Users/linoym/git/HSTS/src/main/resources/background.PNG');
+-fx-background-repeat: stretch;
+}
+
+.log-in-pane{
+-fx-background-position: center;
+-fx-background-image: url('file:C:/Users/linoym/git/HSTS/src/main/resources/background.PNG');
+-fx-background-repeat: stretch;
+}
+
+.element:hover {
+-fx-effect: dropshadow(three-pass-box,  #5dcfde, 10, 0, 0, 0);
+// -fx-effect: dropshadow(three-pass-box, derive(cadetblue, -20%), 10, 0, 2, 2)
+}
+
+.text-input {
+-fx-text-inner-color: white;
+}
+
+.myButton:hover {
+-fx-effect: innershadow(one-pass-box,  rgba(200, 255, 255, 0.1), 40, 0, 0, 25);
+}
+
+.menuButton: hover {
+-fx-text-fill: #5dcfde;
+}
+
+.choice-box{
+-fx-font-family: "Century Gothic";
+}
+
+.choice-box > .label {
+-fx-text-fill: white; 
+}
+
+.textArea {
+-fx-control-inner-background:  #293340;
+-fx-text-inner-color: white;
+-fx-background-color: #3F4E63;
+}
