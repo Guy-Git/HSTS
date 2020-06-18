@@ -191,65 +191,80 @@ public class StudentExamExecutionController implements Initializable {
 
 	@Subscribe
 	public void setExamToPage(Message msg) {
+		
 		Platform.runLater(() -> {
-			// studentsExecutedExam.setUserId(this.user.getUserId());
+			
+			boolean submitted = false;
 
-			if (checkedExtentions == true) {
-				System.out.println("KAKI");
-				minutesLeft = (5 + msg.getExtendTime()) % 60;
-				startTime += msg.getExtendTime();
-				hourTime = minutesLeft / 60;
-				if (startTime < 60) {
-					System.out.println(msg.getExtendTime());
-					System.out.println("minutes" + minutesTime + "start" + startTime);
-					minutesTime = startTime;
-				} else {
-					minutesTime = minutesLeft;
-				}
-			} else {
-				this.exam = msg.getExam();
-				this.executedExam = msg.getExecutedExam();
-				hourTime = (exam.getExamTime()) / 60;
-				minutesLeft = exam.getExamTime() % 60;
-				startTime = exam.getExamTime();
-				if (startTime < 60) {
-					minutesTime = startTime;
-					secondsTime = 0;
-					if (minutesTime == 1) {
-						minutesTime = 1;
-						secondsTime = 0;
-					}
-				} else {
-					minutesTime = minutesLeft;
-					secondsTime = 0;
-				}
-
-				if (exam == null) {
+			for (int i = 0; i < msg.getExecutedExam().getStudentsExecutedExams().size(); i++) {
+				if (msg.getExecutedExam().getStudentsExecutedExams().get(i).getUserId().equals(user.getUserId())) {
+					if(msg.getExecutedExam().getStudentsExecutedExams().get(i).isSubmitted()) {
+					submitted = true;
 					Alert alert = new Alert(AlertType.ERROR);
-					alert.setHeaderText("Exam code is incorrect! \nTry again!");
+					alert.setHeaderText("This exam has already been submitted! \nTry again!");
 					alert.setTitle("");
 					alert.show();
+					break;
+					}
 				}
-
-				else {
-
-					enterExamCode.setVisible(false);
-					for_multi_line.setVisible(false);
-					submit_btn.setDisable(false);
-					submit_btn.setVisible(true);
-
-					if (!exam.isManual()) {
-						submit_btn.setVisible(false);
-						start_exam_btn.setDisable(false);
-						for_multi_line1.setVisible(true);
-						enterIdForExam.setVisible(true);
-						enterIdForExam.setDisable(false);
-						start_exam_btn.setVisible(true);
-						start_exam_btn.setLayoutY(225);
-
+			}
+			if (submitted == false) {
+				if (checkedExtentions == true) {
+					minutesLeft = (5 + msg.getExtendTime()) % 60;
+					startTime += msg.getExtendTime();
+					hourTime = minutesLeft / 60;
+					if (startTime < 60) {
+						System.out.println(msg.getExtendTime());
+						System.out.println("minutes" + minutesTime + "start" + startTime);
+						minutesTime = startTime;
 					} else {
-						submit_btn.setVisible(false);
-						downlod_btn.setVisible(true);
+						minutesTime = minutesLeft;
+					}
+				} else {
+					this.exam = msg.getExam();
+					this.executedExam = msg.getExecutedExam();
+					hourTime = (exam.getExamTime()) / 60;
+					minutesLeft = exam.getExamTime() % 60;
+					startTime = exam.getExamTime();
+					if (startTime < 60) {
+						minutesTime = startTime;
+						secondsTime = 0;
+						if (minutesTime == 1) {
+							minutesTime = 1;
+							secondsTime = 0;
+						}
+					} else {
+						minutesTime = minutesLeft;
+						secondsTime = 0;
+					}
+
+					if (exam == null) {
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setHeaderText("Exam code is incorrect! \nTry again!");
+						alert.setTitle("");
+						alert.show();
+					}
+
+					else {
+
+						enterExamCode.setVisible(false);
+						for_multi_line.setVisible(false);
+						submit_btn.setDisable(false);
+						submit_btn.setVisible(true);
+
+						if (!exam.isManual()) {
+							submit_btn.setVisible(false);
+							start_exam_btn.setDisable(false);
+							for_multi_line1.setVisible(true);
+							enterIdForExam.setVisible(true);
+							enterIdForExam.setDisable(false);
+							start_exam_btn.setVisible(true);
+							start_exam_btn.setLayoutY(225);
+
+						} else {
+							submit_btn.setVisible(false);
+							downlod_btn.setVisible(true);
+						}
 					}
 				}
 			}
@@ -337,14 +352,13 @@ public class StudentExamExecutionController implements Initializable {
 
 			@Override
 			public void handle(ActionEvent event) {
-				
-				
+
 				time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 						+ secondsTime.toString());
-				
+
 				if (minutesTime == 5 && secondsTime == 0 && hourTime == 0 && checkedExtentions == false) {
 					// timeline.stop();
-					ExamForExec newExemExamForExec = new ExamForExec(exam.getExamID(),true, examForExec.getExamCode());
+					ExamForExec newExemExamForExec = new ExamForExec(exam.getExamID(), true, examForExec.getExamCode());
 					checkedExtentions = true;
 					Message msgToServer = new Message();
 					msgToServer.setAction("Check for extension");
@@ -358,7 +372,6 @@ public class StudentExamExecutionController implements Initializable {
 						e.printStackTrace();
 					}
 				}
-
 
 				if (minutesTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
 					timeline.stop();
@@ -524,10 +537,11 @@ public class StudentExamExecutionController implements Initializable {
 
 					time_text.setText("time left: " + hourTime.toString() + " : " + minutesTime.toString() + " : "
 							+ secondsTime.toString());
-					
+
 					if (minutesTime == 5 && secondsTime == 0 && hourTime == 0 && checkedExtentions == false) {
 						// timeline.stop();
-						ExamForExec newExemExamForExec = new ExamForExec(exam.getExamID(),true, examForExec.getExamCode());
+						ExamForExec newExemExamForExec = new ExamForExec(exam.getExamID(), true,
+								examForExec.getExamCode());
 						checkedExtentions = true;
 						Message msgToServer = new Message();
 						msgToServer.setAction("Check for extension");
@@ -593,8 +607,6 @@ public class StudentExamExecutionController implements Initializable {
 	void saveExamContent(boolean isForced) {
 
 		executeTime = exam.getExamTime() - minutesTime;
-		// ExecutedExam newExecutedExam = new ExecutedExam(exam.getExamID(),
-		// enterExamCode.getText());
 		startSave = true;
 		ArrayList<Integer> chosenAnswers = new ArrayList<Integer>();
 		int sizeOfAnswers = 0;
@@ -619,6 +631,7 @@ public class StudentExamExecutionController implements Initializable {
 		StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(isForced, executeTime,
 				this.user.getUserId(), chosenAnswers, false, false, this.executedExam);
 
+		studentsExecutedExam.setSubmitted(true);
 		save_exam.setVisible(false);
 		time_text.setVisible(false);
 		exam_anchor.setVisible(false);
@@ -665,6 +678,7 @@ public class StudentExamExecutionController implements Initializable {
 			startSave = true;
 			StudentsExecutedExam studentsExecutedExam = new StudentsExecutedExam(false,
 					exam.getExamTime() - minutesTime, this.user.getUserId(), file, true, this.executedExam);
+			studentsExecutedExam.setSubmitted(true);
 			saveManualExam(studentsExecutedExam);
 		}
 	}

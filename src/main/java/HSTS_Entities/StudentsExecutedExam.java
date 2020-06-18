@@ -46,6 +46,8 @@ public class StudentsExecutedExam implements Serializable {
 	
 	boolean isChecked;
 	
+	boolean submitted = false;
+	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "executed_exam_id")
 	private ExecutedExam executedExam;
@@ -154,6 +156,16 @@ public class StudentsExecutedExam implements Serializable {
 		this.executedExam = executedExam;
 		executedExam.getStudentsExecutedExams().add(this);
 		}
+
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submited) {
+		this.submitted = submited;
+	}
+	
+	
 	}
 	
 	
