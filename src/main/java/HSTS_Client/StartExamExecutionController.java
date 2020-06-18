@@ -258,6 +258,7 @@ public class StartExamExecutionController implements Initializable {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			String time = simpleDateFormat.format(new Date());
 			newExecutedExam.setTimeAndDate(time);
+			newExecutedExam.setAssignedBy(user.getUserId());
 
 			msgToServer.setAction("Add exam for execution");
 			msgToServer.setExamForExec(newExamForExec);

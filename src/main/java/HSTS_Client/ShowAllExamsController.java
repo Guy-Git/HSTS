@@ -277,7 +277,7 @@ public class ShowAllExamsController implements Initializable {
 
 	//	        Text examDuration = new Text("Exam duration in minutes is:");
 				Text editTime = new Text();
-				editTime.setText("Exam duration in minutes is: "+Integer.toString(exams.get(i).getTime()));
+				editTime.setText("Exam duration in minutes is: "+Integer.toString(exams.get(i).getExamTime()));
 				HBox timeHBox = new HBox(15);
 				timeHBox.setAlignment(Pos.CENTER);
     //		    timeHBox.getChildren().add(examDuration);

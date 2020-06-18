@@ -194,6 +194,15 @@ public class TeacherExamExecutionController implements Initializable {
 					 * if (startTime == 1) { secondsTime = 59; minutesTime = 0; }
 					 */
 					// startTime--;
+					if(minutesTime < 5 && hourTime == 0)
+					{
+						request_time_btn.setVisible(false);
+						reasons_text.setVisible(false);
+						enter_time_text.setVisible(false);
+						enter_reasons_text.setVisible(false);
+						asked_time_text.setVisible(false);
+					}
+					
 					if (minutesTime == 5 && secondsTime == 0 && hourTime == 0 && checkedExtentions == false) {
 						request_time_btn.setVisible(false);
 						reasons_text.setVisible(false);
