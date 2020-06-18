@@ -48,6 +48,9 @@ public class TeacherMainPageController implements Initializable {
 
     @FXML
     private Button edit_exam_btn;
+    
+    @FXML
+    private Button review_btn;
 
     @FXML
     private Button exam_execution_btn;
@@ -157,7 +160,14 @@ public class TeacherMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
+//			if (event.getSource() == exam_execution_btn) 
+//			if (event.getSource() == watch_reports_btn) 
+			if (event.getSource() == about_btn) 
+			{
+				Stage stage = (Stage) about_btn.getScene().getWindow();
+			}
+			
 			if (event.getSource() == edit_question_btn) {
 				Stage stage = (Stage) edit_question_btn.getScene().getWindow();
 				try {
