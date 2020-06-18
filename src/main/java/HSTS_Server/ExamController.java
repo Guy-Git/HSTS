@@ -176,6 +176,35 @@ public class ExamController {
 		return exams;
 	}
 
+	public ArrayList<Exam> getExamsById(ArrayList<String> examsIds) {
+		ArrayList<Exam> exams = new ArrayList<Exam>();
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<Exam> criteriaQuery = builder.createQuery(Exam.class);
+			Root<Exam> rootEntry = criteriaQuery.from(Exam.class);
+			for (int i = 0; i < examsIds.size(); i++) {
+				criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("examID"), examsIds.get(i)));
+				TypedQuery<Exam> query = session.createQuery(criteriaQuery);
+				exams.add((Exam) query.getSingleResult());
+			}
+			
+			// System.out.println(exams.get(0).getQuestions().get(0).getQuestionContent());
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return exams;
+
+	}
+
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
