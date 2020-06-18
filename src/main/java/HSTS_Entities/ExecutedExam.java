@@ -30,7 +30,7 @@ public class ExecutedExam implements Serializable{
 	
 	private int numOfStudents;
 	
-	private int timeAndDate;
+	private String timeAndDate;
 	
 	private int numForced;
 	
@@ -42,11 +42,16 @@ public class ExecutedExam implements Serializable{
 	
 	private String examCode;
 	
+	private String assignedBy;
+	
+	private boolean isChecked = false;
+	
 	@OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "executedExam")
 	private List<StudentsExecutedExam> studentsExecutedExams;
 	
 	public ExecutedExam() {
 		//super();
+		
 		// TODO Auto-generated constructor stub
 	}
  
@@ -73,11 +78,11 @@ public class ExecutedExam implements Serializable{
 		this.numOfStudents = numOfStudents;
 	}
 
-	public int getTimeAndDate() {
+	public String getTimeAndDate() {
 		return timeAndDate;
 	}
 
-	public void setTimeAndDate(int timeAndDate) {
+	public void setTimeAndDate(String timeAndDate) {
 		this.timeAndDate = timeAndDate;
 	}
 
@@ -121,13 +126,23 @@ public class ExecutedExam implements Serializable{
 		this.examCode = examCode;
 	}
 
-	@Override
-	public String toString() {
-		return "ExecutedExam [id=" + id + ", numOfStudents=" + numOfStudents + ", timeAndDate=" + timeAndDate
-				+ ", numForced=" + numForced + ", numUnforced=" + numUnforced + ", timeOfExec=" + timeOfExec
-				+ ", examID=" + examID + ", examCode=" + examCode + ", studentsExecutedExams=" + studentsExecutedExams
-				+ "]";
+	public String getAssignedBy() {
+		return assignedBy;
 	}
 
+	public void setAssignedBy(String assignedBy) {
+		this.assignedBy = assignedBy;
+	}
 
+	public boolean isChecked() {
+		return isChecked;
+	}
+
+	public void setChecked(boolean isChecked) {
+		this.isChecked = isChecked;
+	}
+
+	public int getId() {
+		return id;
+	}
 }

@@ -14,6 +14,7 @@ public class Message implements Serializable
 	String execCode;
 	String userID;
 	int extendTime;
+	String time;
 	
 	ArrayList<Question> questions;
 
@@ -28,9 +29,7 @@ public class Message implements Serializable
 	ArrayList<String> studentExecutedExamsArrayList;
 	ArrayList<StudentsExecutedExam> examsByStudent;
 	
-
-
-
+	ArrayList<ExecutedExam> executedExams;
 	TimeExtension timeExtension;
 	
 	public Message() {
@@ -204,7 +203,21 @@ public class Message implements Serializable
 	public void setExamsByStudent(ArrayList<StudentsExecutedExam> examsByStudent) {
 		this.examsByStudent = examsByStudent;
 	}
-
 	
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public ArrayList<ExecutedExam> getExecutedExams() {
+		return executedExams;
+	}
+
+	public void setExecutedExams(ArrayList<ExecutedExam> executedExams) {
+		this.executedExams = executedExams;
+	}
 	
 }

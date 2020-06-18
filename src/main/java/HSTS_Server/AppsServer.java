@@ -22,6 +22,7 @@ import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
+import HSTS_Entities.ExecutedExam;
 import HSTS_Entities.HstsUser;
 import ocsf_Server.AbstractServer;
 import ocsf_Server.ConnectionToClient;
@@ -134,6 +135,7 @@ public class AppsServer extends AbstractServer {
 		{
 			serverMsg.setExtendTime(timeExtensionController.getTimeExtension(((Message)msg).getExamForExec()));
 			serverMsg.setAction("Time extension result");
+			timeExtensionController.cancelTimeExtensions(((Message)msg).getExamForExec());
 			
 			try {
 				client.sendToClient(serverMsg);
@@ -146,6 +148,11 @@ public class AppsServer extends AbstractServer {
 		if(((Message)msg).getAction().equals("Submit Student Exam"))
 		{
 			executedExamController.checkExam(((Message)msg).getStudentsExecutedExam());
+			executedExamController.addStudentExectutedExam(((Message)msg).getStudentsExecutedExam());
+		}
+		
+		if(((Message)msg).getAction().equals("Submit Student Manual Exam"))
+		{
 			executedExamController.addStudentExectutedExam(((Message)msg).getStudentsExecutedExam());
 		}
 	
@@ -223,6 +230,27 @@ public class AppsServer extends AbstractServer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+		if(((Message)msg).getAction().equals("Pull exam by teacher"))
+		{
+			ArrayList<ExecutedExam> executedExams;
+			executedExams = executedExamController.getExamsByTeacher(((Message)msg).getUser());
+			serverMsg.setExecutedExams(executedExams);
+			serverMsg.setExams(examController.getExamsByExecutedExams(executedExams));
+			serverMsg.setAction("Pulled executedExams and exams");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(((Message)msg).getAction().equals("Review Executed Exam"))
+		{
+			executedExamController.updateExecutedExam(((Message)msg).getExecutedExam());
 		}
 	}
 
@@ -395,7 +423,7 @@ public class AppsServer extends AbstractServer {
 		    SHA3.DigestSHA3 digestSHA3_1 = new SHA3.Digest256();
 		    byte[] digest1 = digestSHA3_1.digest(passwordInput.getBytes());
 		    
-			HstsUser student2 = new HstsUser("2222", Hex.encodeHexString(digest1), 1, null, null, "Guy",false);
+			HstsUser student2 = new HstsUser("222222222", Hex.encodeHexString(digest1), 1, null, null, "Guy",false);
 			session.save(student2);
 			session.flush();
 			
@@ -434,6 +462,10 @@ public class AppsServer extends AbstractServer {
 
 			session.save(principal);
 			session.flush();
+			
+			passwordInput = "1234A";
+		    SHA3.DigestSHA3 digestSHA3_4 = new SHA3.Digest256();
+		    byte[] digest4 = digestSHA3_4.digest(passwordInput.getBytes());
 
 			session.getTransaction().commit(); // Save everything.
 		} catch (Exception exception) {

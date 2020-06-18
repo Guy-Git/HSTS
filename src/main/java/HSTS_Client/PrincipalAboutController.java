@@ -2,9 +2,6 @@ package HSTS_Client;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import org.greenrobot.eventbus.EventBus;
@@ -12,7 +9,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,9 +20,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class PrincipalMainPageController implements Initializable {
+public class PrincipalAboutController implements Initializable {
 
-	@FXML
+	private HstsUser user;
+	
+    @FXML
     private Button about_btn;
 
     @FXML
@@ -45,50 +43,36 @@ public class PrincipalMainPageController implements Initializable {
     private Button watch_reports_btn;
 
     @FXML
-    private Text enter_name_text;
+    private Button main_page_btn;
 
-    @FXML
-    private Text time_text;
-    
-    @FXML
-    private Text message_text;
-    
-    @FXML
-	private Button main_page_btn;
-    
-    @FXML
-    private AnchorPane menu_anchor_pane;
-
-
-	private HstsUser user;
-
-	@Override
+    @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-		menu_anchor_pane.setStyle("-fx-background-image: url('file:C:/Users/linoym/git/HSTS/src/main/resources/background.png');");
-		Thread timerThread = new Thread(() -> {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-			while (true) {
-				final String time = simpleDateFormat.format(new Date());
-				Platform.runLater(() -> {
-					time_text.setText(time);
-				});
-				try {
-					Thread.sleep(1000); // 1 second
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		timerThread.start();
 	}
-
-	@FXML
-	void menuClick(ActionEvent event) {
-		if (event.getSource() == main_page_btn) {
+    
+    @FXML
+    void menuClick(ActionEvent event) {
+    	if (event.getSource() == main_page_btn) {
 			Stage stage = (Stage) main_page_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalMainPage.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == about_btn) {
+			Stage stage = (Stage) about_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/About.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
@@ -118,27 +102,9 @@ public class PrincipalMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-//			if (event.getSource() == watch_reports_btn) 
-
-		if (event.getSource() == about_btn) {
-			Stage stage = (Stage) about_btn.getScene().getWindow();
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalAboutPage.fxml"));
-				stage.setTitle("High School Test System");
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
-				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		
 		if (event.getSource() == log_out_btn) {
-			Stage stage = (Stage) log_out_btn.getScene().getWindow();
+			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
 				stage.setTitle("High School Test System");
@@ -163,22 +129,12 @@ public class PrincipalMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-
+//			if (event.getSource() == watch_reports_btn) 
 	}
-
-	@Subscribe
+    
+    @Subscribe
 	public void onUserEvent(HstsUser user) {
 		this.user = user;
-		LocalDateTime localDateTime = LocalDateTime.now();
-		if (localDateTime.getHour() >= 1 && localDateTime.getHour() <= 12)
-			message_text.setText("Good Morning, ");
-		if (localDateTime.getHour() > 12 && localDateTime.getHour() <= 18)
-			message_text.setText("Good Afternoon, ");
-		if (localDateTime.getHour() > 18)
-			message_text.setText("Good Evening, ");
-		enter_name_text.setText(enter_name_text.getText() + user.getFullName() + ".");
 	}
-	
-	
 
 }

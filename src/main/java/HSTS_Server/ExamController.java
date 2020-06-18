@@ -16,6 +16,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import HSTS_Entities.Exam;
+import HSTS_Entities.ExecutedExam;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
 
@@ -114,6 +115,37 @@ public class ExamController {
 		} finally {
 			session.close();
 		}
+	}
+
+	public ArrayList<Exam> getExamsByExecutedExams(ArrayList<ExecutedExam> executedExams) {
+		ArrayList<Exam> exams = new ArrayList<Exam>();
+
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<Exam> criteriaQuery = builder.createQuery(Exam.class);
+			Root<Exam> rootEntry = criteriaQuery.from(Exam.class);
+
+			for (int i = 0; i < executedExams.size(); i++) 
+			{
+				criteriaQuery.select(rootEntry)
+						.where(builder.equal(rootEntry.get("examID"), executedExams.get(i).getExamID()));
+				TypedQuery<Exam> query = session.createQuery(criteriaQuery);
+				exams.add((Exam) query.getSingleResult());
+			}
+			// System.out.println(exams.get(0).getQuestions().get(0).getQuestionContent());
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return exams;
 	}
 
 	public ArrayList<Exam> getExams(Message msg) {

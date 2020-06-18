@@ -2,7 +2,9 @@ package HSTS_Client;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import org.greenrobot.eventbus.EventBus;
@@ -251,9 +253,12 @@ public class StartExamExecutionController implements Initializable {
 
 			ExecutedExam newExecutedExam = new ExecutedExam();
 			newExecutedExam.setExamCode(exam_code_text.getText());
+			
 			newExecutedExam.setExamID(exams_container.getExpandedPane().getText().substring(6));
-			ArrayList<StudentsExecutedExam> studentsExecutedExams = new ArrayList<StudentsExecutedExam>();
-			newExecutedExam.setStudentsExecutedExams(studentsExecutedExams);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			String time = simpleDateFormat.format(new Date());
+			newExecutedExam.setTimeAndDate(time);
+			newExecutedExam.setAssignedBy(user.getUserId());
 
 			msgToServer.setAction("Add exam for execution");
 			msgToServer.setExamForExec(newExamForExec);

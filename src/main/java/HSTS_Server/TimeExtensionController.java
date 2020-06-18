@@ -116,6 +116,42 @@ public class TimeExtensionController
 		return timeExtensions;
 	}
 	
+	public void cancelTimeExtensions(ExamForExec examForExec) {
+		ArrayList<TimeExtension> timeExtensions = new ArrayList<TimeExtension>();
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<TimeExtension> criteriaQuery = builder.createQuery(TimeExtension.class);
+			Root<TimeExtension> rootEntry = criteriaQuery.from(TimeExtension.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("status"), true),
+					builder.equal(rootEntry.get("examCode"), examForExec.getExamCode()),
+					builder.equal(rootEntry.get("examID"), examForExec.getExamID()));
+			TypedQuery<TimeExtension> query = session.createQuery(criteriaQuery);
+			timeExtensions = (ArrayList<TimeExtension>) query.getResultList();
+			
+			for (int i = 0; i < timeExtensions.size(); i++) {
+				session.evict(timeExtensions.get(i));
+				timeExtensions.get(i).setStatus(false);
+				session.update(timeExtensions.get(i));
+				session.flush();
+			}
+			session.getTransaction().commit(); 
+			
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return;
+	}
+	
 	public void updateTimeExtensions(ArrayList<TimeExtension> timeExtensionsArr)
 	{	
 		ArrayList<TimeExtension> timeExtensions = new ArrayList<TimeExtension>();

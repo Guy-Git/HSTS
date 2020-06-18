@@ -23,14 +23,35 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.ChoiceBox;
 
 public class CreateQuestionController implements Initializable {
 
+    @FXML
+    private Button log_out_btn;
+
+    @FXML
+    private AnchorPane logo;
+
+    @FXML
+    private Text logo_text;
+
+    @FXML
+    private Button edit_question_btn;
+
+    @FXML
+    private Button edit_exam_btn;
+
+    @FXML
+    private Button main_page_btn;
+
+	
 	@FXML
 	private TextArea contentText;
 
@@ -50,16 +71,16 @@ public class CreateQuestionController implements Initializable {
 	private RadioButton rightAnswer4;
 
 	@FXML
-	private TextArea answer1Text;
+	private TextField answer1Text;
 
 	@FXML
-	private TextArea answer2Text;
+	private TextField answer2Text;
 
 	@FXML
-	private TextArea answer3Text;
+	private TextField answer3Text;
 
 	@FXML
-	private TextArea answer4Text;
+	private TextField answer4Text;
 
 	@FXML
 	private Button saveBtn;
@@ -106,6 +127,7 @@ public class CreateQuestionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -122,13 +144,14 @@ public class CreateQuestionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
@@ -138,18 +161,111 @@ public class CreateQuestionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		if (event.getSource() == edit_exam_btn) {
+			Stage stage = (Stage) edit_exam_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditExam.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
-//			if (event.getSource() == exam_execution_btn) 
-//			if (event.getSource() == watch_reports_btn) 
-//			if (event.getSource() == about_btn) 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+			if (event.getSource() == edit_question_btn) 
+			{
+				Stage stage = (Stage) edit_question_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditQuestion.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
 
-		EventBus.getDefault().unregister(this);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == main_page_btn) 
+			{
+				Stage stage = (Stage) main_page_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == about_btn) 
+			{
+				Stage stage = (Stage) about_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAboutPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (event.getSource() == log_out_btn) {
+				Stage stage = (Stage) log_out_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+					Message msg = new Message();
+					msg.setAction("user log out");
+					msg.setUser(this.user);
+					try {
+						AppsClient.getClient().sendToServer(msg);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 	}
 
 	@FXML
@@ -160,54 +276,54 @@ public class CreateQuestionController implements Initializable {
 		boolean badInput = false;
 
 		if (chooseSubject.getSelectionModel().isEmpty()
-				|| chooseSubject.getValue().equals("")) {
-			chooseSubject.setStyle("-fx-background-color: RED");
+				|| chooseSubject.getValue().isEmpty()) {
+			chooseSubject.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
+			chooseSubject.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty()
-				|| chooseCourse.getValue().equals("")) {
-			chooseCourse.setStyle("-fx-background-color: RED");
+				|| chooseCourse.getValue().isEmpty()) {
+			chooseCourse.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
+			chooseCourse.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (contentText.getText().isEmpty()) {
-			contentText.setStyle("-fx-background-color: RED");
+			contentText.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			contentText.setStyle("-fx-background-color: #00bfff");
+			contentText.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer1Text.getText().isEmpty()) {
-			answer1Text.setStyle("-fx-background-color: RED");
+			answer1Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer1Text.setStyle("-fx-background-color: #00bfff");
+			answer1Text.setStyle("-fx-background-color:  #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer2Text.getText().isEmpty()) {
-			answer2Text.setStyle("-fx-background-color: RED");
+			answer2Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer2Text.setStyle("-fx-background-color: #00bfff");
+			answer2Text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer3Text.getText().isEmpty()) {
-			answer3Text.setStyle("-fx-background-color: RED");
+			answer3Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer3Text.setStyle("-fx-background-color: #00bfff");
+			answer3Text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (answer4Text.getText().isEmpty()) {
-			answer4Text.setStyle("-fx-background-color: RED");
+			answer4Text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10;");
 			badInput = true;
 		} else {
-			answer4Text.setStyle("-fx-background-color: #00bfff");
+			answer4Text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
 		}
 
 		if (badInput == false) 
@@ -250,14 +366,19 @@ public class CreateQuestionController implements Initializable {
 
 	@FXML
 	void clear(ActionEvent event) {
-		contentText.setText("");
-		answer1Text.setText("");
-		answer2Text.setText("");
-		answer3Text.setText("");
-		answer4Text.setText("");
-		right_answer.selectToggle(rightAnswer1);
-		chooseSubject.setValue("");
-		chooseCourse.setValue("");
+		Stage stage = (Stage) create_question_btn.getScene().getWindow();
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateQuestion.fxml"));
+			stage.setTitle("High School Test System");
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.show();
+			EventBus.getDefault().post(user);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Subscribe

@@ -2,13 +2,10 @@ package HSTS_Client;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import com.mysql.cj.xdevapi.Client;
 
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
@@ -23,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
@@ -40,20 +38,45 @@ public class LoginController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-
 	}
 
 	@FXML
 	void onClick(ActionEvent event) {
-		HstsUser user = new HstsUser(username_text.getText(), password_text.getText(), 0, null, null, "", false);
-		Message msg = new Message();
-		msg.setAction("Login");
-		msg.setUser(user);
-		try {
-			AppsClient.getClient().sendToServer(msg);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		boolean badInput = false;
+
+		if (username_text.getText().isEmpty()) {
+			username_text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10");
+			badInput = true;
+		} else {
+			username_text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
+		}
+
+		if (password_text.getText().isEmpty()) {
+			password_text.setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10");
+			badInput = true;
+		} else {
+			password_text.setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
+		}
+
+		if (badInput == false) {
+			HstsUser user = new HstsUser(username_text.getText(), password_text.getText(), 0, null, null, "", false);
+			Message msg = new Message();
+			msg.setAction("Login");
+			msg.setUser(user);
+			try {
+				AppsClient.getClient().sendToServer(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		else 
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("The fields marked red must be filled");
+			alert.setTitle("");
+			alert.show();
 		}
 	}
 
@@ -74,7 +97,9 @@ public class LoginController implements Initializable {
 					alert.setHeaderText("User already connected!");
 					alert.setTitle("");
 					alert.show();
-				} else {
+				}
+
+				else {
 					if (recieved.getUser().getUserType() == 1) {
 						Stage stage = (Stage) login_btn.getScene().getWindow();
 						try {
@@ -136,7 +161,7 @@ public class LoginController implements Initializable {
 						e.printStackTrace();
 					}
 				}
-				
+
 			}
 		});
 	}

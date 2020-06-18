@@ -80,6 +80,11 @@ public class AppsClient extends AbstractClient {
 			EventBus.getDefault().post(((Message) msg));
 		}
 		
+		if (((Message) msg).getAction().equals("Pulled executedExams and exams"))
+		{
+			EventBus.getDefault().post(((Message) msg));
+		}
+		
 		
 
 		// if(((Message)msg).getAction().equals(""))
