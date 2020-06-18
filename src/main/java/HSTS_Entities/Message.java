@@ -27,6 +27,8 @@ public class Message implements Serializable
 	StudentsExecutedExam studentsExecutedExam;
 	ExecutedExam executedExam;
 	
+	ArrayList<ExecutedExam> executedExams;
+	
 	TimeExtension timeExtension;
 	
 	public Message() {
@@ -193,8 +195,13 @@ public class Message implements Serializable
 	public void setTime(String time) {
 		this.time = time;
 	}
-	
-	
-	
+
+	public ArrayList<ExecutedExam> getExecutedExams() {
+		return executedExams;
+	}
+
+	public void setExecutedExams(ArrayList<ExecutedExam> executedExams) {
+		this.executedExams = executedExams;
+	}
 	
 }

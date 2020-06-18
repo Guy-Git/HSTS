@@ -132,7 +132,40 @@ public class ExecutedExamController {
 
 	}*/
 	
+	public ArrayList<ExecutedExam> getExamsByTeacher(HstsUser user)
+	{
+		ArrayList<ExecutedExam> exams = new ArrayList<ExecutedExam>();
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
 
+			System.out.println(user.getUserId());
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+					builder.equal(rootEntry.get("isChecked"), false));					
+					TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				exams = (ArrayList<ExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam not found!");
+			}	
+			
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		
+		return exams;
+	}
+	
 	public void checkExam(StudentsExecutedExam studentsExecutedExam) {
 		// TODO Auto-generated method stub
 
@@ -165,10 +198,81 @@ public class ExecutedExamController {
 			}
 			studentsExecutedExam.setGrade(grade);
 			addCheckedExam(studentsExecutedExam);
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
 		}
 
+	}
+	
+public void updateExecutedExam(ExecutedExam updatedExecutedExam) 
+{
+		System.out.println(updatedExecutedExam.getStudentsExecutedExams().get(0).getExamGrade());
+		
+		ExecutedExam executedExam = null;
+		ArrayList<StudentsExecutedExam> studentsExecutedExams = null;
+		
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("examCode"), updatedExecutedExam.getExamCode()),
+					builder.equal(rootEntry.get("examID"), updatedExecutedExam.getExamID()));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				executedExam = (ExecutedExam) query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}	
+			
+			session.evict(executedExam);
+			session.update(updatedExecutedExam);
+			session.flush();
+			
+			session.getTransaction().commit();
+//			session.close();
+//			
+//			session = sessionFactory.openSession();
+//			session.beginTransaction();
+//			
+//			CriteriaBuilder builder1 = session.getCriteriaBuilder();
+//			CriteriaQuery<StudentsExecutedExam> criteriaQuery1 = builder1.createQuery(StudentsExecutedExam.class);
+//			Root<StudentsExecutedExam> rootEntry1 = criteriaQuery1.from(StudentsExecutedExam.class);
+//			criteriaQuery1.select(rootEntry1).where(
+//					builder1.equal(rootEntry1.get("executed_exam_id"), updatedExecutedExam.getId()));
+//			TypedQuery<StudentsExecutedExam> query1 = session.createQuery(criteriaQuery1);
+//			try {
+//				studentsExecutedExams = (ArrayList<StudentsExecutedExam>) query1.getResultList();
+//			} catch (NoResultException nre) {
+//				System.out.println("Exam code not found!");
+//			}
+//			
+//			for(int i = 0; i < updatedExecutedExam.getNumOfStudents(); i++)
+//			{
+//				session.evict(studentsExecutedExams.get(i));
+//				studentsExecutedExams.set(i, updatedExecutedExam.getStudentsExecutedExams().get(i));
+//				session.update(studentsExecutedExams.get(i));
+//				session.flush();
+//			}
+			
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
 	}
 	
 	public ExecutedExam getExecutedExam(Message msg) {
