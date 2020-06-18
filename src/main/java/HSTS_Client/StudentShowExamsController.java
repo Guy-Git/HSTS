@@ -8,13 +8,17 @@ import java.util.ResourceBundle;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.ietf.jgss.Oid;
+import java.awt.Color;
+
 
 //import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import HSTS_Entities.Exam;
+import HSTS_Entities.ExecutedExam;
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
+import HSTS_Entities.StudentsExecutedExam;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,7 +50,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class ShowAllExamsController implements Initializable {
+public class StudentShowExamsController implements Initializable {
+
+
 
 	@FXML
 	private Button create_question_btn;
@@ -63,14 +69,6 @@ public class ShowAllExamsController implements Initializable {
 	@FXML
 	private Button about_btn;
 
-	@FXML
-	private ChoiceBox<String> chooseSubject;
-
-	@FXML
-	private ChoiceBox<String> chooseCourse;
-
-	@FXML
-	private Button show_question_btn;
 
 	@FXML
 	private VBox exams_box;
@@ -84,15 +82,25 @@ public class ShowAllExamsController implements Initializable {
 	private HstsUser user;
 
 	private ArrayList<Exam> exams;
+	
+	private ArrayList<StudentsExecutedExam> examsOfStudent;
 
 	private ArrayList<Question> questions;
 
 	private ArrayList<String> allQuestions;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-		
+	/*	Message msg=new Message();
+		msg.setAction("Pull student's exams");
+		msg.setUser(user);
+		try {
+			AppsClient.getClient().sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 	}
 
 	@FXML
@@ -153,58 +161,19 @@ public class ShowAllExamsController implements Initializable {
 		EventBus.getDefault().unregister(this);
 	}
 
-	@FXML
-	void pullExams(ActionEvent event) {
-
-		System.out.println(user.getFullName());
-		boolean badInput = false;
-
-		if (chooseSubject.getSelectionModel().isEmpty() || chooseSubject.getValue().equals("")) {
-			chooseSubject.setStyle("-fx-background-color: RED");
-			badInput = true;
-		} else {
-			chooseSubject.setStyle("-fx-background-color: #00bfff");
-		}
-
-		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
-			chooseCourse.setStyle("-fx-background-color: RED");
-			badInput = true;
-		} else {
-			chooseCourse.setStyle("-fx-background-color: #00bfff");
-		}
-
-		if (!badInput) {
-			exams_container.getPanes().clear();
-			Message msgToServer = new Message();
-			msgToServer.setSubject(chooseSubject.getValue());
-			msgToServer.setCourse(chooseCourse.getValue());
-			msgToServer.setAction("Pull Exams and Questions");
-
-			try {
-				AppsClient.getClient().sendToServer(msgToServer);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		else {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setHeaderText("The fields marked red must be filled");
-			alert.setTitle("");
-			alert.show();
-		}
-	}
-
+	
 
 	@Subscribe
 	public void setExamsToPage(Message msg) {
 
 		this.exams = msg.getExams();
-		this.questions = msg.getQuestions();
+		this.examsOfStudent=msg.getExamsByStudent();
+//		this.questions = msg.getQuestions();
+//		this.finishedExamsOfStudent=msg.getStudentExecutedExamsArrayList();
 		EventBus.getDefault().clearCaches();
 
 		Platform.runLater(() -> {
+		//	System.out.println(exams.get);
 			exams_box.setVisible(true);
 
 			for (int i = 0; i < exams.size(); i++) {
@@ -214,8 +183,8 @@ public class ShowAllExamsController implements Initializable {
 				HBox instructionsHBox = new HBox();
 				instructionsHBox.setSpacing(10);
 				instructionsHBox.setAlignment(Pos.CENTER);
-			//	Label instructions = new Label("Instructions:");
 				Text editInstructionsArea = new Text("Instructions: "+exams.get(i).getInstructions());
+				Text grade=new Text("Grade: "+examsOfStudent.get(i).getGrade());
 				instructionsHBox.getChildren().add(editInstructionsArea);
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.CENTER);
@@ -223,14 +192,16 @@ public class ShowAllExamsController implements Initializable {
 				Text editNotesArea = new Text(exams.get(i).getNotes());
 				if (editNotesArea.getText()!="")
 				notesHBox.getChildren().addAll(notes, editNotesArea);
+				displayExam.getChildren().add(grade);
 
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
+				
 
-				// GridPane questionsGrid = new GridPane();
-				// questionsGrid.setAlignment(Pos.CENTER);
+				
 
 				for (int j = 0; j < exams.get(i).getQuestions().size(); j++) {
+					int pointsForQuestion=0;
 					VBox questionBox = new VBox(15);
 					HBox questionHBox = new HBox(15);
 					questionHBox.setAlignment(Pos.CENTER);
@@ -240,20 +211,22 @@ public class ShowAllExamsController implements Initializable {
 					Text answer2 = new Text("2. " + exams.get(i).getQuestions().get(j).getAnswer().get(1));
 					Text answer3 = new Text("3. " + exams.get(i).getQuestions().get(j).getAnswer().get(2));
 					Text answer4 = new Text("4. " + exams.get(i).getQuestions().get(j).getAnswer().get(3));
+					Text answerOfStudent=new Text("  your answer is: "+examsOfStudent.get(i).getAnswersForExam().get(j));
 					Text rightAnswer = new Text("The right answer is: "
 							+ String.valueOf(exams.get(i).getQuestions().get(j).getRightAnswer()));
-					//Text gradeText = new Text("points:");
-					Text gradeTextField = new Text("  Points: "+Integer.toString(exams.get(i).getQuestionGrade().get(j)));
+					if(examsOfStudent.get(i).getAnswersForExam().get(j)==exams.get(i).getQuestions().get(j).getRightAnswer())
+						pointsForQuestion=exams.get(i).getQuestionGrade().get(j);
+					Text gradeTextField = new Text("  Points for question: "+Integer.toString(pointsForQuestion)+"/"+Integer.toString(exams.get(i).getQuestionGrade().get(j)));
 
 					questionBox.getChildren().add(questionContent);
 					questionBox.getChildren().add(answer1);
 					questionBox.getChildren().add(answer2);
 					questionBox.getChildren().add(answer3);
 					questionBox.getChildren().add(answer4);
+					questionBox.getChildren().add(answerOfStudent);
 					questionBox.getChildren().add(rightAnswer);
 
 					HBox gradesHB = new HBox();
-				//	gradesHB.getChildren().add(gradeText);
 					gradesHB.getChildren().add(gradeTextField);
 					gradesHB.setSpacing(10);
 					questionBox.getChildren().add(gradesHB);
@@ -275,9 +248,8 @@ public class ShowAllExamsController implements Initializable {
 					displayExam.getChildren().add(questionHBox);
 				}
 
-	//	        Text examDuration = new Text("Exam duration in minutes is:");
 				Text editTime = new Text();
-				editTime.setText("Exam duration in minutes is: "+Integer.toString(exams.get(i).getExamTime()));
+				editTime.setText("Exam completed in: "+Integer.toString(examsOfStudent.get(i).getExecTime())+" minute(s) out of "+exams.get(i).getExamTime());
 				HBox timeHBox = new HBox(15);
 				timeHBox.setAlignment(Pos.CENTER);
     //		    timeHBox.getChildren().add(examDuration);
@@ -374,27 +346,39 @@ public class ShowAllExamsController implements Initializable {
 			}
 		}
 	}
+/*
+	@Subscribe
+	public void setExamsToPageNew(ArrayList<Exam> exams) {
+		this.exams = exams;
+		EventBus.getDefault().clearCaches();
+		Platform.runLater(() -> 
+		{
+			exams_box.setVisible(true);
+			
+			
+		});
+	
+	}
+	
+		*/
 
 	@Subscribe
 	public void onUserEvent(HstsUser user) {
 		Platform.runLater(() -> {
 			this.user = user;
-			ArrayList<String> subjects = new ArrayList<String>();
-			ArrayList<String> courses = new ArrayList<String>();
-			subjects = user.getSubjects();
-			courses = user.getCourses();
-
-			if (subjects.get(0) != null && courses.get(0) != "") {
-				subjects.add(0, null);
-				courses.add(0, "");
+			Message msg=new Message();
+			msg.setAction("Pull student's exams");
+			msg.setUser(user);
+			try {
+				AppsClient.getClient().sendToServer(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-
-			ObservableList<String> setToSubjects = FXCollections.observableArrayList(subjects);
-			ObservableList<String> setToCourse = FXCollections.observableArrayList(courses);
-
-			chooseSubject.setItems(setToSubjects);
-			chooseCourse.setItems(setToCourse);
+			
 		});
+		
+	
 	}
 
 }

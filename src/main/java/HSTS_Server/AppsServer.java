@@ -93,6 +93,19 @@ public class AppsServer extends AbstractServer {
 				e.printStackTrace();
 			}
 		}
+		if(((Message)msg).getAction().equals("Pull student's exams")) 
+		{
+			serverMsg.setExamsByStudent(executedExamController.getStudentsExams(((Message)msg).getUser()));
+			serverMsg.setExams(examController.getExamsById(executedExamController.getStudentsExamById(((Message)msg).getUser())));
+			serverMsg.setAction("Pulled for specific student");
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		
 		if(((Message)msg).getAction().equals("Pull Exams and Questions")) 
 		{
@@ -368,8 +381,12 @@ public class AppsServer extends AbstractServer {
 			String passwordInput = "123456";
 		    SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest256();
 		    byte[] digest = digestSHA3.digest(passwordInput.getBytes());
+		    ArrayList<String> subjectsOfStudent = new ArrayList<String>();
+		    ArrayList<String> coursesOfStudent = new ArrayList<String>();
+		    subjectsOfStudent.add("Math");
+		    coursesOfStudent.add("Calculus");
 		    			    
-			HstsUser student1 = new HstsUser("1111", Hex.encodeHexString(digest), 1, null, null, "Opal",false);
+			HstsUser student1 = new HstsUser("1111", Hex.encodeHexString(digest), 1, subjectsOfStudent, coursesOfStudent, "Opal",false);
 
 			session.save(student1);
 			session.flush();
