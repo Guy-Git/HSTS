@@ -27,7 +27,7 @@ public class StudentsExecutedExam implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@Column(name = "student_exec_id")
+	// @Column(name = "student_exec_id")
 	private int id;
 
 	private boolean forcedFinish;
@@ -41,13 +41,17 @@ public class StudentsExecutedExam implements Serializable {
 	private boolean isManual;
 
 	private File examFile;
-	
+
 	private int examGrade;
-	
-	boolean isChecked;
-	
+
+	private boolean isChecked;
+
+	private String notes;
+		
 	boolean submitted = false;
 	
+	private String reasonOfGradeChange;
+
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "executed_exam_id")
 	private ExecutedExam executedExam;
@@ -63,9 +67,9 @@ public class StudentsExecutedExam implements Serializable {
 		this.isChecked = checked;
 		setExecutedExam(executedExam);
 	}
-	
-	public StudentsExecutedExam(boolean forcedFinish, int execTime, String userId, File examFile,
-			boolean isManual, ExecutedExam executedExam) {
+
+	public StudentsExecutedExam(boolean forcedFinish, int execTime, String userId, File examFile, boolean isManual,
+			ExecutedExam executedExam) {
 		super();
 		this.forcedFinish = forcedFinish;
 		this.execTime = execTime;
@@ -75,12 +79,10 @@ public class StudentsExecutedExam implements Serializable {
 		setExecutedExam(executedExam);
 	}
 
-
 	public StudentsExecutedExam() {
-	//	super();
+		// super();
 		// TODO Auto-generated constructor stub
 	}
-	
 
 	public boolean isForcedFinish() {
 		return forcedFinish;
@@ -146,11 +148,9 @@ public class StudentsExecutedExam implements Serializable {
 		this.userId = userId;
 	}
 
-
 	public ExecutedExam getExecutedExam() {
 		return executedExam;
 	}
-
 
 	public void setExecutedExam(ExecutedExam executedExam) {
 		this.executedExam = executedExam;
@@ -165,8 +165,28 @@ public class StudentsExecutedExam implements Serializable {
 		this.submitted = submited;
 	}
 	
-	
-	}
-	
-	
 
+	public int getExamGrade() {
+		return examGrade;
+	}
+
+	public void setExamGrade(int examGrade) {
+		this.examGrade = examGrade;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public String getReasonOfGradeChange() {
+		return reasonOfGradeChange;
+	}
+
+	public void setReasonOfGradeChange(String reasonOfGradeChange) {
+		this.reasonOfGradeChange = reasonOfGradeChange;
+	}
+}

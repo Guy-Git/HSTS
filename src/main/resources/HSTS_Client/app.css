@@ -1,0 +1,5 @@
+.pane{
+-fx-background-position: center;
+-fx-background-image: url('file:C:\Users\linoym\git\HSTS\src\main\resources\background.PNG');
+-fx-background-repeat: stretch;
+}
