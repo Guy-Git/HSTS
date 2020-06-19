@@ -12,11 +12,21 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HSTS_Client.PrincipalMainPageController">
    <children>
-      <SplitPane layoutX="-5.0" layoutY="-6.0" prefHeight="572.0" prefWidth="193.0">
+     <SplitPane layoutX="-5.0" layoutY="-6.0" prefHeight="572.0" prefWidth="193.0">
          <items>
-            <AnchorPane fx:id="menu_anchor_pane" prefHeight="558.0" prefWidth="183.0">
+            <AnchorPane prefHeight="558.0" prefWidth="183.0" styleClass="pane" stylesheets="@../css/app.css">
                <children>
+                  <Button fx:id="all_questions_btn" layoutX="8.0" layoutY="227.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/app.css" text="Watch Questions" textFill="WHITE">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
                   <Button fx:id="about_btn" layoutX="8.0" layoutY="195.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/app.css" text="About" textFill="WHITE" AnchorPane.leftAnchor="8.0">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="main_page_btn" layoutX="8.0" layoutY="163.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/app.css" text="Main Page" textFill="WHITE" AnchorPane.leftAnchor="8.0">
                      <font>
                         <Font name="Century Gothic" size="14.0" />
                      </font>
@@ -35,13 +45,29 @@
                         </Text>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="time_ext_btn" layoutX="8.0" layoutY="227.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/app.css" text="Time Extensions" textFill="WHITE" AnchorPane.leftAnchor="8.0">
-                     <font>
-                        <Font name="Century Gothic" size="14.0" />
-                     </font>
-                  </Button>
                   <Accordion layoutX="6.0" layoutY="257.0">
                      <panes>
+                        <TitledPane alignment="CENTER" animated="false" contentDisplay="CENTER" prefHeight="60.0" prefWidth="180.0" style="-fx-base: #293340; -fx-border-color: transparent;" text="Exams" textFill="WHITE">
+                           <content>
+                              <VBox prefHeight="40.0" prefWidth="176.0">
+                                 <children>
+                                    <Button fx:id="all_exams_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" styleClass="menuButton" stylesheets="@../css/app.css" text="Watch Exams">
+                                       <font>
+                                          <Font name="Century Gothic" size="12.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="time_ext_btn" layoutX="21.0" layoutY="21.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" styleClass="menuButton" stylesheets="@../css/app.css" text="Time Extensions">
+                                       <font>
+                                          <Font name="Century Gothic" size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </content>
+                           <font>
+                              <Font name="Century Gothic" size="14.0" />
+                           </font>
+                        </TitledPane>
                         <TitledPane alignment="CENTER" animated="false" contentDisplay="CENTER" prefHeight="60.0" prefWidth="180.0" style="-fx-base: #293340; -fx-border-color: transparent;" text="Watch Reports" textFill="WHITE">
                            <content>
                               <VBox prefHeight="40.0" prefWidth="176.0">
@@ -60,11 +86,6 @@
                         </TitledPane>
                      </panes>
                   </Accordion>
-                   <Button fx:id="main_page_btn" layoutX="8.0" layoutY="163.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: #293340; -fx-border-color: #3A495C;" styleClass="myButton" stylesheets="@../css/app.css" text="Main Page" textFill="WHITE" AnchorPane.leftAnchor="8.0">
-                     <font>
-                        <Font name="Century Gothic" size="14.0" />
-                     </font>
-                  </Button>
                </children>
             </AnchorPane>
          </items>

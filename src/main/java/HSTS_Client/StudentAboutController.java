@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import HSTS_Entities.HstsUser;
 import HSTS_Entities.Message;
@@ -20,12 +19,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class PrincipalAboutController implements Initializable {
+public class StudentAboutController implements Initializable {
 
-	private HstsUser user;
-	
-    @FXML
+	@FXML
     private Button about_btn;
+
+    @FXML
+    private Button main_page_btn;
 
     @FXML
     private Button log_out_btn;
@@ -37,19 +37,13 @@ public class PrincipalAboutController implements Initializable {
     private Text logo_text;
 
     @FXML
-    private Button all_exams_btn;
-    
-    @FXML
-    private Button all_questions_btn;
-    
-    @FXML
-    private Button time_ext_btn;
+    private Button start_exam_btn;
 
     @FXML
-    private Button watch_reports_btn;
-
-    @FXML
-    private Button main_page_btn;
+    private Button exam_grades_btn;
+    
+    private HstsUser user;
+    
 
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -57,28 +51,13 @@ public class PrincipalAboutController implements Initializable {
 	}
     
     @FXML
-    void menuClick(ActionEvent event) {
-    	if (event.getSource() == main_page_btn) {
+	void menuClick(ActionEvent event) {
+
+		if (event.getSource() == main_page_btn) 
+		{
 			Stage stage = (Stage) main_page_btn.getScene().getWindow();
 			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalMainPage.fxml"));
-				stage.setTitle("High School Test System");
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
-				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-    	
-    	if (event.getSource() == all_exams_btn) {
-			Stage stage = (Stage) all_exams_btn.getScene().getWindow();
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ShowAllExams.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
@@ -92,10 +71,11 @@ public class PrincipalAboutController implements Initializable {
 			}
 		}
 		
-		if (event.getSource() == about_btn) {
+		if (event.getSource() == about_btn) 
+		{
 			Stage stage = (Stage) about_btn.getScene().getWindow();
 			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalAbout.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentAbout.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
@@ -109,27 +89,11 @@ public class PrincipalAboutController implements Initializable {
 			}
 		}
 		
-		if (event.getSource() == time_ext_btn) {
-			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
+		if (event.getSource() == start_exam_btn) 
+		{
+			Stage stage = (Stage) start_exam_btn.getScene().getWindow();
 			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalTimeExtension.fxml"));
-				stage.setTitle("High School Test System");
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
-				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		if (event.getSource() == all_questions_btn) {
-			Stage stage = (Stage) all_questions_btn.getScene().getWindow();
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ShowAllQuestions.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentExamExecution.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
@@ -144,7 +108,7 @@ public class PrincipalAboutController implements Initializable {
 		}
 		
 		if (event.getSource() == log_out_btn) {
-			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
+			Stage stage = (Stage) log_out_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
 				stage.setTitle("High School Test System");
@@ -169,12 +133,8 @@ public class PrincipalAboutController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-//			if (event.getSource() == watch_reports_btn) 
-	}
-    
-    @Subscribe
-	public void onUserEvent(HstsUser user) {
-		this.user = user;
-	}
 
+//			if (event.getSource() == exam_grades_btn) 
+
+	}
 }

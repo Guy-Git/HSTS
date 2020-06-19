@@ -77,7 +77,7 @@
                                           <Font name="Century Gothic" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="exam_execution_btn" layoutX="21.0" layoutY="47.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" styleClass="menuButton" stylesheets="@../css/app.css" text="Exam Execution">
+                                    <Button fx:id="exam_execution_btn" layoutX="21.0" layoutY="47.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" styleClass="menuButton" stylesheets="@../css/app.css" text="Start Exam Execution">
                                        <font>
                                           <Font name="Century Gothic" size="12.0" />
                                        </font>
@@ -141,7 +141,7 @@
                      </font>
                   </Text>
                   <ChoiceBox fx:id="chooseSubject" layoutX="115.0" layoutY="92.0" prefHeight="27.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-color: #3F4E63; -fx-border-radius: 10;" stylesheets="@../css/app.css" />
-                  <TextArea fx:id="contentText" layoutX="118.0" layoutY="181.0" prefHeight="78.0" prefWidth="393.0" styleClass="textArea" stylesheets="@../css/app.css" wrapText="true">
+                  <TextArea fx:id="contentText" layoutX="118.0" layoutY="181.0" prefHeight="78.0" prefWidth="393.0" style="-fx-text-box-border: transparent;" styleClass="textArea" stylesheets="@../css/app.css" wrapText="true">
                      <font>
                         <Font name="Century Gothic" size="13.0" />
                      </font>

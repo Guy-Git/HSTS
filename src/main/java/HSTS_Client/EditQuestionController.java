@@ -209,7 +209,7 @@ public class EditQuestionController implements Initializable {
 			if (event.getSource() == about_btn) {
 				Stage stage = (Stage) about_btn.getScene().getWindow();
 				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAboutPage.fxml"));
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAbout.fxml"));
 					stage.setTitle("High School Test System");
 					Scene scene = new Scene(root);
 					stage.setScene(scene);
@@ -397,10 +397,10 @@ public class EditQuestionController implements Initializable {
 				contentText.setFill(Color.WHITE);
 				content.getChildren().add(contentText);
 				TextArea contentTextArea = new TextArea(questions.get(i).getQuestionContent());
-				contentTextArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14;");
+				contentTextArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14; -fx-text-box-border: transparent;");
 				
 				contentTextArea.setWrapText(true);
-				contentTextArea.setPrefWidth(380);
+				contentTextArea.setPrefWidth(360);
 				contentTextArea.setPrefHeight(80);
 				content.getChildren().add(contentTextArea);
 
@@ -408,7 +408,7 @@ public class EditQuestionController implements Initializable {
 				Text answersText = new Text("Enter answers and choose the right one: ");
 				answersText.setFont(Font.font("Century Gothic", 14));
 				answersText.setFill(Color.WHITE);
-				answerBox.setMargin(answersText, new Insets(0, 265, 0, 0));
+				answerBox.setMargin(answersText, new Insets(0, 0, 0, 0));
 				answerBox.getChildren().add(answersText);
 				answerBox.setAlignment(Pos.CENTER);
 				ToggleGroup rightAnswer = new ToggleGroup();
@@ -422,7 +422,7 @@ public class EditQuestionController implements Initializable {
 				Text answerNum1 = new Text("1.");
 				TextField answer1TextField = new TextField(questions.get(i).getAnswer().get(0));
 				answer1TextField.setFont(Font.font("Century Gothic", 14));
-				answer1TextField.setStyle("-fx-text-inner-color: white;");
+				answer1TextField.setStyle("-fx-text-inner-color: white; -fx-text-box-border: transparent;");
 				
 				
 				answer1.getChildren().add(rightAnswer1);
@@ -438,7 +438,7 @@ public class EditQuestionController implements Initializable {
 				Text answerNum2 = new Text("2.");
 				TextField answer2TextField = new TextField(questions.get(i).getAnswer().get(1));
 				answer2TextField.setFont(Font.font("Century Gothic", 14));
-				answer2TextField.setStyle("-fx-text-inner-color: white;");
+				answer2TextField.setStyle("-fx-text-inner-color: white; -fx-text-box-border: transparent;");
 				
 				answer2.getChildren().add(rightAnswer2);
 				answer2.getChildren().add(answerNum2);
@@ -453,7 +453,7 @@ public class EditQuestionController implements Initializable {
 				Text answerNum3 = new Text("3.");
 				TextField answer3TextField = new TextField(questions.get(i).getAnswer().get(2));
 				answer3TextField.setFont(Font.font("Century Gothic", 14));
-				answer3TextField.setStyle("-fx-text-inner-color: white;");
+				answer3TextField.setStyle("-fx-text-inner-color: white; -fx-text-box-border: transparent;");
 				
 				answer3.getChildren().add(rightAnswer3);
 				answer3.getChildren().add(answerNum3);
@@ -468,7 +468,7 @@ public class EditQuestionController implements Initializable {
 				Text answerNum4 = new Text("4.");
 				TextField answer4TextField = new TextField(questions.get(i).getAnswer().get(3));
 				answer4TextField.setFont(Font.font("Century Gothic", 14));
-				answer4TextField.setStyle("-fx-text-inner-color: white;");
+				answer4TextField.setStyle("-fx-text-inner-color: white; -fx-text-box-border: transparent;");
 				
 				answer4.getChildren().add(rightAnswer4);
 				answer4.getChildren().add(answerNum4);
