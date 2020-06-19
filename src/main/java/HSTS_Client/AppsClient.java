@@ -69,6 +69,11 @@ public class AppsClient extends AbstractClient {
 			EventBus.getDefault().post(((Message) msg));
 			
 		}
+		if (((Message) msg).getAction().equals("Pulled for specific student"))
+		{
+			EventBus.getDefault().post(((Message) msg));
+			
+		}
 		
 		if (((Message) msg).getAction().equals("Time extension result"))
 		{
