@@ -107,6 +107,20 @@ public class AppsServer extends AbstractServer {
 			}
 		}
 		
+		if(((Message)msg).getAction().equals("Pull Teacher's executed exams")) 
+		{
+			serverMsg.setExamsByTeacher(executedExamController.getExamsByTeacher(((Message)msg).getUser()));
+			serverMsg.setExams(examController.getExamsById(executedExamController.getTeacherExamsById(((Message)msg).getUser())));
+			serverMsg.setAction("Pulled Teacher's executed exams");
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 		
 		if(((Message)msg).getAction().equals("Pull Exams and Questions")) 
 		{

@@ -373,6 +373,40 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 
 		return studentsExamsId;
 	}
+	public ArrayList<String> getTeacherExamsById(HstsUser user) {
+		// TODO Auto-generated method stub
+		ArrayList<String> teacherExamsId = new ArrayList<String>();
+		ArrayList<ExecutedExam> exams = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry)
+					.where(builder.equal(rootEntry.get("assignedBy"), user.getUserId()));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				exams = (ArrayList<ExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			for(int i=0;i<exams.size();i++)
+				teacherExamsId.add(exams.get(i).getExamID());
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return teacherExamsId;
+	}
 
 	private void addCheckedExam(StudentsExecutedExam studentsExecutedExam) {
 		// TODO Auto-generated method stub
