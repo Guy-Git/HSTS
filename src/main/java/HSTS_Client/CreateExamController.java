@@ -228,7 +228,7 @@ public class CreateExamController implements Initializable {
 			if (event.getSource() == about_btn) {
 				Stage stage = (Stage) about_btn.getScene().getWindow();
 				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAboutPage.fxml"));
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAbout.fxml"));
 					stage.setTitle("High School Test System");
 					Scene scene = new Scene(root);
 					stage.setScene(scene);
@@ -454,7 +454,8 @@ public class CreateExamController implements Initializable {
 			for (int i = 0; i < questions.size(); i++) {
 
 				HBox chooseHB = new HBox();
-				chooseHB.setAlignment(Pos.TOP_CENTER);
+				chooseHB.setAlignment(Pos.TOP_LEFT);
+				chooseHB.setPadding(new Insets(0, 0, 0, 80));
 				CheckBox chooseQuestion = new CheckBox();
 				chooseHB.getChildren().add(chooseQuestion);
 				Line line = new Line();
@@ -480,13 +481,20 @@ public class CreateExamController implements Initializable {
 				
 				answer1.setFont(Font.font("Century Gothic", 14));
 				answer1.setFill(Color.WHITE);
+				answer1.setWrappingWidth(250);
+				
 				answer2.setFont(Font.font("Century Gothic", 14));
 				answer2.setFill(Color.WHITE);
+				answer2.setWrappingWidth(250);
+
 				answer3.setFont(Font.font("Century Gothic", 14));
 				answer3.setFill(Color.WHITE);
+				answer3.setWrappingWidth(250);
+
 				answer4.setFont(Font.font("Century Gothic", 14));
 				answer4.setFill(Color.WHITE);
-				
+				answer4.setWrappingWidth(250);
+
 				
 				TextFlow rightAnswer = new TextFlow();
 				rightAnswer.setPrefWidth(300);
@@ -506,6 +514,7 @@ public class CreateExamController implements Initializable {
 				gradeText.setFill(Color.WHITE);
 				
 				TextField gradeTextField = new TextField();
+				gradeTextField.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white; -fx-background-color: #3F4E63");
 
 				questionBox.getChildren().add(questionContent);
 				questionBox.getChildren().add(answer1);
@@ -534,7 +543,8 @@ public class CreateExamController implements Initializable {
 				questionBox.setMargin(answer4, new Insets(0, 0, 0, 35));
 
 				questionBox.setSpacing(15);
-
+				questionBox.setAlignment(Pos.TOP_LEFT);
+				
 				questionsGrid.setVgap(10);
 				//questionBox.setStyle("-fx-background-color: #344152; -fx-background-radius: 10;");
 				questionsGrid.add(questionBox, 0, i + 1, 1, 1);
