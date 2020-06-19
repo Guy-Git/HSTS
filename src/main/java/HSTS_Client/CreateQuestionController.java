@@ -226,7 +226,7 @@ public class CreateQuestionController implements Initializable {
 			{
 				Stage stage = (Stage) about_btn.getScene().getWindow();
 				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAboutPage.fxml"));
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAbout.fxml"));
 					stage.setTitle("High School Test System");
 					Scene scene = new Scene(root);
 					stage.setScene(scene);
