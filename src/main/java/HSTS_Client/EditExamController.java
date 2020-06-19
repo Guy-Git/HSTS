@@ -230,7 +230,7 @@ public class EditExamController implements Initializable {
 			{
 				Stage stage = (Stage) about_btn.getScene().getWindow();
 				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAboutPage.fxml"));
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAbout.fxml"));
 					stage.setTitle("High School Test System");
 					Scene scene = new Scene(root);
 					stage.setScene(scene);
@@ -275,7 +275,6 @@ public class EditExamController implements Initializable {
 	@FXML
 	void pullExams(ActionEvent event) {
 
-		System.out.println(user.getFullName());
 		boolean badInput = false;
 
 		if (chooseSubject.getSelectionModel().isEmpty() || chooseSubject.getValue().equals("")) {
@@ -411,7 +410,7 @@ public class EditExamController implements Initializable {
 		if (((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
 				.getText().isEmpty()) {
 			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
-					.setStyle("--fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
+					.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
 			((TextField) ((HBox) ((VBox) examToEdit.getContent()).getChildren().get(2 + i)).getChildren().get(1))
@@ -528,46 +527,45 @@ public class EditExamController implements Initializable {
 		Platform.runLater(() -> {
 			if(exams.size() != 0)
 				exams_box.setVisible(true);
+			else
+				exams_box.setVisible(false);
 
 			for (int i = 0; i < exams.size(); i++) {
 				VBox displayExam = new VBox(15);
 				displayExam.setAlignment(Pos.CENTER);
 				HBox instructionsHBox = new HBox();
 				instructionsHBox.setSpacing(10);
-				instructionsHBox.setAlignment(Pos.CENTER);
+				instructionsHBox.setAlignment(Pos.TOP_CENTER);
 				Label instructions = new Label("Instructions: ");
 				
 				TextArea editInstructionsArea = new TextArea(exams.get(i).getInstructions());
-				editInstructionsArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14;");
-				editInstructionsArea.setPrefWidth(350);
-				editInstructionsArea.setPrefHeight(300);
+				editInstructionsArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14; -fx-text-box-border: transparent;");
+				editInstructionsArea.setPrefWidth(300);
+				editInstructionsArea.setPrefHeight(100);
 				editInstructionsArea.setWrapText(true);
 
 				instructionsHBox.getChildren().addAll(instructions, editInstructionsArea);
 				
 				HBox notesHBox = new HBox(10);
-				notesHBox.setAlignment(Pos.CENTER);
+				notesHBox.setAlignment(Pos.TOP_CENTER);
 				Label notes = new Label("Notes: ");
 				
 				TextArea editNotesArea = new TextArea(exams.get(i).getNotes());
-				editNotesArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14;");
-				editNotesArea.setPrefWidth(350);
-				editNotesArea.setPrefHeight(300);
+				editNotesArea.setStyle("-fx-text-inner-color: white; -fx-font-size: 14; -fx-text-box-border: transparent;");
+				editNotesArea.setPrefWidth(300);
+				editNotesArea.setPrefHeight(100);
 				editNotesArea.setWrapText(true);
 				notesHBox.getChildren().addAll(notes, editNotesArea);
-			//	instructionsHBox.setMargin(instructions, new Insets(0, 35, 0, 0));
 				instructionsHBox.setMargin(editInstructionsArea, new Insets(0, 34, 0, 0));
 				
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
 
-				// GridPane questionsGrid = new GridPane();
-				// questionsGrid.setAlignment(Pos.CENTER);
-
 				for (int j = 0; j < exams.get(i).getQuestions().size(); j++) {
 					VBox questionBox = new VBox(15);
 					HBox questionHBox = new HBox(15);
-					questionHBox.setAlignment(Pos.TOP_CENTER);
+					questionHBox.setAlignment(Pos.TOP_LEFT);
+					questionHBox.setPadding(new Insets(0, 0, 0, 80));
 					CheckBox chosenBoxQuestion = new CheckBox();
 					chosenBoxQuestion.setSelected(true);
 					
@@ -578,9 +576,14 @@ public class EditExamController implements Initializable {
 					Text answer2 = new Text("2. " + exams.get(i).getQuestions().get(j).getAnswer().get(1));
 					Text answer3 = new Text("3. " + exams.get(i).getQuestions().get(j).getAnswer().get(2));
 					Text answer4 = new Text("4. " + exams.get(i).getQuestions().get(j).getAnswer().get(3));
+				
+					answer1.setWrappingWidth(250);
+					answer2.setWrappingWidth(250);
+					answer3.setWrappingWidth(250);
+					answer4.setWrappingWidth(250);
+
 					
-					
-					questionContent1.setFont(Font.font("Century Gothic",FontWeight.BOLD, 14));
+					questionContent1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
 					questionContent1.setFill(Color.WHITE);
 					questionContent2.setFont(Font.font("Century Gothic", 14));
 					questionContent2.setFill(Color.WHITE);
@@ -604,7 +607,7 @@ public class EditExamController implements Initializable {
 					rightAnswer.setFill(Color.WHITE);
 					gradeText.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
 					gradeText.setFill(Color.WHITE);
-					gradeTextField.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white;");
+					gradeTextField.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white; -fx-text-box-border: transparent;");
 					
 					questionBox.getChildren().add(questionContent);
 					questionBox.getChildren().add(answer1);
@@ -625,7 +628,6 @@ public class EditExamController implements Initializable {
 
 					questionBox.setMargin(questionContent, new Insets(0, 0, 0, 5));
 					questionBox.setMargin(rightAnswer, new Insets(0, 0, 0, 5));
-					// questionBox.setMargin(gradeText, new Insets(0, 5, 0, 5));
 
 					questionBox.setMargin(answer1, new Insets(0, 0, 0, 35));
 					questionBox.setMargin(answer2, new Insets(0, 0, 0, 35));
@@ -634,7 +636,6 @@ public class EditExamController implements Initializable {
 
 					questionBox.setSpacing(15);
 
-					//questionBox.setStyle("-fx-background-color: #ADD8E6");
 					displayExam.getChildren().add(questionHBox);
 					
 					Line line = new Line();
@@ -652,7 +653,7 @@ public class EditExamController implements Initializable {
 				TextField editTime = new TextField();
 				editTime.setPrefWidth(60);
 				editTime.setText(Integer.toString(exams.get(i).getExamTime()));
-				editTime.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white;");
+				editTime.setStyle("-fx-font-family: 'Century Gothic'; -fx-text-inner-color: white; -fx-text-box-border: transparent;");
 				
 				HBox timeHBox = new HBox(15);
 				timeHBox.setAlignment(Pos.CENTER);

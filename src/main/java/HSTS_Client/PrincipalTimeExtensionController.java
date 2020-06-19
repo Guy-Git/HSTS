@@ -63,6 +63,12 @@ public class PrincipalTimeExtensionController implements Initializable{
 
 	 @FXML
 	 private Button log_out_btn;
+	 
+	 @FXML
+	 private Button all_exams_btn;
+    
+	 @FXML
+	 private Button all_questions_btn;
 
 	 @FXML
 	 private VBox time_ext_vbox;
@@ -118,10 +124,27 @@ public class PrincipalTimeExtensionController implements Initializable{
 			}
 		}
 		
+		if (event.getSource() == all_exams_btn) {
+			Stage stage = (Stage) all_exams_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ShowAllExams.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (event.getSource() == about_btn) {
 			Stage stage = (Stage) about_btn.getScene().getWindow();
 			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalAboutPage.fxml"));
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalAbout.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
@@ -139,6 +162,23 @@ public class PrincipalTimeExtensionController implements Initializable{
 			Stage stage = (Stage) time_ext_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalTimeExtension.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == all_questions_btn) {
+			Stage stage = (Stage) all_questions_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ShowAllQuestions.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);

@@ -117,6 +117,7 @@ public class ExecutedExamController {
 			session.update(executedExam);
 			session.flush();
 			//session.getTransaction().commit(); 
+>>>>>>> branch 'master' of https://github.com/Guy-Git/HSTS
 
 		}catch (Exception exception) {
 			if (session != null) {
@@ -306,6 +307,107 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 		}
 
 		return executedExam;
+	}
+	public ArrayList<StudentsExecutedExam> getStudentsExams(HstsUser user) {
+		// TODO Auto-generated method stub
+		ArrayList<StudentsExecutedExam> studentsExams = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<StudentsExecutedExam> criteriaQuery = builder.createQuery(StudentsExecutedExam.class);
+			Root<StudentsExecutedExam> rootEntry = criteriaQuery.from(StudentsExecutedExam.class);
+			criteriaQuery.select(rootEntry)
+					.where(builder.equal(rootEntry.get("userId"), user.getUserId()));
+			TypedQuery<StudentsExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				studentsExams = (ArrayList<StudentsExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return studentsExams;
+	}
+	
+	public ArrayList<String> getStudentsExamById(HstsUser user) {
+		// TODO Auto-generated method stub
+		ArrayList<String> studentsExamsId = new ArrayList<String>();
+		ArrayList<StudentsExecutedExam> studentsExams = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<StudentsExecutedExam> criteriaQuery = builder.createQuery(StudentsExecutedExam.class);
+			Root<StudentsExecutedExam> rootEntry = criteriaQuery.from(StudentsExecutedExam.class);
+			criteriaQuery.select(rootEntry)
+					.where(builder.equal(rootEntry.get("userId"), user.getUserId()));
+			TypedQuery<StudentsExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				studentsExams = (ArrayList<StudentsExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			for(int i=0;i<studentsExams.size();i++)
+				studentsExamsId.add(studentsExams.get(i).getExecutedExam().getExamID());
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return studentsExamsId;
+	}
+	public ArrayList<String> getTeacherExamsById(HstsUser user) {
+		// TODO Auto-generated method stub
+		ArrayList<String> teacherExamsId = new ArrayList<String>();
+		ArrayList<ExecutedExam> exams = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry)
+					.where(builder.equal(rootEntry.get("assignedBy"), user.getUserId()));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				exams = (ArrayList<ExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			for(int i=0;i<exams.size();i++)
+				teacherExamsId.add(exams.get(i).getExamID());
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return teacherExamsId;
 	}
 
 	private void addCheckedExam(StudentsExecutedExam studentsExecutedExam) {

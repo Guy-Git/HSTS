@@ -26,9 +26,12 @@ public class Message implements Serializable
 	ExamForExec examForExec;
 	StudentsExecutedExam studentsExecutedExam;
 	ExecutedExam executedExam;
+	ArrayList<String> studentExecutedExamsArrayList;
+	ArrayList<StudentsExecutedExam> examsByStudent;
+	ArrayList<ExecutedExam> examsByTeacher;
 	
+
 	ArrayList<ExecutedExam> executedExams;
-	
 	TimeExtension timeExtension;
 	
 	public Message() {
@@ -187,7 +190,28 @@ public class Message implements Serializable
 	public void setExtendTime(int extendTime) {
 		this.extendTime = extendTime;
 	}
+	
+	public ArrayList<String> getStudentExecutedExamsArrayList() {
+		return studentExecutedExamsArrayList;
+	}
 
+	public void setStudentExecutedExamsArrayList(ArrayList<String> studentExecutedExams) {
+		this.studentExecutedExamsArrayList = studentExecutedExams;
+	}
+	public ArrayList<StudentsExecutedExam> getExamsByStudent() {
+		return examsByStudent;
+	}
+
+	public void setExamsByStudent(ArrayList<StudentsExecutedExam> examsByStudent) {
+		this.examsByStudent = examsByStudent;
+	}
+	public ArrayList<ExecutedExam> getExamsByTeacher() {
+		return examsByTeacher;
+	}
+
+	public void setExamsByTeacher(ArrayList<ExecutedExam> examsByTeacher) {
+		this.examsByTeacher = examsByTeacher;
+	}
 	public String getTime() {
 		return time;
 	}
