@@ -165,7 +165,24 @@ public class TeacherMainPageController implements Initializable {
 			}
 		}
 
-//			if (event.getSource() == exam_execution_btn) 
+			if (event.getSource() == review_btn)
+			{
+				Stage stage = (Stage) review_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ExamsReview.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 //			if (event.getSource() == watch_reports_btn) 
 			if (event.getSource() == about_btn) 
 			{

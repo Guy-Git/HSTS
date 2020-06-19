@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.hibernate.HibernateException;
@@ -20,6 +15,8 @@ import org.hibernate.service.ServiceRegistry;
 
 import HSTS_Entities.Message;
 import HSTS_Entities.Question;
+import HSTS_Entities.StudentsExecutedExam;
+import HSTS_Entities.TimeExtension;
 import HSTS_Entities.Exam;
 import HSTS_Entities.ExamForExec;
 import HSTS_Entities.ExecutedExam;
@@ -241,128 +238,6 @@ public class AppsServer extends AbstractServer {
 		}
 	}
 
-	/*public void showAll(ConnectionToClient client) {
-		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-
-			List<Question> questions = getAll(Question.class);
-			try {
-				// System.out.println(questions.get(0));
-				client.sendToClient(questions);
-			} catch (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
-			}
-
-			session.getTransaction().commit(); // Save everything.
-		} catch (Exception exception) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			System.err.println("An error occured, changes have been rolled back.");
-			exception.printStackTrace();
-		} finally {
-			session.close();
-		}
-	}
-
-/*	public void findQuestion(String questionID, ConnectionToClient client) {
-		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			// You can change the question, answers, right answers,
-			List<Question> questions = getAll(Question.class);
-			Object msg;
-			// System.out.println("KAKI");
-
-			for (Question question : questions) { // Change to a better type of search!!!!!!!
-				if (question.getQuestionID().equals(questionID))
-				{
-					chosenQuestion = question;
-					isFound = 1;
-				}
-			}
-			
-			if(isFound == 1)
-				msg = chosenQuestion;
-			else {
-				msg = "Question not found! please try again: ";
-			}
-			isFound = 0;
-			
-			try {
-				client.sendToClient(msg);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			session.getTransaction().commit(); // Save everything.
-		} catch (Exception exception) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			System.err.println("An error occured, changes have been rolled back.");
-			exception.printStackTrace();
-		} finally {
-			session.close();
-		}
-	}
-	
-	public void editQuestion(String theActualChange, int changeType, ConnectionToClient client) {
-		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			switch (changeType) {
-			case 1: // Edit question content
-				System.out.println(chosenQuestion.getQuestionID());
-				System.out.println(theActualChange);
-				chosenQuestion.setQuestionContent(theActualChange);
-				session.update(chosenQuestion);
-				break;
-			case 2: // Edit one Answers
-				System.out.println(answerNum);
-				chosenQuestion.setAnswer(theActualChange, answerNum);
-				System.out.println(chosenQuestion.getAnswer().get(answerNum - 1));
-				session.update(chosenQuestion);
-				break;
-			case 3: // Edit the right answer
-				chosenQuestion.setRightAnswer(Integer.parseInt(theActualChange));
-				session.update(chosenQuestion);
-				break;
-			}
-
-			session.flush();
-
-			session.getTransaction().commit(); // Save everything.
-
-			// System.out.println(chosenQuestion.toString());
-
-			
-			  try { client.sendToClient(chosenQuestion); } catch (IOException e) { // TODO
-			  Auto-generated catch block e.printStackTrace(); }
-			 
-
-		} catch (Exception exception) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			System.err.println("An error occured, changes have been rolled back.");
-			exception.printStackTrace();
-		} finally {
-			session.close();
-		}
-	}*/
-
-	public static <T> List<T> getAll(Class<T> object) {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<T> criteriaQuery = builder.createQuery(object);
-		Root<T> rootEntry = criteriaQuery.from(object);
-		CriteriaQuery<T> allCriteriaQuery = criteriaQuery.select(rootEntry);
-
-		TypedQuery<T> allQuery = session.createQuery(allCriteriaQuery);
-		return allQuery.getResultList();
-	}
-
 	@Override
 	protected synchronized void clientDisconnected(ConnectionToClient client) {
 		// TODO Auto-generated method stub
@@ -381,8 +256,12 @@ public class AppsServer extends AbstractServer {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package
 		configuration.addAnnotatedClass(HstsUser.class);
-		//configuration.addAnnotatedClass(Exam.class);
-		//configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(Exam.class);
+		configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(ExamForExec.class);
+		configuration.addAnnotatedClass(StudentsExecutedExam.class);
+		configuration.addAnnotatedClass(TimeExtension.class);
+		configuration.addAnnotatedClass(ExecutedExam.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
@@ -392,64 +271,204 @@ public class AppsServer extends AbstractServer {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			
-			String passwordInput = "123456";
+		
+			//Create Students:
+			String passwordInput = "S123";
 		    SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest256();
 		    byte[] digest = digestSHA3.digest(passwordInput.getBytes());
 		    			    
-			HstsUser student1 = new HstsUser("1111", Hex.encodeHexString(digest), 1, null, null, "Opal",false);
+			HstsUser student1 = new HstsUser("123456789", Hex.encodeHexString(digest), 1, null, null, "Opal", false);
 
 			session.save(student1);
 			session.flush();
 			
-			passwordInput = "1234";
-		    SHA3.DigestSHA3 digestSHA3_1 = new SHA3.Digest256();
-		    byte[] digest1 = digestSHA3_1.digest(passwordInput.getBytes());
+			passwordInput = "S1234";
+		    digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
 		    
-			HstsUser student2 = new HstsUser("222222222", Hex.encodeHexString(digest1), 1, null, null, "Guy",false);
+			HstsUser student2 = new HstsUser("987654321", Hex.encodeHexString(digest), 1, null, null, "Linoy", false);
 			session.save(student2);
 			session.flush();
+						
+			passwordInput = "S12345";
+			digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
 			
-			ArrayList<String> subjects = new ArrayList<String>();
-			subjects.add("Math");
-			subjects.add("CS");
+			HstsUser student3 = new HstsUser("121212121", Hex.encodeHexString(digest), 1, null, null, "Chen", false);
+			session.save(student3);
+			session.flush();
 			
-			ArrayList<String> courses = new ArrayList<String>();
-			courses.add("Calculus");
-			courses.add("Introduction to CS");
-			courses.add("OS");
+			passwordInput = "S123456";
+			digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
 			
-			passwordInput = "1234A";
-		    SHA3.DigestSHA3 digestSHA3_2 = new SHA3.Digest256();
-		    byte[] digest2 = digestSHA3_2.digest(passwordInput.getBytes());
+			HstsUser student4 = new HstsUser("111111111", Hex.encodeHexString(digest), 1, null, null, "Guy", false);
+			session.save(student4);
+			session.flush();
+			
+			passwordInput = "S1234567";
+			digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
+			
+			HstsUser student5 = new HstsUser("222222222", Hex.encodeHexString(digest), 1, null, null, "Zachary", false);
+			session.save(student5);
+			session.flush();
+			
+			
+			//Create Teachers:
+			ArrayList<String> teacher1Subjects = new ArrayList<String>();
+			teacher1Subjects.add("Math");
+			teacher1Subjects.add("CS");
+			
+			ArrayList<String> teacher1Courses = new ArrayList<String>();
+			teacher1Courses.add("Calculus");
+			teacher1Courses.add("Introduction to CS");
+			teacher1Courses.add("OS");
+			
+			passwordInput = "T123";
+			digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
 		    
-			HstsUser teacher1 = new HstsUser("3333", Hex.encodeHexString(digest2), 2, subjects, courses, "Trachel",false);
+			HstsUser teacher1 = new HstsUser("333333333", Hex.encodeHexString(digest), 2, teacher1Subjects, teacher1Courses, "Liel",false);
 
 			session.save(teacher1);
 			session.flush();
 			
-			passwordInput = "1234A";
-		    SHA3.DigestSHA3 digestSHA3_3 = new SHA3.Digest256();
-		    byte[] digest3 = digestSHA3_3.digest(passwordInput.getBytes());
-		    
-			subjects.add("Biology");
-			courses.add("Algebra 101");
-			courses.add("Introduction to Probability");
-			courses.add("Data structures");
-			courses.add("OS");
-			courses.add("Anatomy");
-			courses.add("Stem Cells");
-			courses.add("Biostructure");
+			ArrayList<String> teacher2Subjects = new ArrayList<String>();
+			teacher2Subjects.add("Math");
 			
-			HstsUser principal = new HstsUser("4444", Hex.encodeHexString(digest3), 3, subjects, courses, "Chen",false);
+			ArrayList<String> teacher2Courses = new ArrayList<String>();
+			teacher2Courses.add("Calculus");
+			teacher2Courses.add("Algebra 101");
+			teacher2Courses.add("Introduction to Probability");
+			
+			passwordInput = "T1234";
+			digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
+			
+			HstsUser teacher2 = new HstsUser("444444444", Hex.encodeHexString(digest), 2, teacher2Subjects, teacher2Courses, "Liel",false);
+			
+			session.save(teacher2);
+			session.flush();
+			
+			ArrayList<String> teacher3Subjects = new ArrayList<String>();
+			teacher2Subjects.add("Biology");
+			
+			ArrayList<String> teacher3Courses = new ArrayList<String>();
+			teacher3Courses.add("Anatomy");
+			teacher3Courses.add("Stem Cells");
+			
+			passwordInput = "T12345";
+			digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
+			
+			HstsUser teacher3 = new HstsUser("555555555", Hex.encodeHexString(digest), 2, teacher3Subjects, teacher3Courses, "Liel",false);
+			
+			session.save(teacher3);
+			session.flush();
+			
+			
+			//Create principal:
+			ArrayList<String> principalSubjects = new ArrayList<String>();
+			principalSubjects.add("Math");
+			principalSubjects.add("CS");
+			principalSubjects.add("Biology");
+			
+			ArrayList<String> principalCourses = new ArrayList<String>();
+			principalCourses.add("Calculus");
+			principalCourses.add("Algebra 101");
+			principalCourses.add("Introduction to Probability");
+			principalCourses.add("Introduction to CS");
+			principalCourses.add("Data structures");
+			principalCourses.add("OS");
+			principalCourses.add("Anatomy");
+			principalCourses.add("Stem Cells");
+			principalCourses.add("Biostructure");
+			
+			passwordInput = "1234A";
+			digestSHA3 = new SHA3.Digest256();
+		    digest = digestSHA3.digest(passwordInput.getBytes());
+		    
+			HstsUser principal = new HstsUser("888888888", Hex.encodeHexString(digest), 3, principalSubjects, principalCourses, "Malki", false);
 
 			session.save(principal);
 			session.flush();
-			
-			passwordInput = "1234A";
-		    SHA3.DigestSHA3 digestSHA3_4 = new SHA3.Digest256();
-		    byte[] digest4 = digestSHA3_4.digest(passwordInput.getBytes());
 
+			session.getTransaction().commit(); // Save everything.
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+	
+	public static void addExamsAndQuestionsToDB() {
+		try {
+			ExamController examController = new ExamController();
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			//Create Questions:
+			ArrayList<String> answers1 = new ArrayList<String>();
+			answers1.add("4");
+			answers1.add("6");
+			answers1.add("8");
+			answers1.add("10");
+			Question question1 = new Question("2 * 2 =", answers1, 1, "Algebra 101", "Math");
+			session.save(question1);
+			session.flush();
+			
+			ArrayList<String> answers2 = new ArrayList<String>();
+			answers2.add("145");
+			answers2.add("124");
+			answers2.add("14");
+			answers2.add("13");
+			Question question2 = new Question("11 + 3 =", answers2, 3, "Algebra 101", "Math");
+			session.save(question2);
+			session.flush();
+			
+			ArrayList<String> answers3 = new ArrayList<String>();
+			answers3.add("2.5");
+			answers3.add("7");
+			answers3.add("10");
+			answers3.add("4");
+			Question question3 = new Question("3 + 2 / 2 =", answers3, 4, "Algebra 101", "Math");
+			session.save(question3);
+			session.flush();
+			
+			ArrayList<String> answers4 = new ArrayList<String>();
+			answers4.add("2");
+			answers4.add("512");
+			answers4.add("1024");
+			answers4.add("1000");
+			Question question4 = new Question("2 ^ 10 =", answers4, 3, "Algebra 101", "Math");
+			session.save(question4);
+			session.flush();
+			
+			ArrayList<String> answers5 = new ArrayList<String>();
+			answers5.add("72");
+			answers5.add("63");
+			answers5.add("54");
+			answers5.add("45");
+			Question question5 = new Question("6 * 9 =", answers5, 3, "Algebra 101", "Math");
+			session.save(question5);
+			session.flush();
+			
+			ArrayList<Question> questionsExam1 = new ArrayList<Question>();
+			questionsExam1.add(question1);
+			questionsExam1.add(question2);
+			questionsExam1.add(question3);
+			questionsExam1.add(question4);
+			questionsExam1.add(question5);
+			
+			Exam exam1 = new Exam(questionsExam1, "Solve the following: ", "All questions worth the same",
+					"Liel", 6, new ArrayList<Integer>((List.of(20, 20, 20, 20, 20))), "Math", "Algebra 101");
+			examController.addExam(exam1);
+			
 			session.getTransaction().commit(); // Save everything.
 		} catch (Exception exception) {
 			if (session != null) {
@@ -471,6 +490,7 @@ public class AppsServer extends AbstractServer {
 			server.listen();
 		}
 		addUsersToDB();
+		addExamsAndQuestionsToDB();
 
 	}
 

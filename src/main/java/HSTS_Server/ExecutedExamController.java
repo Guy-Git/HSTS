@@ -239,30 +239,32 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			session.flush();
 			
 			session.getTransaction().commit();
-//			session.close();
-//			
-//			session = sessionFactory.openSession();
-//			session.beginTransaction();
-//			
-//			CriteriaBuilder builder1 = session.getCriteriaBuilder();
-//			CriteriaQuery<StudentsExecutedExam> criteriaQuery1 = builder1.createQuery(StudentsExecutedExam.class);
-//			Root<StudentsExecutedExam> rootEntry1 = criteriaQuery1.from(StudentsExecutedExam.class);
-//			criteriaQuery1.select(rootEntry1).where(
-//					builder1.equal(rootEntry1.get("executed_exam_id"), updatedExecutedExam.getId()));
-//			TypedQuery<StudentsExecutedExam> query1 = session.createQuery(criteriaQuery1);
-//			try {
-//				studentsExecutedExams = (ArrayList<StudentsExecutedExam>) query1.getResultList();
-//			} catch (NoResultException nre) {
-//				System.out.println("Exam code not found!");
-//			}
-//			
-//			for(int i = 0; i < updatedExecutedExam.getNumOfStudents(); i++)
-//			{
-//				session.evict(studentsExecutedExams.get(i));
-//				studentsExecutedExams.set(i, updatedExecutedExam.getStudentsExecutedExams().get(i));
-//				session.update(studentsExecutedExams.get(i));
-//				session.flush();
-//			}
+			session.close();
+			
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			CriteriaBuilder builder1 = session.getCriteriaBuilder();
+			CriteriaQuery<StudentsExecutedExam> criteriaQuery1 = builder1.createQuery(StudentsExecutedExam.class);
+			Root<StudentsExecutedExam> rootEntry1 = criteriaQuery1.from(StudentsExecutedExam.class);
+			criteriaQuery1.select(rootEntry1).where(
+					builder1.equal(rootEntry1.get("executedExam"), updatedExecutedExam.getId()));
+			TypedQuery<StudentsExecutedExam> query1 = session.createQuery(criteriaQuery1);
+			try {
+				studentsExecutedExams = (ArrayList<StudentsExecutedExam>) query1.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			
+			for(int i = 0; i < updatedExecutedExam.getNumOfStudents(); i++)
+			{
+				session.evict(studentsExecutedExams.get(i));
+				studentsExecutedExams.set(i, updatedExecutedExam.getStudentsExecutedExams().get(i));
+				session.update(studentsExecutedExams.get(i));
+				session.flush();
+			}
+			
+			session.getTransaction().commit();
 			
 		} catch (Exception exception) {
 			if (session != null) {
@@ -334,6 +336,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			
 			//System.out.println(executedExam);
 			session.evict(executedExam);
+			executedExam.setChecked(false);
 			executedExam.getStudentsExecutedExams().add(studentsExecutedExam);
 			executedExam.setNumOfStudents(executedExam.getNumOfStudents() + 1);
 			if(studentsExecutedExam.isForcedFinish())
