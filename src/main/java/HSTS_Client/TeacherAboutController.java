@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import HSTS_Entities.HstsUser;
+import HSTS_Entities.Message;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -194,6 +195,32 @@ public class TeacherAboutController implements Initializable {
 				}
 			}
 			
+			if (event.getSource() == log_out_btn) {
+				Stage stage = (Stage) log_out_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(this);
+
+					Message msg = new Message();
+					msg.setAction("user log out");
+					msg.setUser(this.user);
+					try {
+						AppsClient.getClient().sendToServer(msg);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
 	}
 
