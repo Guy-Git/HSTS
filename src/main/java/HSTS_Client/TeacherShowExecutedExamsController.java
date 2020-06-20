@@ -57,21 +57,6 @@ import javafx.stage.Stage;
 public class TeacherShowExecutedExamsController implements Initializable {
 
 	@FXML
-	private Button create_question_btn;
-
-	@FXML
-	private Button create_exam_btn;
-
-	@FXML
-	private Button exam_execution_btn;
-
-	@FXML
-	private Button watch_reports_btn;
-
-	@FXML
-	private Button about_btn;
-
-	@FXML
 	private VBox exams_box;
 
 	@FXML
@@ -102,7 +87,7 @@ public class TeacherShowExecutedExamsController implements Initializable {
 		 */
 	}
 
-	@FXML
+/*	@FXML
 	void menuClick(ActionEvent event) {
 
 		if (event.getSource() == create_question_btn) {
@@ -158,13 +143,13 @@ public class TeacherShowExecutedExamsController implements Initializable {
 //			if (event.getSource() == about_btn) 
 
 		EventBus.getDefault().unregister(this);
-	}
+	}*/
 
 	@Subscribe
 	public void setExamsToPage(Message msg) {
 
 		this.exams = msg.getExams();
-		this.examsOfTeacher = msg.getExamsByTeacher();
+		this.examsOfTeacher = msg.getExecutedExams();
 //		this.questions = msg.getQuestions();
 //		this.finishedExamsOfStudent=msg.getStudentExecutedExamsArrayList();
 		EventBus.getDefault().clearCaches();
@@ -389,7 +374,7 @@ public class TeacherShowExecutedExamsController implements Initializable {
 		Platform.runLater(() -> {
 			this.user = user;
 			Message msg = new Message();
-			msg.setAction("Pull Teacher's executed exams");
+			msg.setAction("Pull checked exams by teacher");
 			msg.setUser(user);
 			try {
 				AppsClient.getClient().sendToServer(msg);

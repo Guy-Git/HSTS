@@ -341,7 +341,7 @@ public class ExamsReviewController implements Initializable {
 			this.user = user;
 
 			Message msgToServer = new Message();
-			msgToServer.setAction("Pull exam by teacher");
+			msgToServer.setAction("Pull unchecked exams by teacher");
 			msgToServer.setUser(user);
 
 			try {

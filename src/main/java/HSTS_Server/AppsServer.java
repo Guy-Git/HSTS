@@ -27,10 +27,6 @@ import ocsf_Server.ConnectionToClient;
 public class AppsServer extends AbstractServer {
 
 	private static Session session;
-	private Question chosenQuestion;
-	private int isFound = 0;
-	private int changeType;
-	private int answerNum;
 	static SessionFactory sessionFactory = getSessionFactory();
 	private QuestionController questionController;
 	private UserController userController;
@@ -80,6 +76,19 @@ public class AppsServer extends AbstractServer {
 			timeExtensionController.updateTimeExtensions(((Message)msg).getTimeExtensionArr());
 		}
 		
+		if(((Message)msg).getAction().equals("Pull teachers"))  
+		{	
+			serverMsg.setTeachers(userController.getTeachers());
+			serverMsg.setAction("Got teachers");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if(((Message)msg).getAction().equals("show time extensions")) // principal 
 		{
 			serverMsg.setTimeExtensionArr(timeExtensionController.getTimeExtensions());
@@ -104,10 +113,10 @@ public class AppsServer extends AbstractServer {
 			}
 		}
 		
-		if(((Message)msg).getAction().equals("Pull Teacher's executed exams")) 
+		if(((Message)msg).getAction().equals("Pull unchecked exams by teacher")) 
 		{
-			serverMsg.setExamsByTeacher(executedExamController.getExamsByTeacher(((Message)msg).getUser()));
-			serverMsg.setExams(examController.getExamsById(executedExamController.getTeacherExamsById(((Message)msg).getUser())));
+			serverMsg.setExecutedExams(executedExamController.getUncheckedExamsByTeacher(((Message)msg).getUser()));
+			serverMsg.setExams(examController.getExamsById(executedExamController.getUncheckedTeacherExamsById(((Message)msg).getUser())));
 			serverMsg.setAction("Pulled Teacher's executed exams");
 			try {
 				client.sendToClient(serverMsg);
@@ -243,13 +252,11 @@ public class AppsServer extends AbstractServer {
 			}
 		}
 		
-		if(((Message)msg).getAction().equals("Pull exam by teacher"))
+		if(((Message)msg).getAction().equals("Pull checked exams by teacher"))
 		{
-			ArrayList<ExecutedExam> executedExams;
-			executedExams = executedExamController.getExamsByTeacher(((Message)msg).getUser());
-			serverMsg.setExecutedExams(executedExams);
-			serverMsg.setExams(examController.getExamsByExecutedExams(executedExams));
-			serverMsg.setAction("Pulled executedExams and exams");
+			serverMsg.setExecutedExams(executedExamController.getCheckedExamsByTeacher(((Message)msg).getUser()));
+			serverMsg.setExams(examController.getExamsById(executedExamController.getCheckedTeacherExamsById(((Message)msg).getUser())));
+			serverMsg.setAction("Pulled Teacher's executed exams");
 			
 			try {
 				client.sendToClient(serverMsg);
@@ -377,13 +384,13 @@ public class AppsServer extends AbstractServer {
 			digestSHA3 = new SHA3.Digest256();
 		    digest = digestSHA3.digest(passwordInput.getBytes());
 			
-			HstsUser teacher2 = new HstsUser("444444444", Hex.encodeHexString(digest), 2, teacher2Subjects, teacher2Courses, "Liel",false);
+			HstsUser teacher2 = new HstsUser("444444444", Hex.encodeHexString(digest), 2, teacher2Subjects, teacher2Courses, "Trachel",false);
 			
 			session.save(teacher2);
 			session.flush();
 			
 			ArrayList<String> teacher3Subjects = new ArrayList<String>();
-			teacher2Subjects.add("Biology");
+			teacher3Subjects.add("Biology");
 			
 			ArrayList<String> teacher3Courses = new ArrayList<String>();
 			teacher3Courses.add("Anatomy");
@@ -393,7 +400,7 @@ public class AppsServer extends AbstractServer {
 			digestSHA3 = new SHA3.Digest256();
 		    digest = digestSHA3.digest(passwordInput.getBytes());
 			
-			HstsUser teacher3 = new HstsUser("555555555", Hex.encodeHexString(digest), 2, teacher3Subjects, teacher3Courses, "Liel",false);
+			HstsUser teacher3 = new HstsUser("555555555", Hex.encodeHexString(digest), 2, teacher3Subjects, teacher3Courses, "Yafit",false);
 			
 			session.save(teacher3);
 			session.flush();
@@ -440,6 +447,7 @@ public class AppsServer extends AbstractServer {
 	public static void addExamsAndQuestionsToDB() {
 		try {
 			ExamController examController = new ExamController();
+			QuestionController questionController = new QuestionController();
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			
@@ -450,7 +458,7 @@ public class AppsServer extends AbstractServer {
 			answers1.add("8");
 			answers1.add("10");
 			Question question1 = new Question("2 * 2 =", answers1, 1, "Algebra 101", "Math");
-			session.save(question1);
+			questionController.addQuestion(question1);
 			session.flush();
 			
 			ArrayList<String> answers2 = new ArrayList<String>();
@@ -459,7 +467,7 @@ public class AppsServer extends AbstractServer {
 			answers2.add("14");
 			answers2.add("13");
 			Question question2 = new Question("11 + 3 =", answers2, 3, "Algebra 101", "Math");
-			session.save(question2);
+			questionController.addQuestion(question2);
 			session.flush();
 			
 			ArrayList<String> answers3 = new ArrayList<String>();
@@ -468,7 +476,7 @@ public class AppsServer extends AbstractServer {
 			answers3.add("10");
 			answers3.add("4");
 			Question question3 = new Question("3 + 2 / 2 =", answers3, 4, "Algebra 101", "Math");
-			session.save(question3);
+			questionController.addQuestion(question3);
 			session.flush();
 			
 			ArrayList<String> answers4 = new ArrayList<String>();
@@ -477,7 +485,7 @@ public class AppsServer extends AbstractServer {
 			answers4.add("1024");
 			answers4.add("1000");
 			Question question4 = new Question("2 ^ 10 =", answers4, 3, "Algebra 101", "Math");
-			session.save(question4);
+			questionController.addQuestion(question4);
 			session.flush();
 			
 			ArrayList<String> answers5 = new ArrayList<String>();
@@ -486,7 +494,7 @@ public class AppsServer extends AbstractServer {
 			answers5.add("54");
 			answers5.add("45");
 			Question question5 = new Question("6 * 9 =", answers5, 3, "Algebra 101", "Math");
-			session.save(question5);
+			questionController.addQuestion(question5);
 			session.flush();
 			
 			ArrayList<Question> questionsExam1 = new ArrayList<Question>();
@@ -498,6 +506,15 @@ public class AppsServer extends AbstractServer {
 			
 			Exam exam1 = new Exam(questionsExam1, "Solve the following: ", "All questions worth the same",
 					"Liel", 6, new ArrayList<Integer>((List.of(20, 20, 20, 20, 20))), "Math", "Algebra 101");
+			
+			ArrayList<Exam> exams = new ArrayList<Exam>();
+			exams.add(exam1);
+			
+			for (Question question : questionsExam1) {
+				question.setExams(exams);
+			}
+			
+			exam1.setQuestions(questionsExam1);
 			examController.addExam(exam1);
 			
 			session.getTransaction().commit(); // Save everything.
