@@ -47,7 +47,7 @@ public class StudentAboutController implements Initializable {
 
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
-		EventBus.getDefault().register(this);
+
 	}
     
     @FXML
@@ -62,8 +62,7 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
+			
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -80,8 +79,7 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
+				
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -98,8 +96,7 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
+			
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -115,8 +112,7 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
+			
 
 				Message msg = new Message();
 				msg.setAction("user log out");

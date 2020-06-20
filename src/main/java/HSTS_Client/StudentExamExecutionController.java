@@ -59,13 +59,35 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class StudentExamExecutionController implements Initializable {
 
+    @FXML
+    private Button main_page_btn;
+
+    @FXML
+    private Button log_out_btn;
+
+    @FXML
+    private AnchorPane logo;
+
+    @FXML
+    private Text logo_text;
+
+    @FXML
+    private Button start_exam_btn1;
+
+    @FXML
+    private Button exam_grades_btn;
+	
 	@FXML
 	private AnchorPane exam_anchor;
 
@@ -116,6 +138,9 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	private Button upload_exam;
+	
+	@FXML
+	private Text exam_title;
 
 	@FXML
 	private Text fileName;
@@ -154,9 +179,45 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	void menuClick(ActionEvent event) {
+		if (event.getSource() == main_page_btn) 
+		{
+			Stage stage = (Stage) main_page_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
-		if (event.getSource() == exam_execution_btn) {
-			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == about_btn) 
+		{
+			Stage stage = (Stage) about_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentAbout.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == start_exam_btn) 
+		{
+			Stage stage = (Stage) start_exam_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentExamExecution.fxml"));
 				stage.setTitle("High School Test System");
@@ -164,12 +225,43 @@ public class StudentExamExecutionController implements Initializable {
 				stage.setScene(scene);
 				stage.show();
 				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		if (event.getSource() == log_out_btn) {
+			Stage stage = (Stage) log_out_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+				Message msg = new Message();
+				msg.setAction("user log out");
+				msg.setUser(this.user);
+				try {
+					AppsClient.getClient().sendToServer(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+//			if (event.getSource() == exam_grades_btn) 
+
 	}
 
 	@FXML
@@ -248,20 +340,28 @@ public class StudentExamExecutionController implements Initializable {
 					else {
 
 						enterExamCode.setVisible(false);
-						for_multi_line.setVisible(false);
+						for_multi_line.setLayoutX(237);
+						for_multi_line.setLayoutY(97);
 						submit_btn.setDisable(false);
 						submit_btn.setVisible(true);
 
 						if (!exam.isManual()) {
 							submit_btn.setVisible(false);
 							start_exam_btn.setDisable(false);
-							for_multi_line1.setVisible(true);
+							for_multi_line.setText("Enter ID:");
+							for_multi_line.setVisible(true);
+							//for_multi_line1.setVisible(true);
+							//for_multi_line1.setLayoutX(237);
+							//for_multi_line1.setLayoutY(80);
 							enterIdForExam.setVisible(true);
+							enterIdForExam.setLayoutX(299);
+							enterIdForExam.setLayoutY(80);
 							enterIdForExam.setDisable(false);
 							start_exam_btn.setVisible(true);
-							start_exam_btn.setLayoutY(225);
+							//start_exam_btn.setLayoutY(225);
 
 						} else {
+							for_multi_line.setVisible(false);
 							submit_btn.setVisible(false);
 							downlod_btn.setVisible(true);
 						}
@@ -326,8 +426,8 @@ public class StudentExamExecutionController implements Initializable {
 		run = paragraph.createRun();
 		run.setText("Good Luck!");
 		exam_anchor.setDisable(true);
-		upload_exam.setLayoutX(270);
-		upload_exam.setLayoutY(320);
+		//upload_exam.setLayoutX(236);
+		//upload_exam.setLayoutY(121);
 		upload_exam.setDisable(false);
 		try {
 			FileOutputStream out = new FileOutputStream(new File("C:/Users/opal/Desktop/CoolTest.docx"));
@@ -438,11 +538,11 @@ public class StudentExamExecutionController implements Initializable {
 
 		if (enterIdForExam.getText().equals(user.getUserId())) {
 
-			for_multi_line1.setVisible(false);
+			for_multi_line.setVisible(false);
 			enterIdForExam.setVisible(false);
 			start_exam_btn.setVisible(false);
 			submit_btn.setVisible(false);
-			// save_exam.setVisible(true);
+		    save_exam.setVisible(true);
 
 			Timeline timeline = new Timeline();
 			timeline.setCycleCount(Timeline.INDEFINITE);
@@ -453,24 +553,38 @@ public class StudentExamExecutionController implements Initializable {
 				timeline.stop();
 			}
 			System.out.println(exam.getQuestions().get(0).getQuestionContent());
-			VBox displayExam = new VBox(15);
+			VBox displayExam = new VBox(10);
 			displayExam.setAlignment(Pos.CENTER);
-			Text instructions = new Text("Instructions: " + exam.getInstructions());
+			
+			TextFlow instructions = new TextFlow();
+			Text instructions1 = new Text("\nInstructions: ");
+			Text instructions2 = new Text(exam.getInstructions());
+			instructions.getChildren().add(instructions1);
+			instructions.getChildren().add(instructions2);
+			instructions1.setFont(Font.font("Century Gothic", 14));
+			instructions1.setFill(Color.WHITE);
+			instructions2.setFont(Font.font("Century Gothic", 14));
+			instructions2.setFill(Color.WHITE);
+			instructions2.setWrappingWidth(280);
+			
 			displayExam.getChildren().add(instructions);
 			Button save_btn = new Button();
 			save_btn.setAlignment(Pos.CENTER);
 			save_btn.setText("save exam");
 			GridPane questionsGrid = new GridPane();
 			questionsGrid.setAlignment(Pos.CENTER);
-			Text examTitle = new Text("Exam in subject " + exam.getSubject() + " in course " + exam.getCourse());
+			Text examTitle = new Text("");
+			exam_title.setText("  Exam in " + exam.getSubject() + " \ncourse " + exam.getCourse());
 			displayExam.getChildren().add(examTitle);
+		
 			for (int j = 0; j < exam.getQuestions().size(); j++) {
-				VBox questionBox = new VBox(15);
+				VBox questionBox = new VBox(20);
 				ToggleGroup answerGroup = new ToggleGroup();
 				RadioButton ans1RB = new RadioButton();
 				RadioButton ans2RB = new RadioButton();
 				RadioButton ans3RB = new RadioButton();
 				RadioButton ans4RB = new RadioButton();
+			
 				ans1RB.setToggleGroup(answerGroup);
 				ans2RB.setToggleGroup(answerGroup);
 				ans3RB.setToggleGroup(answerGroup);
@@ -486,12 +600,29 @@ public class StudentExamExecutionController implements Initializable {
 				answer3HBox.getChildren().add(ans3RB);
 				answer4HBox.getChildren().add(ans4RB);
 
-				Text questionContent = new Text("" + (j + 1) + ". " + exam.getQuestions().get(j).getQuestionContent());
+				TextFlow questionContent = new TextFlow();
+				Text questionContent1 = new Text("" + (j + 1) + ".    ");
+				Text questionContent2 = new Text(exam.getQuestions().get(j).getQuestionContent());
 				Text answer1 = new Text("1. " + exam.getQuestions().get(j).getAnswer().get(0));
 				Text answer2 = new Text("2. " + exam.getQuestions().get(j).getAnswer().get(1));
 				Text answer3 = new Text("3. " + exam.getQuestions().get(j).getAnswer().get(2));
 				Text answer4 = new Text("4. " + exam.getQuestions().get(j).getAnswer().get(3));
 
+				questionContent1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+				questionContent1.setFill(Color.WHITE);
+				questionContent2.setFont(Font.font("Century Gothic", 14));
+				questionContent2.setFill(Color.WHITE);
+				questionContent.getChildren().add(questionContent1);
+				questionContent.getChildren().add(questionContent2);
+				answer1.setFont(Font.font("Century Gothic", 14));
+				answer1.setFill(Color.WHITE);
+				answer2.setFont(Font.font("Century Gothic", 14));
+				answer2.setFill(Color.WHITE);
+				answer3.setFont(Font.font("Century Gothic", 14));
+				answer3.setFill(Color.WHITE);
+				answer4.setFont(Font.font("Century Gothic", 14));
+				answer4.setFill(Color.WHITE);
+				
 				answer1HBox.getChildren().add(answer1);
 				answer2HBox.getChildren().add(answer2);
 				answer3HBox.getChildren().add(answer3);
@@ -503,7 +634,7 @@ public class StudentExamExecutionController implements Initializable {
 				questionBox.getChildren().add(answer3HBox);
 				questionBox.getChildren().add(answer4HBox);
 
-				questionBox.setMargin(questionContent, new Insets(0, 0, 0, 5));
+				questionBox.setMargin(questionContent, new Insets(20, 10, 0, 5));
 
 				questionBox.setMargin(answer1, new Insets(0, 0, 0, 35));
 				questionBox.setMargin(answer2, new Insets(0, 0, 0, 35));
@@ -512,21 +643,23 @@ public class StudentExamExecutionController implements Initializable {
 
 				questionBox.setSpacing(15);
 
-				questionsGrid.setVgap(10);
-				questionBox.setStyle("-fx-background-color: #ADD8E6");
+				questionsGrid.setVgap(30);
+				//questionBox.setStyle("-fx-background-color: #ADD8E6");
 				questionsGrid.add(questionBox, 0, j, 1, 1);
 				displayExam.getChildren().add(questionBox);
 
 			}
 
 			Text endTitle = new Text("GOOD LUCK!");
+			endTitle.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+			endTitle.setFill(Color.WHITE);
 			displayExam.getChildren().add(endTitle);
 			save_exam.setVisible(true);
 			save_exam.setDisable(false);
 			displayExam.getChildren().add(save_exam);
-			exam_anchor.setLayoutX(205);
+			exam_anchor.setLayoutX(200);
 			exam_anchor.setLayoutY(120);
-			time_text.setLayoutY(100);
+			time_text.setLayoutY(110);
 			exam_anchor.getChildren().add(displayExam);
 
 			KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
