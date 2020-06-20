@@ -175,14 +175,18 @@ public class StudentShowExamsController implements Initializable {
 			exams_box.setVisible(true);
 
 			for (int i = 0; i < exams.size(); i++) {
+				Text grade=new Text("");
+				Text ReasonOfGradeChangeArea=new Text("");
 				VBox displayExam = new VBox(15);
-
 				displayExam.setAlignment(Pos.CENTER);
 				HBox instructionsHBox = new HBox();
 				instructionsHBox.setSpacing(10);
 				instructionsHBox.setAlignment(Pos.CENTER);
 				Text editInstructionsArea = new Text("Instructions: "+exams.get(i).getInstructions());
-				Text grade=new Text("Grade: "+examsOfStudent.get(i).getGrade());
+	
+				grade.setText("Grade: " + examsOfStudent.get(i).getGrade());
+				ReasonOfGradeChangeArea.setText(examsOfStudent.get(i).getReasonOfGradeChange());
+
 				instructionsHBox.getChildren().add(editInstructionsArea);
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.CENTER);
@@ -191,6 +195,13 @@ public class StudentShowExamsController implements Initializable {
 				if (editNotesArea.getText()!="")
 				notesHBox.getChildren().addAll(notes, editNotesArea);
 				displayExam.getChildren().add(grade);
+				Text Reason=new Text("Reason for change in grade: ");
+				if (ReasonOfGradeChangeArea.getText()!="")
+				{
+					Text Combine=new Text(Reason.getText()+ReasonOfGradeChangeArea.getText());
+					displayExam.getChildren().add(Combine);
+					//displayExam.getChildren().add(ReasonOfGradeChangeArea);
+				}
 
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
