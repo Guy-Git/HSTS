@@ -702,6 +702,22 @@ public class EditExamController implements Initializable {
 
 	EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent e) {
+			TitledPane chosenExamPane = exams_container.getExpandedPane();
+			String chosenExamId = chosenExamPane.getText().substring(6);
+			VBox examBox = (VBox) chosenExamPane.getContent();
+			int examSize = 0;
+			for(int i = 0 ; i < exams.size() ; i++)
+			{
+				if(exams.get(i).getExamID().equals(chosenExamId))
+				{
+					examSize = exams.get(i).getQuestions().size();
+				}
+			}
+			
+			examSize += 3;
+			
+		//	examBox.getChildren().size();
+			((Button)examBox.getChildren().get(examSize)).setDisable(true);
 			setQuestionsToPage(questions);
 	
 		}
