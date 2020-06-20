@@ -77,65 +77,9 @@ public class ExecutedExamController {
 		}
 	}
 	
-	/*public void addFinishedManualExam(StudentsExecutedExam studentsExecutedExam) {
-		
-		ExecutedExam executedExam = null;
-		
-		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
-			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExecutedExam().getExamID()),
-					builder.equal(rootEntry.get("examCode"), studentsExecutedExam.getExecutedExam().getExamCode()));
-			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
-			
-			try {
-				executedExam = (ExecutedExam) query.getSingleResult();
-			} catch (NoResultException nre) {
-				System.out.println("Executed Exam not found!");
-			}
-			session.close();
-			
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			
-			//System.out.println(executedExam);
-			session.evict(executedExam);
-			executedExam.getStudentsExecutedExams().add(studentsExecutedExam);
-			executedExam.setNumOfStudents(executedExam.getNumOfStudents() + 1);
-			if(studentsExecutedExam.isForcedFinish())
-			{
-				executedExam.setNumForced(executedExam.getNumForced() + 1);
-			}
-			else {
-				executedExam.setNumUnforced(executedExam.getNumUnforced() + 1);
-			}
-			
-			session.update(executedExam);
-			session.flush();
-			//session.getTransaction().commit(); 
->>>>>>> branch 'master' of https://github.com/Guy-Git/HSTS
-
-		}catch (Exception exception) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			System.err.println("An error occured, changes have been rolled back.");
-			exception.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return;
-
-
-	}*/
-	
-	public ArrayList<ExecutedExam> getExamsByTeacher(HstsUser user)
+	public ArrayList<ExecutedExam> getUncheckedExamsByTeacher(HstsUser user)
 	{
-		ArrayList<ExecutedExam> exams = new ArrayList<ExecutedExam>();
+		ArrayList<ExecutedExam> exams = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -148,6 +92,40 @@ public class ExecutedExamController {
 					builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
 					builder.equal(rootEntry.get("isChecked"), false));					
 					TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				exams = (ArrayList<ExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam not found!");
+			}	
+			
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		System.out.println(exams.get(0).getNumOfStudents());
+		return exams;
+	}
+	
+	public ArrayList<ExecutedExam> getCheckedExamsByTeacher(HstsUser user)
+	{
+		ArrayList<ExecutedExam> exams = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			System.out.println(user.getUserId());
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+					builder.equal(rootEntry.get("isChecked"), true));					
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
 				exams = (ArrayList<ExecutedExam>) query.getResultList();
 			} catch (NoResultException nre) {
@@ -240,30 +218,32 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			session.flush();
 			
 			session.getTransaction().commit();
-//			session.close();
-//			
-//			session = sessionFactory.openSession();
-//			session.beginTransaction();
-//			
-//			CriteriaBuilder builder1 = session.getCriteriaBuilder();
-//			CriteriaQuery<StudentsExecutedExam> criteriaQuery1 = builder1.createQuery(StudentsExecutedExam.class);
-//			Root<StudentsExecutedExam> rootEntry1 = criteriaQuery1.from(StudentsExecutedExam.class);
-//			criteriaQuery1.select(rootEntry1).where(
-//					builder1.equal(rootEntry1.get("executed_exam_id"), updatedExecutedExam.getId()));
-//			TypedQuery<StudentsExecutedExam> query1 = session.createQuery(criteriaQuery1);
-//			try {
-//				studentsExecutedExams = (ArrayList<StudentsExecutedExam>) query1.getResultList();
-//			} catch (NoResultException nre) {
-//				System.out.println("Exam code not found!");
-//			}
-//			
-//			for(int i = 0; i < updatedExecutedExam.getNumOfStudents(); i++)
-//			{
-//				session.evict(studentsExecutedExams.get(i));
-//				studentsExecutedExams.set(i, updatedExecutedExam.getStudentsExecutedExams().get(i));
-//				session.update(studentsExecutedExams.get(i));
-//				session.flush();
-//			}
+			session.close();
+			
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			CriteriaBuilder builder1 = session.getCriteriaBuilder();
+			CriteriaQuery<StudentsExecutedExam> criteriaQuery1 = builder1.createQuery(StudentsExecutedExam.class);
+			Root<StudentsExecutedExam> rootEntry1 = criteriaQuery1.from(StudentsExecutedExam.class);
+			criteriaQuery1.select(rootEntry1).where(
+					builder1.equal(rootEntry1.get("executedExam"), updatedExecutedExam.getId()));
+			TypedQuery<StudentsExecutedExam> query1 = session.createQuery(criteriaQuery1);
+			try {
+				studentsExecutedExams = (ArrayList<StudentsExecutedExam>) query1.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			
+			for(int i = 0; i < updatedExecutedExam.getNumOfStudents(); i++)
+			{
+				session.evict(studentsExecutedExams.get(i));
+				studentsExecutedExams.set(i, updatedExecutedExam.getStudentsExecutedExams().get(i));
+				session.update(studentsExecutedExams.get(i));
+				session.flush();
+			}
+			
+			session.getTransaction().commit();
 			
 		} catch (Exception exception) {
 			if (session != null) {
@@ -316,8 +296,9 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<StudentsExecutedExam> criteriaQuery = builder.createQuery(StudentsExecutedExam.class);
 			Root<StudentsExecutedExam> rootEntry = criteriaQuery.from(StudentsExecutedExam.class);
-			criteriaQuery.select(rootEntry)
-					.where(builder.equal(rootEntry.get("userId"), user.getUserId()));
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("userId"), user.getUserId()),
+					builder.equal(rootEntry.get("isChecked"), true));
 			TypedQuery<StudentsExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
 				studentsExams = (ArrayList<StudentsExecutedExam>) query.getResultList();
@@ -373,6 +354,80 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 
 		return studentsExamsId;
 	}
+	
+	public ArrayList<String> getCheckedTeacherExamsById(HstsUser user) 
+	{
+		// TODO Auto-generated method stub
+		ArrayList<String> teacherExamsId = new ArrayList<String>();
+		ArrayList<ExecutedExam> exams = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry).where(
+							builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+							builder.equal(rootEntry.get("isChecked"), true));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				exams = (ArrayList<ExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			for(int i=0;i<exams.size();i++)
+				teacherExamsId.add(exams.get(i).getExamID());
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return teacherExamsId;
+	}
+	
+	public ArrayList<String> getUncheckedTeacherExamsById(HstsUser user) 
+	{
+		// TODO Auto-generated method stub
+		ArrayList<String> teacherExamsId = new ArrayList<String>();
+		ArrayList<ExecutedExam> exams = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+					builder.equal(rootEntry.get("isChecked"), false));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			try {
+				exams = (ArrayList<ExecutedExam>) query.getResultList();
+			} catch (NoResultException nre) {
+				System.out.println("Exam code not found!");
+			}
+			for(int i=0;i<exams.size();i++)
+				teacherExamsId.add(exams.get(i).getExamID());
+			
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		
+		return teacherExamsId;
+	}
 
 	private void addCheckedExam(StudentsExecutedExam studentsExecutedExam) {
 		// TODO Auto-generated method stub
@@ -402,6 +457,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			
 			//System.out.println(executedExam);
 			session.evict(executedExam);
+			executedExam.setChecked(false);
 			executedExam.getStudentsExecutedExams().add(studentsExecutedExam);
 			executedExam.setNumOfStudents(executedExam.getNumOfStudents() + 1);
 			if(studentsExecutedExam.isForcedFinish())

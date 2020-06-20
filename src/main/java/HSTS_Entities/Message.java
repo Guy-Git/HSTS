@@ -29,6 +29,8 @@ public class Message implements Serializable
 	ArrayList<String> studentExecutedExamsArrayList;
 	ArrayList<StudentsExecutedExam> examsByStudent;
 	
+	ArrayList<HstsUser> teachers;
+
 	ArrayList<ExecutedExam> executedExams;
 	TimeExtension timeExtension;
 	
@@ -219,5 +221,15 @@ public class Message implements Serializable
 	public void setExecutedExams(ArrayList<ExecutedExam> executedExams) {
 		this.executedExams = executedExams;
 	}
+
+	public ArrayList<HstsUser> getTeachers() {
+		return teachers;
+	}
+
+	public void setTeachers(ArrayList<HstsUser> teachers) {
+		this.teachers = teachers;
+	}
+	
 	
 }
+

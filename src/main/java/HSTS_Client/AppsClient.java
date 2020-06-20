@@ -74,15 +74,21 @@ public class AppsClient extends AbstractClient {
 			EventBus.getDefault().post(((Message) msg));
 			
 		}
+		if (((Message) msg).getAction().equals("Pulled Teacher's executed exams"))
+		{
+			EventBus.getDefault().post(((Message) msg));
+			System.out.println(((Message)msg).getExecutedExams().get(0).getExamID());
+			System.out.println(((Message)msg).getExams().get(0).getExamID());
+		}
 		
 		if (((Message) msg).getAction().equals("Time extension result"))
 		{
 			EventBus.getDefault().post(((Message) msg));
 		}
 		
-		if (((Message) msg).getAction().equals("Pulled executedExams and exams"))
+		if (((Message) msg).getAction().equals("Got teachers"))
 		{
-			EventBus.getDefault().post(((Message) msg));
+			EventBus.getDefault().post(((Message) msg).getTeachers());
 		}
 		
 		

@@ -32,6 +32,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
@@ -500,6 +501,34 @@ public class EditExamController implements Initializable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block e.printStackTrace();
 			}
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setHeaderText("Exam Edited successfully");
+			alert.setTitle("");
+			// alert.setContentText("The fields marked red must be filled");
+			alert.show();
+			
+			alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+			{
+		        @Override
+		        public void handle(DialogEvent event) {
+		        	Stage stage = (Stage) saveBtn.getScene().getWindow();
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+						stage.setTitle("High School Test System");
+						Scene scene = new Scene(root);
+						stage.setScene(scene);
+						stage.show();
+						EventBus.getDefault().post(user);
+						EventBus.getDefault().unregister(this);
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
+		    });
+			
 		} else {
 			if (noQuestionsChosen == false) {
 				Alert alert = new Alert(AlertType.ERROR);

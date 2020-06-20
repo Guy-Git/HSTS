@@ -20,12 +20,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -242,6 +244,7 @@ public class ExamsReviewController implements Initializable {
 		TitledPane chosenExam = review_box.getExpandedPane();
 		String checkedExamID = chosenExam.getText().substring(6);
 		ExecutedExam checkedExam = null;
+		boolean badInput = false;
 		
 		for(int i = 0; i < executedExams.size(); i++)
 		{
@@ -262,10 +265,42 @@ public class ExamsReviewController implements Initializable {
 				{
 					if((((Text)((HBox)studentsTable.getChildren().get(i)).getChildren().get(1)).getText()).equals(checkedExam.getStudentsExecutedExams().get(j).getUserId()))
 					{
+						int currentGrade = checkedExam.getStudentsExecutedExams().get(j).getExamGrade();
 						checkedExam.getStudentsExecutedExams().get(j).setChecked(true);
 						checkedExam.getStudentsExecutedExams().get(j).setReasonOfGradeChange(((TextArea)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 2)).getText());
-						checkedExam.getStudentsExecutedExams().get(j).setGrade(Integer.valueOf(((TextField)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 3)).getText()));
+						
+						if(((TextField)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 3)).getText().matches("[0-9]+") &&
+								Integer.valueOf(((TextField)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 3)).getText()) >= 0 &&
+								Integer.valueOf(((TextField)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 3)).getText()) <= 100)
+						{
+							checkedExam.getStudentsExecutedExams().get(j).setGrade(Integer.valueOf(((TextField)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 3)).getText()));
+						}
+						else 
+						{
+							badInput = true;
+							((TextField)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 3)).setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10");
+							Alert alert = new Alert(AlertType.ERROR);
+							alert.setHeaderText("The fields marked red" + "\n" + "are empty or illegal");
+							alert.setTitle("");
+							alert.show();
+						}
+						
 						checkedExam.getStudentsExecutedExams().get(j).setNotes(((TextArea)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 4)).getText());
+						if(currentGrade != checkedExam.getStudentsExecutedExams().get(j).getExamGrade())
+						{
+							if(checkedExam.getStudentsExecutedExams().get(j).getReasonOfGradeChange().isEmpty())
+							{
+								badInput = true;
+								((TextArea)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 2)).setStyle("-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10");
+								Alert alert = new Alert(AlertType.ERROR);
+								alert.setHeaderText("Must enter reason for changing exam grade!");
+								alert.setTitle("");
+								alert.show();
+							}
+							else {
+								((TextArea)((HBox)studentsTable.getChildren().get(i)).getChildren().get(((HBox)studentsTable.getChildren().get(i)).getChildren().size() - 2)).setStyle("-fx-background-color: #1E242E; -fx-background-radius: 10;");
+							}
+						}
 					}
 				}
 			}
@@ -285,15 +320,18 @@ public class ExamsReviewController implements Initializable {
 		else
 			checkedExam.setChecked(false);
 		
-		Message msgToServer = new Message();
-		msgToServer.setAction("Review Executed Exam");
-		msgToServer.setExecutedExam(checkedExam);
-		
-		try {
-			AppsClient.getClient().sendToServer(msgToServer);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(badInput == false)
+		{
+			Message msgToServer = new Message();
+			msgToServer.setAction("Review Executed Exam");
+			msgToServer.setExecutedExam(checkedExam);
+			
+			try {
+				AppsClient.getClient().sendToServer(msgToServer);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -303,7 +341,7 @@ public class ExamsReviewController implements Initializable {
 			this.user = user;
 
 			Message msgToServer = new Message();
-			msgToServer.setAction("Pull exam by teacher");
+			msgToServer.setAction("Pull unchecked exams by teacher");
 			msgToServer.setUser(user);
 
 			try {
