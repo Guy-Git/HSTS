@@ -28,8 +28,8 @@ public class Message implements Serializable
 	ExecutedExam executedExam;
 	ArrayList<String> studentExecutedExamsArrayList;
 	ArrayList<StudentsExecutedExam> examsByStudent;
-	ArrayList<ExecutedExam> examsByTeacher;
 	
+	ArrayList<HstsUser> teachers;
 
 	ArrayList<ExecutedExam> executedExams;
 	TimeExtension timeExtension;
@@ -205,13 +205,7 @@ public class Message implements Serializable
 	public void setExamsByStudent(ArrayList<StudentsExecutedExam> examsByStudent) {
 		this.examsByStudent = examsByStudent;
 	}
-	public ArrayList<ExecutedExam> getExamsByTeacher() {
-		return examsByTeacher;
-	}
-
-	public void setExamsByTeacher(ArrayList<ExecutedExam> examsByTeacher) {
-		this.examsByTeacher = examsByTeacher;
-	}
+	
 	public String getTime() {
 		return time;
 	}
@@ -227,5 +221,15 @@ public class Message implements Serializable
 	public void setExecutedExams(ArrayList<ExecutedExam> executedExams) {
 		this.executedExams = executedExams;
 	}
+
+	public ArrayList<HstsUser> getTeachers() {
+		return teachers;
+	}
+
+	public void setTeachers(ArrayList<HstsUser> teachers) {
+		this.teachers = teachers;
+	}
+	
 	
 }
+

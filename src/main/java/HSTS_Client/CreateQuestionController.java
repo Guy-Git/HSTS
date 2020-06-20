@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,29 +30,30 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.bytebuddy.implementation.attribute.AnnotationAppender.Target.OnType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DialogEvent;
 
 public class CreateQuestionController implements Initializable {
 
-    @FXML
-    private Button log_out_btn;
+	@FXML
+	private Button log_out_btn;
 
-    @FXML
-    private AnchorPane logo;
+	@FXML
+	private AnchorPane logo;
 
-    @FXML
-    private Text logo_text;
+	@FXML
+	private Text logo_text;
 
-    @FXML
-    private Button edit_question_btn;
+	@FXML
+	private Button edit_question_btn;
 
-    @FXML
-    private Button edit_exam_btn;
+	@FXML
+	private Button edit_exam_btn;
 
-    @FXML
-    private Button main_page_btn;
+	@FXML
+	private Button main_page_btn;
 
-	
 	@FXML
 	private TextArea contentText;
 
@@ -151,7 +153,7 @@ public class CreateQuestionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
@@ -168,7 +170,7 @@ public class CreateQuestionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == edit_exam_btn) {
 			Stage stage = (Stage) edit_exam_btn.getScene().getWindow();
 			try {
@@ -185,87 +187,84 @@ public class CreateQuestionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
-			if (event.getSource() == edit_question_btn) 
-			{
-				Stage stage = (Stage) edit_question_btn.getScene().getWindow();
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditQuestion.fxml"));
-					stage.setTitle("High School Test System");
-					Scene scene = new Scene(root);
-					stage.setScene(scene);
-					stage.show();
-					EventBus.getDefault().post(user);
-					EventBus.getDefault().unregister(this);
 
+		if (event.getSource() == edit_question_btn) {
+			Stage stage = (Stage) edit_question_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/EditQuestion.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		if (event.getSource() == main_page_btn) {
+			Stage stage = (Stage) main_page_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		if (event.getSource() == about_btn) {
+			Stage stage = (Stage) about_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAbout.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		if (event.getSource() == log_out_btn) {
+			Stage stage = (Stage) log_out_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+				Message msg = new Message();
+				msg.setAction("user log out");
+				msg.setUser(this.user);
+				try {
+					AppsClient.getClient().sendToServer(msg);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-			
-			if (event.getSource() == main_page_btn) 
-			{
-				Stage stage = (Stage) main_page_btn.getScene().getWindow();
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
-					stage.setTitle("High School Test System");
-					Scene scene = new Scene(root);
-					stage.setScene(scene);
-					stage.show();
-					EventBus.getDefault().post(user);
-					EventBus.getDefault().unregister(this);
 
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			if (event.getSource() == about_btn) 
-			{
-				Stage stage = (Stage) about_btn.getScene().getWindow();
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherAbout.fxml"));
-					stage.setTitle("High School Test System");
-					Scene scene = new Scene(root);
-					stage.setScene(scene);
-					stage.show();
-					EventBus.getDefault().post(user);
-					EventBus.getDefault().unregister(this);
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			if (event.getSource() == log_out_btn) {
-				Stage stage = (Stage) log_out_btn.getScene().getWindow();
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/Login.fxml"));
-					stage.setTitle("High School Test System");
-					Scene scene = new Scene(root);
-					stage.setScene(scene);
-					stage.show();
-					EventBus.getDefault().post(user);
-					EventBus.getDefault().unregister(this);
-
-					Message msg = new Message();
-					msg.setAction("user log out");
-					msg.setUser(this.user);
-					try {
-						AppsClient.getClient().sendToServer(msg);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+		}
 	}
 
 	@FXML
@@ -355,6 +354,34 @@ public class CreateQuestionController implements Initializable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block e.printStackTrace();
 			}
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setHeaderText("Question saved successfully");
+			alert.setTitle("");
+			// alert.setContentText("The fields marked red must be filled");
+			alert.show();
+			
+			alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+			{
+		        @Override
+		        public void handle(DialogEvent event) {
+		        	Stage stage = (Stage) saveBtn.getScene().getWindow();
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+						stage.setTitle("High School Test System");
+						Scene scene = new Scene(root);
+						stage.setScene(scene);
+						stage.show();
+						EventBus.getDefault().post(user);
+						EventBus.getDefault().unregister(this);
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
+		    });
+			
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("The fields marked red must be filled");

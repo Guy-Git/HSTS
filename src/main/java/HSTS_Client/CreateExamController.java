@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -380,6 +382,33 @@ public class CreateExamController implements Initializable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block e.printStackTrace();
 			}
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setHeaderText("Exam saved successfully");
+			alert.setTitle("");
+			// alert.setContentText("The fields marked red must be filled");
+			alert.show();
+			
+			alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+			{
+		        @Override
+		        public void handle(DialogEvent event) {
+		        	Stage stage = (Stage) save_btn.getScene().getWindow();
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+						stage.setTitle("High School Test System");
+						Scene scene = new Scene(root);
+						stage.setScene(scene);
+						stage.show();
+						EventBus.getDefault().post(user);
+						EventBus.getDefault().unregister(CreateExamController.this);
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
+		    });
 		}
 		
 		else {
@@ -423,6 +452,7 @@ public class CreateExamController implements Initializable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 
 		else {

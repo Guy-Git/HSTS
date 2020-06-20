@@ -1,5 +1,6 @@
 package HSTS_Server;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -161,6 +162,37 @@ public class UserController {
 			session.close();
 		}
 		return foundUser;
+	}
+	
+	public ArrayList<HstsUser> getTeachers() {
+		ArrayList<HstsUser> teachers = null;
+
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<HstsUser> criteriaQuery = builder.createQuery(HstsUser.class);
+			Root<HstsUser> rootEntry = criteriaQuery.from(HstsUser.class);
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userType"), 2));
+			TypedQuery<HstsUser> query = session.createQuery(criteriaQuery);
+			teachers = (ArrayList<HstsUser>) query.getResultList();
+
+//			Criteria crit = session.createCriteria(HstsUser.class);
+//			crit.add(Restrictions.eq("userId", user.getUserId()));
+//			foundUser = crit.list();
+
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return teachers;
+
 	}
 
 	private static SessionFactory getSessionFactory() throws HibernateException {

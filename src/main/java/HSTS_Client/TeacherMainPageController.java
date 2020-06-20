@@ -26,72 +26,70 @@ import javafx.stage.Stage;
 public class TeacherMainPageController implements Initializable {
 
 	@FXML
-    private Button about_btn;
+	private Button about_btn;
 
-    @FXML
-    private Button log_out_btn;
+	@FXML
+	private Button log_out_btn;
 
-    @FXML
-    private AnchorPane logo;
+	@FXML
+	private AnchorPane logo;
 
-    @FXML
-    private Text logo_text;
+	@FXML
+	private Text logo_text;
 
-    @FXML
-    private Button create_question_btn;
+	@FXML
+	private Button create_question_btn;
 
-    @FXML
-    private Button edit_question_btn;
+	@FXML
+	private Button edit_question_btn;
 
-    @FXML
-    private Button create_exam_btn;
+	@FXML
+	private Button create_exam_btn;
 
-    @FXML
-    private Button edit_exam_btn;
-    
-    @FXML
-    private Button review_btn;
+	@FXML
+	private Button edit_exam_btn;
 
-    @FXML
-    private Button exam_execution_btn;
+	@FXML
+	private Button review_btn;
 
-    @FXML
-    private Button watch_reports_btn;
+	@FXML
+	private Button exam_execution_btn;
 
-    @FXML
-    private Button main_page_btn;
+	@FXML
+	private Button watch_reports_btn;
 
-    @FXML
-    private Text message_text;
+	@FXML
+	private Button main_page_btn;
 
-    @FXML
-    private Text time_text;
+	@FXML
+	private Text message_text;
 
-    @FXML
-    private Text enter_name_text;
+	@FXML
+	private Text time_text;
+
+	@FXML
+	private Text enter_name_text;
 
 	private HstsUser user;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) 
-	{
+	public void initialize(URL location, ResourceBundle resources) {
 		EventBus.getDefault().register(this);
-		
-		Thread timerThread = new Thread(() -> 
-		{
-	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	        while (true) {
-	            final String time = simpleDateFormat.format(new Date());
-	            Platform.runLater(() -> {
-	                time_text.setText(time);
-	            });
-	            try {
-	            	Thread.sleep(1000); //1 second
-	            } catch (InterruptedException e) {
-	            	e.printStackTrace();
-	            }
-	        }
-	    });   
+
+		Thread timerThread = new Thread(() -> {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			while (true) {
+				final String time = simpleDateFormat.format(new Date());
+				Platform.runLater(() -> {
+					time_text.setText(time);
+				});
+				try {
+					Thread.sleep(1000); // 1 second
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		timerThread.start();
 	}
 
@@ -130,7 +128,7 @@ public class TeacherMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == exam_execution_btn) {
 			Stage stage = (Stage) exam_execution_btn.getScene().getWindow();
 			try {
@@ -147,7 +145,7 @@ public class TeacherMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == edit_exam_btn) {
 			Stage stage = (Stage) edit_exam_btn.getScene().getWindow();
 			try {
@@ -165,7 +163,28 @@ public class TeacherMainPageController implements Initializable {
 			}
 		}
 
-			
+		if (event.getSource() == review_btn) {
+			Stage stage = (Stage) review_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ExamsReview.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+//			if (event.getSource() == watch_reports_btn) 
+		if (event.getSource() == about_btn) {
+			Stage stage = (Stage) about_btn.getScene().getWindow();
+		}
+
 		if (event.getSource() == edit_question_btn) {
 			Stage stage = (Stage) edit_question_btn.getScene().getWindow();
 			try {
@@ -182,7 +201,7 @@ public class TeacherMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-			
+
 		if (event.getSource() == main_page_btn) {
 			Stage stage = (Stage) main_page_btn.getScene().getWindow();
 			try {
@@ -199,7 +218,7 @@ public class TeacherMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-			
+
 		if (event.getSource() == about_btn) {
 			Stage stage = (Stage) about_btn.getScene().getWindow();
 			try {
@@ -215,8 +234,8 @@ public class TeacherMainPageController implements Initializable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			}
-			
+		}
+
 		if (event.getSource() == log_out_btn) {
 			Stage stage = (Stage) log_out_btn.getScene().getWindow();
 			try {
@@ -237,7 +256,7 @@ public class TeacherMainPageController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
