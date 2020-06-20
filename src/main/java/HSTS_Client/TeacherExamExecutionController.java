@@ -394,19 +394,19 @@ public class TeacherExamExecutionController implements Initializable {
 					// startTime--;
 					if(minutesTime < 5 && hourTime == 0)
 					{
-						request_time_btn.setVisible(false);
-						reasons_text.setVisible(false);
-						enter_time_text.setVisible(false);
-						enter_reasons_text.setVisible(false);
-						asked_time_text.setVisible(false);
+						request_time_btn.setDisable(true);
+						reasons_text.setDisable(true);
+						enter_time_text.setDisable(true);
+						enter_reasons_text.setDisable(true);
+						asked_time_text.setDisable(true);
 					}
 					
 					if (minutesTime == 5 && secondsTime == 0 && hourTime == 0 && checkedExtentions == false) {
-						request_time_btn.setVisible(false);
-						reasons_text.setVisible(false);
-						enter_time_text.setVisible(false);
-						enter_reasons_text.setVisible(false);
-						asked_time_text.setVisible(false);
+						request_time_btn.setDisable(true);
+						reasons_text.setDisable(true);
+						enter_time_text.setDisable(true);
+						enter_reasons_text.setDisable(true);
+						asked_time_text.setDisable(true);
 						
 						timeline.stop();
 						checkedExtentions = true;
