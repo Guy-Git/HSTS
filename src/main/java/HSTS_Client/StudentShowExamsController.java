@@ -175,14 +175,20 @@ public class StudentShowExamsController implements Initializable {
 			exams_box.setVisible(true);
 
 			for (int i = 0; i < exams.size(); i++) {
+				Text grade=new Text("");
+				Text ReasonOfGradeChange=new Text("");
 				VBox displayExam = new VBox(15);
-
 				displayExam.setAlignment(Pos.CENTER);
 				HBox instructionsHBox = new HBox();
 				instructionsHBox.setSpacing(10);
 				instructionsHBox.setAlignment(Pos.CENTER);
 				Text editInstructionsArea = new Text("Instructions: "+exams.get(i).getInstructions());
-				Text grade=new Text("Grade: "+examsOfStudent.get(i).getGrade());
+				if(examsOfStudent!=null)
+				if(examsOfStudent.get(i)!=null)
+				{
+				grade.setText("Grade: " + examsOfStudent.get(i).getGrade());
+				ReasonOfGradeChange.setText("Reason for change in grade: " + examsOfStudent.get(i).getReasonOfGradeChange());
+				}
 				instructionsHBox.getChildren().add(editInstructionsArea);
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.CENTER);
@@ -191,6 +197,8 @@ public class StudentShowExamsController implements Initializable {
 				if (editNotesArea.getText()!="")
 				notesHBox.getChildren().addAll(notes, editNotesArea);
 				displayExam.getChildren().add(grade);
+				if (ReasonOfGradeChange.getText()!="")
+					displayExam.getChildren().add(ReasonOfGradeChange);
 
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);

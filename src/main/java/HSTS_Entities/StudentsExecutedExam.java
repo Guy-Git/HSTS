@@ -50,7 +50,7 @@ public class StudentsExecutedExam implements Serializable {
 		
 	boolean submitted = false;
 	
-	private String reasonOfGradeChange;
+	private String reasonOfGradeChange="";
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "executed_exam_id")
