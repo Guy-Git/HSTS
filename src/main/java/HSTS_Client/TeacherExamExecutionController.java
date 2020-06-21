@@ -46,6 +46,9 @@ public class TeacherExamExecutionController implements Initializable {
 	@FXML
     private Button about_btn;
 
+	@FXML
+	private Button review_btn;
+
     @FXML
     private Button log_out_btn;
 
@@ -165,7 +168,24 @@ public class TeacherExamExecutionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
+		
+		if (event.getSource() == review_btn) {
+			Stage stage = (Stage) review_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ExamsReview.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (event.getSource() == create_exam_btn) {
 			Stage stage = (Stage) create_exam_btn.getScene().getWindow();
 			try {
@@ -345,7 +365,7 @@ public class TeacherExamExecutionController implements Initializable {
 	public void onExamEvent(Message msg) {
 		Platform.runLater(() -> {
 
-			System.out.println(msg.getAction());
+			//System.out.println(msg.getAction());
 			if (checkedExtentions == true) {
 				minutesLeft = (5 + msg.getExtendTime()) % 60;
 				startTime += msg.getExtendTime();
@@ -363,7 +383,7 @@ public class TeacherExamExecutionController implements Initializable {
 				hourTime = exam.getExamTime() / 60;
 				minutesLeft = exam.getExamTime() % 60;
 
-				System.out.println(hourTime);
+				//System.out.println(hourTime);
 
 				if (startTime < 60) {
 					minutesTime = startTime;

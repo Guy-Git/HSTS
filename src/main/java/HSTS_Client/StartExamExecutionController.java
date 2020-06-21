@@ -60,6 +60,9 @@ public class StartExamExecutionController implements Initializable {
 	@FXML
     private Button about_btn;
 
+	@FXML
+	private Button review_btn;
+	
     @FXML
     private Button log_out_btn;
 
@@ -135,6 +138,23 @@ public class StartExamExecutionController implements Initializable {
 			Stage stage = (Stage) create_question_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/CreateQuestion.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == review_btn) {
+			Stage stage = (Stage) review_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ExamsReview.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);

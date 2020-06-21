@@ -401,7 +401,7 @@ public class StudentExamExecutionController implements Initializable {
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		XWPFRun run = paragraph.createRun();
 		System.out.println(exam.getCourse());
-		run.setText("Exam in course " + exam.getCourse() + " the subject is " + exam.getSubject());
+		run.setText("Exam in course " + exam.getCourse() + ", subject " + exam.getSubject());
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
@@ -540,7 +540,7 @@ public class StudentExamExecutionController implements Initializable {
 			fileName.setText("");
 			// Text fileName = new Text();
 			fileName.setText(file.getName());
-			fileName.setLayoutX(53);
+			fileName.setLayoutX(0);
 			exam_anchor.getChildren().add(fileName);
 
 		}
