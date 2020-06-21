@@ -33,6 +33,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -365,7 +366,8 @@ public class TeacherExamExecutionController implements Initializable {
 
 				System.out.println(hourTime);
 
-				if (startTime < 60) {
+				if (startTime < 60) 
+				{
 					minutesTime = startTime;
 					secondsTime = 0;
 					if (minutesTime == 1) {
@@ -427,10 +429,32 @@ public class TeacherExamExecutionController implements Initializable {
 					if (minutesTime <= 0 && secondsTime <= 0 && hourTime <= 0) {
 						timeline.stop();
 						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("time is up!");
+						alert.setHeaderText("The Exam Is Done");
+						alert.setTitle("");
+						// alert.setContentText("The fields marked red must be filled");
 						alert.show();
 						
+						alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+						{
+					        @Override
+					        public void handle(DialogEvent event) {
+					        	Stage stage = (Stage) request_time_btn.getScene().getWindow();
+								try {
+									Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherMainPage.fxml"));
+									stage.setTitle("High School Test System");
+									Scene scene = new Scene(root);
+									stage.setScene(scene);
+									stage.show();
+									EventBus.getDefault().post(user);
+									EventBus.getDefault().unregister(TeacherExamExecutionController.this);
 
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+					        }
+					    });
+						
 					} else {
 						if (secondsTime == 0 && minutesTime > 0) {
 							secondsTime = 60;
