@@ -6,7 +6,7 @@
 
 .log-in-pane{
 -fx-background-position: center;
--fx-background-image: url('file:C:/Users/linoym/git/HSTS/src/main/resources/background.PNG');
+-fx-background-image: url('file:../main/resources/background.PNG');
 -fx-background-repeat: stretch;
 }
 

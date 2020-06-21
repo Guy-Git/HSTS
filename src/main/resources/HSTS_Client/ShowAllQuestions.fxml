@@ -92,9 +92,9 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="185.0" prefHeight="560.0" prefWidth="595.0" style="-fx-padding: 0;">
+      <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="185.0" prefWidth="595.0" style="-fx-padding: 0;">
          <content>
-            <AnchorPane prefHeight="571.0" prefWidth="598.0" style="-fx-background-color: #293340;">
+            <AnchorPane prefHeight="571.0" style="-fx-background-color: #293340;">
                <children>
                   <Text fill="WHITE" layoutX="49.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subject:">
                      <font>
