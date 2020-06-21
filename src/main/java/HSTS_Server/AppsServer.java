@@ -100,6 +100,7 @@ public class AppsServer extends AbstractServer {
 				e.printStackTrace();
 			}
 		}
+		
 		if(((Message)msg).getAction().equals("Pull student's exams")) 
 		{
 			serverMsg.setExamsByStudent(executedExamController.getStudentsExams(((Message)msg).getUser()));
@@ -359,8 +360,8 @@ public class AppsServer extends AbstractServer {
 			teacher1Subjects.add("CS");
 			
 			ArrayList<String> teacher1Courses = new ArrayList<String>();
-			teacher1Courses.add("Calculus");
 			teacher1Courses.add("Introduction to CS");
+			teacher1Courses.add("Calculus");
 			teacher1Courses.add("OS");
 			
 			passwordInput = "T123";
@@ -376,8 +377,8 @@ public class AppsServer extends AbstractServer {
 			teacher2Subjects.add("Math");
 			
 			ArrayList<String> teacher2Courses = new ArrayList<String>();
-			teacher2Courses.add("Calculus");
 			teacher2Courses.add("Algebra 101");
+			teacher2Courses.add("Calculus");
 			teacher2Courses.add("Introduction to Probability");
 			
 			passwordInput = "T1234";
@@ -393,8 +394,8 @@ public class AppsServer extends AbstractServer {
 			teacher3Subjects.add("Biology");
 			
 			ArrayList<String> teacher3Courses = new ArrayList<String>();
-			teacher3Courses.add("Anatomy");
 			teacher3Courses.add("Stem Cells");
+			teacher3Courses.add("Anatomy");
 			
 			passwordInput = "T12345";
 			digestSHA3 = new SHA3.Digest256();
@@ -404,7 +405,6 @@ public class AppsServer extends AbstractServer {
 			
 			session.save(teacher3);
 			session.flush();
-			
 			
 			//Create principal:
 			ArrayList<String> principalSubjects = new ArrayList<String>();
@@ -423,7 +423,7 @@ public class AppsServer extends AbstractServer {
 			principalCourses.add("Stem Cells");
 			principalCourses.add("Biostructure");
 			
-			passwordInput = "1234A";
+			passwordInput = "P123";
 			digestSHA3 = new SHA3.Digest256();
 		    digest = digestSHA3.digest(passwordInput.getBytes());
 		    
@@ -504,8 +504,123 @@ public class AppsServer extends AbstractServer {
 			questionsExam1.add(question4);
 			questionsExam1.add(question5);
 			
+			ArrayList<String> answers6 = new ArrayList<String>();
+			answers6.add("Stem");
+			answers6.add("Cell");
+			answers6.add("It's a stem cell");
+			answers6.add("It's a cell stem");
+			Question question6 = new Question("Whats a stem cell?", answers6, 3, "Stem Cells", "Biology");
+			questionController.addQuestion(question6);
+			session.flush();
+			
+			ArrayList<String> answers7 = new ArrayList<String>();
+			answers7.add("145");
+			answers7.add("124");
+			answers7.add("326");
+			answers7.add("Infinite");
+			Question question7 = new Question("How many cells in a stem", answers7, 2, "Stem Cells", "Biology");
+			questionController.addQuestion(question7);
+			session.flush();
+			
+			ArrayList<String> answers8 = new ArrayList<String>();
+			answers8.add("Yes");
+			answers8.add("No");
+			answers8.add("IDK");
+			answers8.add("Yes, but...");
+			Question question8 = new Question("Stem cells?", answers8, 1, "Stem Cells", "Biology");
+			questionController.addQuestion(question8);
+			session.flush();
+			
+			ArrayList<Question> questionsExam2 = new ArrayList<Question>();
+			questionsExam2.add(question6);
+			questionsExam2.add(question7);
+			questionsExam2.add(question8);
+
+			ArrayList<String> answers9 = new ArrayList<String>();
+			answers9.add("Python");
+			answers9.add("Java");
+			answers9.add("C++");
+			answers9.add("C#");
+			Question question9 = new Question("In which of the following the user requires to free its allocated data?",
+					answers9, 3, "Introduction to CS", "CS");
+			questionController.addQuestion(question9);
+			session.flush();
+			
+			ArrayList<String> answers10 = new ArrayList<String>();
+			answers10.add("Bucket Sort");
+			answers10.add("Dripping Sort");
+			answers10.add("Bubble Sort");
+			answers10.add("Quick Sort");
+			Question question10 = new Question("Which of the following sort didnt we learn?",
+					answers10, 2, "Introduction to CS", "CS");
+			questionController.addQuestion(question10);
+			session.flush();
+			
+			//Create Questions:
+			ArrayList<String> answers11 = new ArrayList<String>();
+			answers11.add("Apple");
+			answers11.add("Affirmative");
+			answers11.add("Aardvark");
+			answers11.add("Alcohol");
+			Question question11 = new Question("Whats the first word in an english dictionary?",
+					answers11, 3, "Introduction to CS", "CS");
+			questionController.addQuestion(question11);
+			session.flush();
+			
+			ArrayList<Question> questionsExam3 = new ArrayList<Question>();
+			questionsExam3.add(question9);
+			questionsExam3.add(question10);
+			questionsExam3.add(question11);
+			
+			ArrayList<String> answers12 = new ArrayList<String>();
+			answers12.add("1000");
+			answers12.add("250");
+			answers12.add("375");
+			answers12.add("75");
+			Question question12 = new Question("2 * 5 ^ 3 =", answers12, 2, "Calculus", "Math");
+			questionController.addQuestion(question12);
+			session.flush();
+			
+			ArrayList<String> answers13 = new ArrayList<String>();
+			answers13.add("124.5");
+			answers13.add("70");
+			answers13.add("76.5");
+			answers13.add("75.5");
+			Question question13 = new Question("7 + 9 * 8 - (7 / 2) =", answers13, 4, "Calculus", "Math");
+			questionController.addQuestion(question13);
+			session.flush();
+			
+			ArrayList<Question> questionsExam4 = new ArrayList<Question>();
+			questionsExam4.add(question12);
+			questionsExam4.add(question13);
+			
+			ArrayList<String> answers14 = new ArrayList<String>();
+			answers14.add("8192");
+			answers14.add("2048");
+			answers14.add("1024");
+			answers14.add("4096");
+			Question question14 = new Question("2 ^ 12 =", answers14, 4, "Calculus", "Math");
+			questionController.addQuestion(question14);
+			session.flush();
+			
+			ArrayList<String> answers15 = new ArrayList<String>();
+			answers15.add("4");
+			answers15.add("2");
+			answers15.add("Infinite");
+			answers15.add("0");
+			Question question15 = new Question("Whats to lim of 2x/x for x to infinite", answers15, 2, "Calculus", "Math");
+			questionController.addQuestion(question15);
+			session.flush();
+			
+			ArrayList<Question> questionsExam5 = new ArrayList<Question>();
+			questionsExam5.add(question14);
+			questionsExam5.add(question15);
+			
+			
+			//Create Exams:
+			// Exam 1:
 			Exam exam1 = new Exam(questionsExam1, "Solve the following: ", "All questions worth the same",
-					"Liel", 6, new ArrayList<Integer>((List.of(20, 20, 20, 20, 20))), "Math", "Algebra 101");
+					"Trachel", 6, new ArrayList<Integer>((List.of(20, 20, 20, 20, 20))), "Math", "Algebra 101");
 			
 			ArrayList<Exam> exams = new ArrayList<Exam>();
 			exams.add(exam1);
@@ -516,6 +631,63 @@ public class AppsServer extends AbstractServer {
 			
 			exam1.setQuestions(questionsExam1);
 			examController.addExam(exam1);
+			
+			//Exam 2
+			Exam exam2 = new Exam(questionsExam2, "Solve the following: ", "",
+					"Yafit", 6, new ArrayList<Integer>((List.of(40, 20, 40))), "Biology", "Stem Cells");
+			
+			exams = new ArrayList<Exam>();
+			exams.add(exam2);
+			
+			for (Question question : questionsExam2) {
+				question.setExams(exams);
+			}
+			
+			exam2.setQuestions(questionsExam2);
+			examController.addExam(exam2);
+			
+			//Exam 3
+			Exam exam3 = new Exam(questionsExam3, "Solve the following: ", "",
+					"Liel", 6, new ArrayList<Integer>((List.of(30, 10, 60))), "CS", "Introduction to CS");
+			
+			exams = new ArrayList<Exam>();
+			exams.add(exam3);
+			
+			for (Question question : questionsExam3) {
+				question.setExams(exams);
+			}
+			
+			exam3.setQuestions(questionsExam3);
+			examController.addExam(exam3);
+			
+			//Exam 4
+			Exam exam4 = new Exam(questionsExam4, "Solve the following: ", "",
+					"Liel", 6, new ArrayList<Integer>((List.of(50, 50))), "Math", "Calculus");
+			
+			exams = new ArrayList<Exam>();
+			exams.add(exam4);
+			
+			for (Question question : questionsExam4) {
+				question.setExams(exams);
+			}
+			
+			exam4.setQuestions(questionsExam4);
+			examController.addExam(exam4);
+			
+			//Exam 5
+			Exam exam5 = new Exam(questionsExam5, "Solve the following: ", "",
+					"Trachel", 1, new ArrayList<Integer>((List.of(10, 90))), "Math", "Calculus");
+			
+			exams = new ArrayList<Exam>();
+			exams.add(exam5);
+			
+			for (Question question : questionsExam5) {
+				question.setExams(exams);
+			}
+			
+			exam5.setQuestions(questionsExam5);
+			examController.addExam(exam5);
+			
 			
 			session.getTransaction().commit(); // Save everything.
 		} catch (Exception exception) {
