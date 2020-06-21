@@ -18,6 +18,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -380,24 +382,31 @@ public class PrincipalTimeExtensionController implements Initializable{
 			e.printStackTrace();
 		}
 		
-		Stage stage = (Stage) main_page_btn.getScene().getWindow();
-		try {
-			
-			//Alert alert = new Alert(AlertType.INFORMATION);
-			//alert.setHeaderText("Done!");
-			//alert.setTitle("");
-			//alert.show();
-			
-			Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalTimeExtension.fxml"));
-			stage.setTitle("High School Test System");
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-			EventBus.getDefault().post(user);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText("Approved time extensions sent");
+		alert.setTitle("");
+		alert.show();
+		
+		alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+		{
+	        @Override
+	        public void handle(DialogEvent event) {
+	        	Stage stage = (Stage) approve_btn.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/PrincipalMainPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(PrincipalTimeExtensionController.this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	    });
 	}
 	
 	

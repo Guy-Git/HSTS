@@ -49,6 +49,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -492,9 +493,6 @@ public class StudentExamExecutionController implements Initializable {
 					upload_exam.setVisible(false);
 
 					if (startSave == false) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("time is up!");
-						alert.show();
 						timesUp();
 					}
 				} else {
@@ -708,9 +706,6 @@ public class StudentExamExecutionController implements Initializable {
 						save_exam.setVisible(false);
 
 						if (startSave == false) {
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setHeaderText("time is up!");
-							alert.show();
 							timesUp();
 
 						}
@@ -793,6 +788,33 @@ public class StudentExamExecutionController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText("Exam Submitted!");
+		alert.setTitle("");
+		// alert.setContentText("The fields marked red must be filled");
+		alert.show();
+		
+		alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+		{
+	        @Override
+	        public void handle(DialogEvent event) {
+	        	Stage stage = (Stage) save_exam.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(StudentExamExecutionController.this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	    });
 	}
 
 	@FXML
@@ -842,6 +864,33 @@ public class StudentExamExecutionController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText("Exam Submitted!");
+		alert.setTitle("");
+		// alert.setContentText("The fields marked red must be filled");
+		alert.show();
+		
+		alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+		{
+	        @Override
+	        public void handle(DialogEvent event) {
+	        	Stage stage = (Stage) save_exam.getScene().getWindow();
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
+					stage.setTitle("High School Test System");
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+					EventBus.getDefault().post(user);
+					EventBus.getDefault().unregister(StudentExamExecutionController.this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	    });
 	}
 
 	@Subscribe
