@@ -170,6 +170,8 @@ public class StudentExamExecutionController implements Initializable {
 	private boolean checkedExtentions = false;
 
 	ExamForExec examForExec;
+	
+	private boolean beforeTimeExtension = true;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -288,6 +290,8 @@ public class StudentExamExecutionController implements Initializable {
 			
 			boolean submitted = false;
 
+			if(beforeTimeExtension == true) {
+				beforeTimeExtension = false;
 			for (int i = 0; i < msg.getExecutedExam().getStudentsExecutedExams().size(); i++) {
 				if (msg.getExecutedExam().getStudentsExecutedExams().get(i).getUserId().equals(user.getUserId())) {
 					if(msg.getExecutedExam().getStudentsExecutedExams().get(i).isSubmitted()) {
@@ -299,6 +303,7 @@ public class StudentExamExecutionController implements Initializable {
 					break;
 					}
 				}
+			}
 			}
 			if (submitted == false) {
 				if (checkedExtentions == true) {
@@ -430,7 +435,15 @@ public class StudentExamExecutionController implements Initializable {
 		//upload_exam.setLayoutY(121);
 		upload_exam.setDisable(false);
 		try {
-			FileOutputStream out = new FileOutputStream(new File("C:/Users/opal/Desktop/CoolTest.docx"));
+	        String absolutePath = System.getProperty(("user.home"), "Desktop").toString();
+	        absolutePath += "\\" + "Desktop";
+	        System.out.println(absolutePath);
+	        String fileName = "test in " + exam.getCourse() +" "+ exam.getSubject() + ".docx";
+	        //new File("").getAbsolutePath();
+	        String path = absolutePath + "\\" + fileName;
+	        
+
+	        FileOutputStream out = new FileOutputStream(new File(path));
 			try {
 				document.write(out);
 			} catch (IOException e) {
