@@ -59,7 +59,6 @@ public class ExecutedExamController {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			System.out.println("kaki");
 			session.save(executedExam);
 
 			session.flush();
@@ -191,7 +190,7 @@ public class ExecutedExamController {
 	
 public void updateExecutedExam(ExecutedExam updatedExecutedExam) 
 {
-		System.out.println(updatedExecutedExam.getStudentsExecutedExams().get(0).getExamGrade());
+		//System.out.println(updatedExecutedExam.getStudentsExecutedExams().get(0).getExamGrade());
 		
 		ExecutedExam executedExam = null;
 		ArrayList<StudentsExecutedExam> studentsExecutedExams = null;
@@ -215,6 +214,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			
 			session.evict(executedExam);
 			session.update(updatedExecutedExam);
+			
 			session.flush();
 			
 			session.getTransaction().commit();

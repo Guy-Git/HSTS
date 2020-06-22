@@ -69,9 +69,36 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <ScrollPane layoutX="185.0" prefHeight="579.0" prefWidth="596.0" style="-fx-padding: 0;">
+      <ScrollPane layoutX="185.0" prefHeight="579.0" prefWidth="603.0" style="-fx-padding: 0;">
          <content>
-            <AnchorPane prefHeight="563.0" prefWidth="596.0" style="-fx-background-color: #293340;" />
+            <AnchorPane prefHeight="563.0" prefWidth="612.0" style="-fx-background-color: #293340;">
+               <children>
+                  <Text fill="WHITE" layoutX="28.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HSTS is a system designed to gather all exam activities in your high school. ">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="28.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="It improves the efficiency and credibility of creating, managing and checking">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="28.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="exams, all within the same app.">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="28.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Here you can take new exams, see old ones and monitor your own grades.">
+                     <font>
+                        <Font name="Century Gothic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="212.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About The System">
+                     <font>
+                        <Font name="Century Gothic" size="20.0" />
+                     </font>
+                  </Text>
+               </children></AnchorPane>
          </content>
       </ScrollPane>
    </children>
