@@ -559,7 +559,7 @@ public class EditExamController implements Initializable {
 						stage.setScene(scene);
 						stage.show();
 						EventBus.getDefault().post(user);
-						EventBus.getDefault().unregister(this);
+						EventBus.getDefault().unregister(EditExamController.this);
 
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

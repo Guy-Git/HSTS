@@ -621,7 +621,7 @@ public class StudentExamExecutionController implements Initializable {
 			GridPane questionsGrid = new GridPane();
 			questionsGrid.setAlignment(Pos.CENTER);
 			Text examTitle = new Text("");
-			exam_title.setText("  Exam in " + exam.getCourse() + " \n" + exam.getSubject());
+			exam_title.setText("Exam in\n" + exam.getCourse() + ", " + exam.getSubject());
 			displayExam.getChildren().add(examTitle);
 
 			for (int j = 0; j < exam.getQuestions().size(); j++) {

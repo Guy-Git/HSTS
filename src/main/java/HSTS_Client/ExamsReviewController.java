@@ -671,7 +671,7 @@ public class ExamsReviewController implements Initializable {
 						stage.setScene(scene);
 						stage.show();
 						EventBus.getDefault().post(user);
-						EventBus.getDefault().unregister(ExamsReviewController.class);
+						EventBus.getDefault().unregister(ExamsReviewController.this);
 
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

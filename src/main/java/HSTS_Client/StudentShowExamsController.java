@@ -217,7 +217,7 @@ public class StudentShowExamsController implements Initializable {
 
 		Platform.runLater(() -> {
 			exams_box.setVisible(true);
-			if (exams.size() != 0) {
+			if (exams.size() != 0 && examsOfStudent.size() != 0) {
 				for (int i = 0; i < exams.size(); i++) {
 					VBox displayExam = new VBox(15);
 					displayExam.setAlignment(Pos.TOP_CENTER);
