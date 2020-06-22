@@ -87,18 +87,7 @@
                                           <Font name="Century Gothic" size="12.0" />
                                        </font>
                                     </Button>
-                                 </children>
-                              </VBox>
-                           </content>
-                           <font>
-                              <Font name="Century Gothic" size="14.0" />
-                           </font>
-                        </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" contentDisplay="CENTER" prefHeight="60.0" prefWidth="180.0" style="-fx-base: #293340; -fx-border-color: transparent;" text="Watch Reports" textFill="WHITE">
-                           <content>
-                              <VBox prefHeight="40.0" prefWidth="176.0">
-                                 <children>
-                                    <Button fx:id="watch_reports_btn" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" styleClass="menuButton" stylesheets="@../css/app.css" text="All Reports">
+                                    <Button fx:id="executed_exams_btn" layoutX="21.0" layoutY="91.0" mnemonicParsing="false" onAction="#menuClick" prefHeight="25.0" prefWidth="283.0" style="-fx-background-color: transparent;" styleClass="menuButton" stylesheets="@../css/app.css" text="Executed Exams">
                                        <font>
                                           <Font name="Century Gothic" size="12.0" />
                                        </font>

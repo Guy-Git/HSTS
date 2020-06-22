@@ -46,6 +46,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -98,6 +99,9 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	private Button create_exam_btn;
 
+	@FXML
+	private Accordion accordion;
+	
 	@FXML
 	private Button exam_execution_btn;
 
@@ -182,6 +186,7 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	void menuClick(ActionEvent event) {
+
 		if (event.getSource() == main_page_btn) 
 		{
 			Stage stage = (Stage) main_page_btn.getScene().getWindow();
@@ -205,6 +210,24 @@ public class StudentExamExecutionController implements Initializable {
 			Stage stage = (Stage) about_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentAbout.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == exam_grades_btn) 
+		{
+			Stage stage = (Stage) exam_grades_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentShowExams.fxml"));
 				stage.setTitle("High School Test System");
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
@@ -262,9 +285,6 @@ public class StudentExamExecutionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-
-//			if (event.getSource() == exam_grades_btn) 
-
 	}
 
 	@FXML
@@ -352,6 +372,11 @@ public class StudentExamExecutionController implements Initializable {
 						submit_btn.setVisible(true);
 
 						if (!exam.isManual()) {
+							about_btn.setDisable(true);
+							main_page_btn.setDisable(true);
+							accordion.setDisable(true);
+							log_out_btn.setDisable(true);
+							
 							submit_btn.setVisible(false);
 							start_exam_btn.setDisable(false);
 							for_multi_line.setText("Enter ID:");

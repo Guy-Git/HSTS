@@ -118,6 +118,24 @@ public class StudentMainPageController implements Initializable {
 			}
 		}
 		
+		if (event.getSource() == exam_grades_btn) 
+		{
+			Stage stage = (Stage) exam_grades_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentShowExams.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (event.getSource() == start_exam_btn) 
 		{
 			Stage stage = (Stage) start_exam_btn.getScene().getWindow();
@@ -162,9 +180,6 @@ public class StudentMainPageController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-
-//			if (event.getSource() == exam_grades_btn) 
-
 	}
 
 	@Subscribe

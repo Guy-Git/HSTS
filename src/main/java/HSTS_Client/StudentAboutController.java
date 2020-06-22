@@ -62,7 +62,8 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-			
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -79,7 +80,26 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (event.getSource() == exam_grades_btn) 
+		{
+			Stage stage = (Stage) exam_grades_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentShowExams.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -96,7 +116,8 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-			
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -112,7 +133,8 @@ public class StudentAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-			
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
 				Message msg = new Message();
 				msg.setAction("user log out");
@@ -129,8 +151,5 @@ public class StudentAboutController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-
-//			if (event.getSource() == exam_grades_btn) 
-
 	}
 }
