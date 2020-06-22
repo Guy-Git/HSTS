@@ -49,6 +49,9 @@ public class ExamsReviewController implements Initializable {
 	private Button about_btn;
 
 	@FXML
+    private Button executed_exams_btn;
+	
+	@FXML
 	private Button log_out_btn;
 
 	@FXML
@@ -76,13 +79,13 @@ public class ExamsReviewController implements Initializable {
 	private Button exam_execution_btn;
 
 	@FXML
-	private Button watch_reports_btn;
-
-	@FXML
 	private Button main_page_btn;
 
 	@FXML
 	private Accordion review_box;
+	
+	@FXML
+    private Text no_exams_text;
 
 	private HstsUser user;
 
@@ -94,6 +97,7 @@ public class ExamsReviewController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		review_box.getPanes().clear();
 		EventBus.getDefault().register(this);
+		no_exams_text.setVisible(true);
 	}
 
 	@FXML
@@ -182,8 +186,24 @@ public class ExamsReviewController implements Initializable {
 				e.printStackTrace();
 			}
 		}
+		
+		if (event.getSource() == executed_exams_btn) {
+			Stage stage = (Stage) executed_exams_btn.getScene().getWindow();
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/TeacherShowExecutedExams.fxml"));
+				stage.setTitle("High School Test System");
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				EventBus.getDefault().post(user);
+				EventBus.getDefault().unregister(this);
 
-//			if (event.getSource() == watch_reports_btn) 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		if (event.getSource() == about_btn) {
 			Stage stage = (Stage) about_btn.getScene().getWindow();
 		}
@@ -265,6 +285,7 @@ public class ExamsReviewController implements Initializable {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 	@Subscribe
@@ -274,6 +295,7 @@ public class ExamsReviewController implements Initializable {
 
 		Platform.runLater(() -> {
 			if (executedExams.size() != 0) {
+				no_exams_text.setVisible(false);
 				for (int i = 0; i < exams.size(); i++) {
 					VBox displayExam = new VBox(15);
 
@@ -535,6 +557,11 @@ public class ExamsReviewController implements Initializable {
 					}
 				}
 			}
+			else {
+				no_exams_text.setVisible(true);
+
+
+			}
 		});
 	}
 
@@ -608,7 +635,8 @@ public class ExamsReviewController implements Initializable {
 								badInput = true;
 								((TextArea) ((HBox) studentsTable.getChildren().get(i)).getChildren().get(
 										((HBox) studentsTable.getChildren().get(i)).getChildren().size() - 2)).setStyle(
-												"-fx-background-color: Trasnparent; -fx-border-color: RED; -fx-border-radius: 10");
+												"-fx-background-color: Trasnparent; -fx-border-color: RED; "
+												+ "-fx-border-radius: 10; -fx-inner-text-color: white;");
 								Alert alert = new Alert(AlertType.ERROR);
 								alert.setHeaderText("Must enter reason for changing exam grade!");
 								alert.setTitle("");
