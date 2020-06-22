@@ -235,6 +235,21 @@ public class StudentShowExamsController implements Initializable {
 					instructionsArea.setStyle("-fx-fill: white");
 					instructionsArea.setWrappingWidth(300);
 					editInstructionsArea.getChildren().addAll(instructions, instructionsArea);
+					
+					HBox teacherHBox = new HBox();
+					teacherHBox.setSpacing(10);
+					teacherHBox.setAlignment(Pos.TOP_CENTER);
+
+					TextFlow editTeacherArea = new TextFlow();
+					Text teacher = new Text("Teacher: ");
+					teacher.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+					teacher.setStyle("-fx-fill: white");
+					Text teacherArea = new Text(exams.get(i).getTeacherName());
+					teacherArea.setFont(Font.font("Century Gothic", 14));
+					teacherArea.setStyle("-fx-fill: white");
+					teacherArea.setWrappingWidth(300);
+					editTeacherArea.getChildren().addAll(teacher, teacherArea);
+					teacherHBox.getChildren().add(editTeacherArea);
 
 					TextFlow grade = new TextFlow();
 					Text grade1 = new Text("Grade: ");
@@ -287,7 +302,7 @@ public class StudentShowExamsController implements Initializable {
 						combine.getChildren().addAll(combine1, combine2);
 						displayExam.getChildren().add(combine);
 					}
-
+                    displayExam.getChildren().add(teacherHBox);
 					displayExam.getChildren().add(instructionsHBox);
 					displayExam.getChildren().add(notesHBox);
 
