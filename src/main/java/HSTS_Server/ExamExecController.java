@@ -80,7 +80,7 @@ public class ExamExecController {
 						.where(builder.equal(rootEntry1.get("examID"), examForExec.getExamID()));
 				TypedQuery<Exam> query1 = session.createQuery(criteriaQuery1);
 				try {
-					exam = (Exam) query1.getResultList().get(0);
+					exam = (Exam) query1.getSingleResult();
 				} catch (NoResultException nre) {
 					System.out.println("Exam not found!");
 				}
