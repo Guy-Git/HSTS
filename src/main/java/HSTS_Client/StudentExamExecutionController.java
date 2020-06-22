@@ -177,6 +177,8 @@ public class StudentExamExecutionController implements Initializable {
 	ExamForExec examForExec;
 	
 	private boolean beforeTimeExtension = true;
+	
+	private String teacherName = null;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -339,6 +341,7 @@ public class StudentExamExecutionController implements Initializable {
 						minutesTime = minutesLeft;
 					}
 				} else {
+					this.teacherName = msg.getUser().getFullName();
 					this.exam = msg.getExam();
 					this.executedExam = msg.getExecutedExam();
 					hourTime = (exam.getExamTime()) / 60;
@@ -381,9 +384,6 @@ public class StudentExamExecutionController implements Initializable {
 							start_exam_btn.setDisable(false);
 							for_multi_line.setText("Enter ID:");
 							for_multi_line.setVisible(true);
-							//for_multi_line1.setVisible(true);
-							//for_multi_line1.setLayoutX(237);
-							//for_multi_line1.setLayoutY(80);
 							enterIdForExam.setVisible(true);
 							enterIdForExam.setLayoutX(299);
 							enterIdForExam.setLayoutY(80);
@@ -428,6 +428,12 @@ public class StudentExamExecutionController implements Initializable {
 		XWPFRun run = paragraph.createRun();
 		System.out.println(exam.getCourse());
 		run.setText("Exam in course " + exam.getCourse() + ", subject " + exam.getSubject());
+		
+		paragraph = document.createParagraph();
+		paragraph.setAlignment(ParagraphAlignment.CENTER);
+		run = paragraph.createRun();
+		run.setText("This exam is given by " + teacherName);
+		
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
@@ -592,6 +598,7 @@ public class StudentExamExecutionController implements Initializable {
 			VBox displayExam = new VBox(10);
 			displayExam.setAlignment(Pos.CENTER);
 			
+			Text TeacherName = new Text("This exam given by " + teacherName); 
 			TextFlow instructions = new TextFlow();
 			Text instructions1 = new Text("\nInstructions: ");
 			Text instructions2 = new Text(exam.getInstructions());
@@ -603,6 +610,7 @@ public class StudentExamExecutionController implements Initializable {
 			instructions2.setFill(Color.WHITE);
 			instructions2.setWrappingWidth(280);
 			
+			displayExam.getChildren().add(TeacherName);
 			displayExam.getChildren().add(instructions);
 			Button save_btn = new Button();
 			save_btn.setAlignment(Pos.CENTER);
@@ -779,7 +787,7 @@ public class StudentExamExecutionController implements Initializable {
 
 		for (int i = 0; i < exam.getQuestions().size(); i++) {
 			VBox questionBox = (VBox) exam_anchor.getChildren().get(0);
-			VBox answersBox = (VBox) questionBox.getChildren().get(2 + i);
+			VBox answersBox = (VBox) questionBox.getChildren().get(3 + i);
 
 			for (int j = 0; j < 4; j++) {
 
