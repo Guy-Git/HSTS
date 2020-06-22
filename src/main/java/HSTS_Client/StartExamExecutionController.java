@@ -58,40 +58,40 @@ import javafx.stage.Stage;
 public class StartExamExecutionController implements Initializable {
 
 	@FXML
-    private Button about_btn;
+	private Button about_btn;
 
 	@FXML
-    private Button executed_exams_btn;
-	
+	private Button executed_exams_btn;
+
 	@FXML
 	private Button review_btn;
-	
-    @FXML
-    private Button log_out_btn;
 
-    @FXML
-    private AnchorPane logo;
+	@FXML
+	private Button log_out_btn;
 
-    @FXML
-    private Text logo_text;
+	@FXML
+	private AnchorPane logo;
 
-    @FXML
-    private Button create_question_btn;
+	@FXML
+	private Text logo_text;
 
-    @FXML
-    private Button edit_question_btn;
+	@FXML
+	private Button create_question_btn;
 
-    @FXML
-    private Button create_exam_btn;
+	@FXML
+	private Button edit_question_btn;
 
-    @FXML
-    private Button edit_exam_btn;
+	@FXML
+	private Button create_exam_btn;
 
-    @FXML
-    private Button exam_execution_btn;
+	@FXML
+	private Button edit_exam_btn;
 
-    @FXML
-    private Button main_page_btn;
+	@FXML
+	private Button exam_execution_btn;
+
+	@FXML
+	private Button main_page_btn;
 
 	@FXML
 	private ChoiceBox<String> chooseSubject;
@@ -218,7 +218,7 @@ public class StartExamExecutionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == executed_exams_btn) {
 			Stage stage = (Stage) executed_exams_btn.getScene().getWindow();
 			try {
@@ -329,14 +329,16 @@ public class StartExamExecutionController implements Initializable {
 			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
+			chooseSubject
+					.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
 			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
+			chooseCourse
+					.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (!badInput) {
@@ -364,6 +366,37 @@ public class StartExamExecutionController implements Initializable {
 
 	@FXML
 	void save(ActionEvent event) {
+		Message msgToServer = new Message();
+
+		msgToServer.setAction("Check exam code - teacher");
+		msgToServer.setExecCode(exam_code_text.getText());
+
+		try {
+			AppsClient.getClient().sendToServer(msgToServer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Subscribe
+	public void checkCode(Message msg) {
+		Platform.runLater(() -> {
+
+			if (msg.getAction().equals("code used")) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setHeaderText("The code is already used,\nplease choose another one");
+				alert.setTitle("");
+				alert.show();
+			}
+
+			else {
+				checkAndSend();
+			}
+		});
+	}
+
+	public void checkAndSend() {
 		boolean examType;
 
 		if (exams_container.getExpandedPane() == null) {
@@ -381,7 +414,7 @@ public class StartExamExecutionController implements Initializable {
 			alert.show();
 			return;
 		}
-		
+
 		else if (com_exam.isSelected() == false && manual_exam.isSelected() == false) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("Choose manual or computerized exam!");
@@ -396,14 +429,16 @@ public class StartExamExecutionController implements Initializable {
 			chooseSubject.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseSubject.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
+			chooseSubject
+					.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (chooseCourse.getSelectionModel().isEmpty() || chooseCourse.getValue().equals("")) {
 			chooseCourse.setStyle("-fx-border-color: RED; -fx-border-radius: 10; -fx-background-color: transparent;");
 			badInput = true;
 		} else {
-			chooseCourse.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
+			chooseCourse
+					.setStyle("-fx-background-color: #1E242E; -fx-text-inner-color: white; -fx-background-radius: 10;");
 		}
 
 		if (!badInput) {
@@ -420,7 +455,7 @@ public class StartExamExecutionController implements Initializable {
 
 			ExecutedExam newExecutedExam = new ExecutedExam();
 			newExecutedExam.setExamCode(exam_code_text.getText());
-			
+
 			newExecutedExam.setExamID(exams_container.getExpandedPane().getText().substring(6));
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			String time = simpleDateFormat.format(new Date());
@@ -430,7 +465,7 @@ public class StartExamExecutionController implements Initializable {
 			msgToServer.setAction("Add exam for execution");
 			msgToServer.setExamForExec(newExamForExec);
 			msgToServer.setExecutedExam(newExecutedExam);
-			
+
 			try {
 				AppsClient.getClient().sendToServer(msgToServer);
 			} catch (IOException e) {
@@ -470,7 +505,7 @@ public class StartExamExecutionController implements Initializable {
 		EventBus.getDefault().clearCaches();
 
 		Platform.runLater(() -> {
-			if(exams.size() != 0)
+			if (exams.size() != 0)
 				exams_box.setVisible(true);
 			else
 				exams_box.setVisible(false);
@@ -478,7 +513,7 @@ public class StartExamExecutionController implements Initializable {
 			for (int i = 0; i < exams.size(); i++) {
 				VBox displayExam = new VBox(15);
 				displayExam.setAlignment(Pos.CENTER);
-				
+
 				HBox instructionsHBox = new HBox();
 				instructionsHBox.setSpacing(10);
 				instructionsHBox.setAlignment(Pos.TOP_CENTER);
@@ -490,7 +525,7 @@ public class StartExamExecutionController implements Initializable {
 				instructionsArea.setWrappingWidth(300);
 				instructionsHBox.getChildren().addAll(instructions, instructionsArea);
 				instructionsHBox.setMargin(instructionsArea, new Insets(0, 34, 0, 0));
-				instructionsHBox.setPadding(new Insets(0, 0, 0, 78));			
+				instructionsHBox.setPadding(new Insets(0, 0, 0, 78));
 
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.TOP_CENTER);
@@ -501,8 +536,8 @@ public class StartExamExecutionController implements Initializable {
 				notesArea.setFill(Color.WHITE);
 				notesArea.setWrappingWidth(300);
 				notesHBox.getChildren().addAll(notes, notesArea);
-				notesHBox.setPadding(new Insets(0, 0, 0, 78));			
-				
+				notesHBox.setPadding(new Insets(0, 0, 0, 78));
+
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
 
@@ -510,8 +545,8 @@ public class StartExamExecutionController implements Initializable {
 					VBox questionBox = new VBox(15);
 					HBox questionHBox = new HBox(15);
 					questionHBox.setAlignment(Pos.TOP_LEFT);
-					questionHBox.setPadding(new Insets(0, 0, 0, 150));			
-					
+					questionHBox.setPadding(new Insets(0, 0, 0, 150));
+
 					TextFlow questionContent = new TextFlow();
 					Text questionContent1 = new Text("" + (j + 1) + ".    ");
 					Text questionContent2 = new Text(exams.get(i).getQuestions().get(j).getQuestionContent());
@@ -519,13 +554,12 @@ public class StartExamExecutionController implements Initializable {
 					Text answer2 = new Text("2. " + exams.get(i).getQuestions().get(j).getAnswer().get(1));
 					Text answer3 = new Text("3. " + exams.get(i).getQuestions().get(j).getAnswer().get(2));
 					Text answer4 = new Text("4. " + exams.get(i).getQuestions().get(j).getAnswer().get(3));
-				
+
 					answer1.setWrappingWidth(250);
 					answer2.setWrappingWidth(250);
 					answer3.setWrappingWidth(250);
 					answer4.setWrappingWidth(250);
 
-					
 					questionContent1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
 					questionContent1.setFill(Color.WHITE);
 					questionContent2.setFont(Font.font("Century Gothic", 14));
@@ -540,7 +574,7 @@ public class StartExamExecutionController implements Initializable {
 					answer3.setFill(Color.WHITE);
 					answer4.setFont(Font.font("Century Gothic", 14));
 					answer4.setFill(Color.WHITE);
-					
+
 					TextFlow rightAnswer = new TextFlow();
 					Text rightAnswer1 = new Text("   The right answer is:    ");
 					Text rightAnswer2 = new Text(String.valueOf(exams.get(i).getQuestions().get(j).getRightAnswer()));
@@ -550,7 +584,7 @@ public class StartExamExecutionController implements Initializable {
 					rightAnswer1.setFill(Color.WHITE);
 					rightAnswer2.setFont(Font.font("Century Gothic", 14));
 					rightAnswer2.setFill(Color.WHITE);
-					
+
 					TextFlow grade = new TextFlow();
 					Text gradeText = new Text("    Grade for this question:    ");
 					Text gradeTextField = new Text(Integer.toString(exams.get(i).getQuestionGrade().get(j)));
@@ -560,7 +594,7 @@ public class StartExamExecutionController implements Initializable {
 					gradeText.setFill(Color.WHITE);
 					gradeTextField.setFont(Font.font("Century Gothic", 14));
 					gradeTextField.setFill(Color.WHITE);
-					
+
 					questionBox.getChildren().add(questionContent);
 					questionBox.getChildren().add(answer1);
 					questionBox.getChildren().add(answer2);
@@ -585,7 +619,7 @@ public class StartExamExecutionController implements Initializable {
 
 					questionBox.setSpacing(15);
 					displayExam.getChildren().add(questionHBox);
-					
+
 					Line line = new Line();
 					line.setEndX(250);
 					line.setStroke(Color.web("#1E242E"));
@@ -596,18 +630,18 @@ public class StartExamExecutionController implements Initializable {
 				}
 
 				Text examDuration = new Text("Exam time (minutes): ");
-				examDuration.setFont(Font.font("Century Gothic",FontWeight.BOLD, 14));
+				examDuration.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
 				examDuration.setFill(Color.WHITE);
 				Text editTime = new Text();
 				editTime.setText(Integer.toString(exams.get(i).getExamTime()));
 				editTime.setFont(Font.font("Century Gothic", 14));
-				editTime.setFill(Color.WHITE);				
-				
+				editTime.setFill(Color.WHITE);
+
 				HBox timeHBox = new HBox(15);
 				timeHBox.setAlignment(Pos.CENTER);
 				timeHBox.getChildren().add(examDuration);
 				timeHBox.getChildren().add(editTime);
-				
+
 				displayExam.getChildren().add(timeHBox);
 				exams_container.getPanes().add(new TitledPane("Exam #" + exams.get(i).getExamID(), displayExam));
 			}

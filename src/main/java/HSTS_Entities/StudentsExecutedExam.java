@@ -46,10 +46,12 @@ public class StudentsExecutedExam implements Serializable {
 
 	private boolean isChecked;
 
+	@Column(length = 100000)
 	private String notes;
 		
 	boolean submitted = false;
 	
+	@Column(length = 100000)
 	private String reasonOfGradeChange="";
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
