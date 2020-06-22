@@ -107,6 +107,8 @@ public class ShowAllExamsController implements Initializable {
 	private ArrayList<Question> questions;
 
 	private ArrayList<String> allQuestions;
+	
+	private String teacherName;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -308,6 +310,9 @@ public class ShowAllExamsController implements Initializable {
 				HBox instructionsHBox = new HBox();
 				instructionsHBox.setSpacing(10);
 				instructionsHBox.setAlignment(Pos.TOP_CENTER);
+				
+				
+				
 				Label instructions = new Label("Instructions: ");
 				instructions.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
 				Text instructionsArea = new Text(exams.get(i).getInstructions());
@@ -316,7 +321,18 @@ public class ShowAllExamsController implements Initializable {
 				instructionsArea.setWrappingWidth(300);
 				instructionsHBox.getChildren().addAll(instructions, instructionsArea);
 				instructionsHBox.setMargin(instructionsArea, new Insets(0, 34, 0, 0));
-				instructionsHBox.setPadding(new Insets(0, 0, 0, 78));			
+				instructionsHBox.setPadding(new Insets(0, 0, 0, 78));	
+				
+				HBox teacherHbox=new HBox(10);
+				teacherHbox.setAlignment(Pos.TOP_CENTER);
+				Label teacher=new Label("Teacher: "); 
+				teacher.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+				Text teacherName=new Text(exams.get(i).getTeacherName());
+				teacherName.setFont(Font.font("Century Gothic", 14));
+				teacherName.setFill(Color.WHITE);
+				teacherName.setWrappingWidth(300);
+				teacherHbox.getChildren().addAll(teacher, teacherName);
+				teacherHbox.setPadding(new Insets(0, 0, 0, 78));
 
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.TOP_CENTER);
@@ -329,6 +345,7 @@ public class ShowAllExamsController implements Initializable {
 				notesHBox.getChildren().addAll(notes, notesArea);
 				notesHBox.setPadding(new Insets(0, 0, 0, 78));			
 				
+				displayExam.getChildren().add(teacherHbox);
 				displayExam.getChildren().add(instructionsHBox);
 				displayExam.getChildren().add(notesHBox);
 
