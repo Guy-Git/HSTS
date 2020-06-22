@@ -181,12 +181,22 @@ public class AppsServer extends AbstractServer {
 		{
 			serverMsg.setExam(examExecController.getExamForExec(((Message)msg)));
 			serverMsg.setExecutedExam(executedExamController.getExecutedExam(((Message)msg)));
+	
 			if(serverMsg.getExam() == null)
 			{
 				serverMsg.setAction("Exam code invalid");
 			}
 			else {
+				if(((Message)msg).getAction().equals("Enter code"))
+				{
+					System.out.println("hiiiiiiiiiiiiiiiiiiii");
+					HstsUser teacher = new HstsUser();
+					teacher.setUserId(serverMsg.getExecutedExam().getAssignedBy());
+					serverMsg.setUser(userController.getSubsAndCourses(teacher));
+					System.out.println(serverMsg.getUser().getFullName());
+				}
 				serverMsg.setAction("Exam for exec");
+				
 			}
 			try {
 				client.sendToClient(serverMsg);
