@@ -189,7 +189,6 @@ public class AppsServer extends AbstractServer {
 			else {
 				if(((Message)msg).getAction().equals("Enter code"))
 				{
-					System.out.println("hiiiiiiiiiiiiiiiiiiii");
 					HstsUser teacher = new HstsUser();
 					teacher.setUserId(serverMsg.getExecutedExam().getAssignedBy());
 					serverMsg.setUser(userController.getSubsAndCourses(teacher));

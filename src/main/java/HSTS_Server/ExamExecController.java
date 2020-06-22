@@ -79,8 +79,13 @@ public class ExamExecController {
 				criteriaQuery1.select(rootEntry1)
 						.where(builder.equal(rootEntry1.get("examID"), examForExec.getExamID()));
 				TypedQuery<Exam> query1 = session.createQuery(criteriaQuery1);
-				exam = (Exam) query1.getResultList().get(0);
+				try {
+					exam = (Exam) query1.getResultList().get(0);
+				} catch (NoResultException nre) {
+					System.out.println("Exam not found!");
+				}
 				exam.setManual(examForExec.isManual());
+
 			}
 		} catch (Exception exception) {
 			if (session != null) {
@@ -93,7 +98,6 @@ public class ExamExecController {
 		}
 		return exam;
 	}
-	
 
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
@@ -105,8 +109,5 @@ public class ExamExecController {
 				.applySettings(configuration.getProperties()).build();
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
-
-
-
 
 }

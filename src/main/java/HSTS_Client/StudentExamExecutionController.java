@@ -72,24 +72,24 @@ import javafx.util.Duration;
 
 public class StudentExamExecutionController implements Initializable {
 
-    @FXML
-    private Button main_page_btn;
+	@FXML
+	private Button main_page_btn;
 
-    @FXML
-    private Button log_out_btn;
+	@FXML
+	private Button log_out_btn;
 
-    @FXML
-    private AnchorPane logo;
+	@FXML
+	private AnchorPane logo;
 
-    @FXML
-    private Text logo_text;
+	@FXML
+	private Text logo_text;
 
-    @FXML
-    private Button start_exam_btn1;
+	@FXML
+	private Button start_exam_btn1;
 
-    @FXML
-    private Button exam_grades_btn;
-	
+	@FXML
+	private Button exam_grades_btn;
+
 	@FXML
 	private AnchorPane exam_anchor;
 
@@ -101,7 +101,7 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	private Accordion accordion;
-	
+
 	@FXML
 	private Button exam_execution_btn;
 
@@ -143,7 +143,7 @@ public class StudentExamExecutionController implements Initializable {
 
 	@FXML
 	private Button upload_exam;
-	
+
 	@FXML
 	private Text exam_title;
 
@@ -175,9 +175,9 @@ public class StudentExamExecutionController implements Initializable {
 	private boolean checkedExtentions = false;
 
 	ExamForExec examForExec;
-	
+
 	private boolean beforeTimeExtension = true;
-	
+
 	private String teacherName = null;
 
 	@Override
@@ -189,8 +189,7 @@ public class StudentExamExecutionController implements Initializable {
 	@FXML
 	void menuClick(ActionEvent event) {
 
-		if (event.getSource() == main_page_btn) 
-		{
+		if (event.getSource() == main_page_btn) {
 			Stage stage = (Stage) main_page_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
@@ -206,9 +205,8 @@ public class StudentExamExecutionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
-		if (event.getSource() == about_btn) 
-		{
+
+		if (event.getSource() == about_btn) {
 			Stage stage = (Stage) about_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentAbout.fxml"));
@@ -224,9 +222,8 @@ public class StudentExamExecutionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
-		if (event.getSource() == exam_grades_btn) 
-		{
+
+		if (event.getSource() == exam_grades_btn) {
 			Stage stage = (Stage) exam_grades_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentShowExams.fxml"));
@@ -242,9 +239,8 @@ public class StudentExamExecutionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
-		if (event.getSource() == start_exam_btn) 
-		{
+
+		if (event.getSource() == start_exam_btn) {
 			Stage stage = (Stage) start_exam_btn.getScene().getWindow();
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentExamExecution.fxml"));
@@ -260,7 +256,7 @@ public class StudentExamExecutionController implements Initializable {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (event.getSource() == log_out_btn) {
 			Stage stage = (Stage) log_out_btn.getScene().getWindow();
 			try {
@@ -281,7 +277,7 @@ public class StudentExamExecutionController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -308,25 +304,25 @@ public class StudentExamExecutionController implements Initializable {
 
 	@Subscribe
 	public void setExamToPage(Message msg) {
-		
+
 		Platform.runLater(() -> {
-			
+
 			boolean submitted = false;
 
-			if(beforeTimeExtension == true) {
+			if (beforeTimeExtension == true) {
 				beforeTimeExtension = false;
-			for (int i = 0; i < msg.getExecutedExam().getStudentsExecutedExams().size(); i++) {
-				if (msg.getExecutedExam().getStudentsExecutedExams().get(i).getUserId().equals(user.getUserId())) {
-					if(msg.getExecutedExam().getStudentsExecutedExams().get(i).isSubmitted()) {
-					submitted = true;
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setHeaderText("This exam has already been submitted! \nTry again!");
-					alert.setTitle("");
-					alert.show();
-					break;
+				for (int i = 0; i < msg.getExecutedExam().getStudentsExecutedExams().size(); i++) {
+					if (msg.getExecutedExam().getStudentsExecutedExams().get(i).getUserId().equals(user.getUserId())) {
+						if (msg.getExecutedExam().getStudentsExecutedExams().get(i).isSubmitted()) {
+							submitted = true;
+							Alert alert = new Alert(AlertType.ERROR);
+							alert.setHeaderText("This exam has already been submitted! \nTry again!");
+							alert.setTitle("");
+							alert.show();
+							break;
+						}
 					}
 				}
-			}
 			}
 			if (submitted == false) {
 				if (checkedExtentions == true) {
@@ -379,7 +375,7 @@ public class StudentExamExecutionController implements Initializable {
 							main_page_btn.setDisable(true);
 							accordion.setDisable(true);
 							log_out_btn.setDisable(true);
-							
+
 							submit_btn.setVisible(false);
 							start_exam_btn.setDisable(false);
 							for_multi_line.setText("Enter ID:");
@@ -389,7 +385,7 @@ public class StudentExamExecutionController implements Initializable {
 							enterIdForExam.setLayoutY(80);
 							enterIdForExam.setDisable(false);
 							start_exam_btn.setVisible(true);
-							//start_exam_btn.setLayoutY(225);
+							// start_exam_btn.setLayoutY(225);
 
 						} else {
 							for_multi_line.setVisible(false);
@@ -428,12 +424,12 @@ public class StudentExamExecutionController implements Initializable {
 		XWPFRun run = paragraph.createRun();
 		System.out.println(exam.getCourse());
 		run.setText("Exam in course " + exam.getCourse() + ", subject " + exam.getSubject());
-		
+
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
-		run.setText("This exam is given by " + teacherName);
-		
+		run.setText("Teacher: " + teacherName);
+
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
@@ -463,19 +459,18 @@ public class StudentExamExecutionController implements Initializable {
 		run = paragraph.createRun();
 		run.setText("Good Luck!");
 		exam_anchor.setDisable(true);
-		//upload_exam.setLayoutX(236);
-		//upload_exam.setLayoutY(121);
+		// upload_exam.setLayoutX(236);
+		// upload_exam.setLayoutY(121);
 		upload_exam.setDisable(false);
 		try {
-	        String absolutePath = System.getProperty(("user.home"), "Desktop").toString();
-	        absolutePath += "\\" + "Desktop";
-	        System.out.println(absolutePath);
-	        String fileName = "test in " + exam.getCourse() +" "+ exam.getSubject() + ".docx";
-	        //new File("").getAbsolutePath();
-	        String path = absolutePath + "\\" + fileName;
-	        
+			String absolutePath = System.getProperty(("user.home"), "Desktop").toString();
+			absolutePath += "\\" + "Desktop";
+			System.out.println(absolutePath);
+			String fileName = "test in " + exam.getCourse() + " " + exam.getSubject() + ".docx";
+			// new File("").getAbsolutePath();
+			String path = absolutePath + "\\" + fileName;
 
-	        FileOutputStream out = new FileOutputStream(new File(path));
+			FileOutputStream out = new FileOutputStream(new File(path));
 			try {
 				document.write(out);
 			} catch (IOException e) {
@@ -584,7 +579,7 @@ public class StudentExamExecutionController implements Initializable {
 			enterIdForExam.setVisible(false);
 			start_exam_btn.setVisible(false);
 			submit_btn.setVisible(false);
-		    save_exam.setVisible(true);
+			save_exam.setVisible(true);
 
 			Timeline timeline = new Timeline();
 			timeline.setCycleCount(Timeline.INDEFINITE);
@@ -595,10 +590,18 @@ public class StudentExamExecutionController implements Initializable {
 				timeline.stop();
 			}
 			System.out.println(exam.getQuestions().get(0).getQuestionContent());
-			VBox displayExam = new VBox(10);
+			VBox displayExam = new VBox(15);
 			displayExam.setAlignment(Pos.CENTER);
-			
-			Text TeacherName = new Text("This exam given by " + teacherName); 
+
+			TextFlow TeacherName = new TextFlow();
+			Text TeacherName1 = new Text("Teacher: ");
+			TeacherName1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
+			TeacherName1.setFill(Color.WHITE);
+			Text TeacherName2 = new Text(teacherName);
+			TeacherName2.setFont(Font.font("Century Gothic", 14));
+			TeacherName2.setFill(Color.WHITE);
+			TeacherName.getChildren().addAll(TeacherName1, TeacherName2);
+
 			TextFlow instructions = new TextFlow();
 			Text instructions1 = new Text("\nInstructions: ");
 			Text instructions2 = new Text(exam.getInstructions());
@@ -609,7 +612,7 @@ public class StudentExamExecutionController implements Initializable {
 			instructions2.setFont(Font.font("Century Gothic", 14));
 			instructions2.setFill(Color.WHITE);
 			instructions2.setWrappingWidth(280);
-			
+
 			displayExam.getChildren().add(TeacherName);
 			displayExam.getChildren().add(instructions);
 			Button save_btn = new Button();
@@ -618,9 +621,9 @@ public class StudentExamExecutionController implements Initializable {
 			GridPane questionsGrid = new GridPane();
 			questionsGrid.setAlignment(Pos.CENTER);
 			Text examTitle = new Text("");
-			exam_title.setText("  Exam in " + exam.getSubject() + " \ncourse " + exam.getCourse());
+			exam_title.setText("  Exam in " + exam.getCourse() + " \n" + exam.getSubject());
 			displayExam.getChildren().add(examTitle);
-		
+
 			for (int j = 0; j < exam.getQuestions().size(); j++) {
 				VBox questionBox = new VBox(20);
 				ToggleGroup answerGroup = new ToggleGroup();
@@ -628,7 +631,7 @@ public class StudentExamExecutionController implements Initializable {
 				RadioButton ans2RB = new RadioButton();
 				RadioButton ans3RB = new RadioButton();
 				RadioButton ans4RB = new RadioButton();
-			
+
 				ans1RB.setToggleGroup(answerGroup);
 				ans2RB.setToggleGroup(answerGroup);
 				ans3RB.setToggleGroup(answerGroup);
@@ -666,7 +669,7 @@ public class StudentExamExecutionController implements Initializable {
 				answer3.setFill(Color.WHITE);
 				answer4.setFont(Font.font("Century Gothic", 14));
 				answer4.setFill(Color.WHITE);
-				
+
 				answer1HBox.getChildren().add(answer1);
 				answer2HBox.getChildren().add(answer2);
 				answer3HBox.getChildren().add(answer3);
@@ -688,7 +691,7 @@ public class StudentExamExecutionController implements Initializable {
 				questionBox.setSpacing(15);
 
 				questionsGrid.setVgap(30);
-				//questionBox.setStyle("-fx-background-color: #ADD8E6");
+				// questionBox.setStyle("-fx-background-color: #ADD8E6");
 				questionsGrid.add(questionBox, 0, j, 1, 1);
 				displayExam.getChildren().add(questionBox);
 
@@ -821,18 +824,17 @@ public class StudentExamExecutionController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText("Exam Submitted!");
 		alert.setTitle("");
 		// alert.setContentText("The fields marked red must be filled");
 		alert.show();
-		
-		alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
-		{
-	        @Override
-	        public void handle(DialogEvent event) {
-	        	Stage stage = (Stage) save_exam.getScene().getWindow();
+
+		alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
+			@Override
+			public void handle(DialogEvent event) {
+				Stage stage = (Stage) save_exam.getScene().getWindow();
 				try {
 					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
 					stage.setTitle("High School Test System");
@@ -846,8 +848,8 @@ public class StudentExamExecutionController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	        }
-	    });
+			}
+		});
 	}
 
 	@FXML
@@ -897,18 +899,17 @@ public class StudentExamExecutionController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText("Exam Submitted!");
 		alert.setTitle("");
 		// alert.setContentText("The fields marked red must be filled");
 		alert.show();
-		
-		alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
-		{
-	        @Override
-	        public void handle(DialogEvent event) {
-	        	Stage stage = (Stage) save_exam.getScene().getWindow();
+
+		alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
+			@Override
+			public void handle(DialogEvent event) {
+				Stage stage = (Stage) save_exam.getScene().getWindow();
 				try {
 					Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/StudentMainPage.fxml"));
 					stage.setTitle("High School Test System");
@@ -922,8 +923,8 @@ public class StudentExamExecutionController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	        }
-	    });
+			}
+		});
 	}
 
 	@Subscribe

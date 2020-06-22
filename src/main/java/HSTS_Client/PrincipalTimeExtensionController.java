@@ -176,7 +176,6 @@ public class PrincipalTimeExtensionController implements Initializable{
 				e.printStackTrace();
 			}
 		}
-//			if (event.getSource() == watch_reports_btn) 
 
 		if (event.getSource() == about_btn) {
 			Stage stage = (Stage) about_btn.getScene().getWindow();

@@ -26,6 +26,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -95,9 +96,7 @@ public class ExamsReviewController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		review_box.getPanes().clear();
 		EventBus.getDefault().register(this);
-		no_exams_text.setVisible(true);
 	}
 
 	@FXML
@@ -292,11 +291,14 @@ public class ExamsReviewController implements Initializable {
 	public void setExamsToPage(Message msg) {
 		exams = msg.getExams();
 		executedExams = msg.getExecutedExams();
+		EventBus.getDefault().clearCaches();
 
 		Platform.runLater(() -> {
+			review_box.getPanes().clear();
+
 			if (executedExams.size() != 0) {
 				no_exams_text.setVisible(false);
-				for (int i = 0; i < exams.size(); i++) {
+				for (int i = 0; i < executedExams.size(); i++) {
 					VBox displayExam = new VBox(15);
 
 					displayExam.setAlignment(Pos.CENTER);
@@ -493,6 +495,7 @@ public class ExamsReviewController implements Initializable {
 					int serialCounter = 0;
 
 					for (int j = 0; j < executedExam.getNumOfStudents(); j++) {
+						
 						if (executedExam.getStudentsExecutedExams().get(j).isChecked() == false) {
 							serialCounter++;
 							HBox studentsExam = new HBox(15);
@@ -650,6 +653,33 @@ public class ExamsReviewController implements Initializable {
 					}
 				}
 			}
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setHeaderText("Updated exam grades sent!");
+			alert.setTitle("");
+			alert.show();
+			
+			alert.setOnCloseRequest(new EventHandler<DialogEvent>() 
+			{
+		        @Override
+		        public void handle(DialogEvent event) {
+		        	Stage stage = (Stage) review_btn.getScene().getWindow();
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/HSTS_Client/ExamsReview.fxml"));
+						stage.setTitle("High School Test System");
+						Scene scene = new Scene(root);
+						stage.setScene(scene);
+						stage.show();
+						EventBus.getDefault().post(user);
+						EventBus.getDefault().unregister(ExamsReviewController.class);
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
+		    });
+			
 		}
 
 		int numOfChecked = 0;
