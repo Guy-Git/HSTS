@@ -105,7 +105,7 @@
                         <Font name="Century Gothic" size="14.0" />
                      </font>
                   </Button>
-                  <Text fx:id="time_text" fill="#5dcfde" layoutX="224.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="153.99999999999997">
+                  <Text fx:id="time_text" fill="#5dcfde" layoutX="164.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="261.3333435058594">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font>
@@ -115,7 +115,7 @@
                         <Font name="Century Gothic" size="14.0" />
                      </font>
                   </Button>
-                  <AnchorPane fx:id="exam_anchor" layoutX="200.0" layoutY="307.0" maxWidth="570.0" prefHeight="20.0" prefWidth="308.0">
+                  <AnchorPane fx:id="exam_anchor" layoutX="147.0" layoutY="310.0" maxWidth="570.0" prefHeight="20.0" prefWidth="308.0">
                      <opaqueInsets>
                         <Insets bottom="20.0" />
                      </opaqueInsets>
@@ -138,7 +138,7 @@
                         <Font name="Century Gothic" size="13.0" />
                      </font>
                   </Text>
-                  <Text fx:id="exam_title" fill="WHITE" layoutX="216.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Exam Execution">
+                  <Text fx:id="exam_title" fill="WHITE" layoutX="218.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Exam Execution" textAlignment="CENTER">
                      <font>
                         <Font name="Century Gothic" size="20.0" />
                      </font>

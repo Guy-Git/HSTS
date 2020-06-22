@@ -415,7 +415,7 @@ public class CreateQuestionController implements Initializable {
 						stage.setScene(scene);
 						stage.show();
 						EventBus.getDefault().post(user);
-						EventBus.getDefault().unregister(this);
+						EventBus.getDefault().unregister(CreateQuestionController.this);
 
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

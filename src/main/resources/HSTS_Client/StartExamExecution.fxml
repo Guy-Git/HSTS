@@ -126,13 +126,13 @@
                      </font>
                   </Text>
                   <ChoiceBox fx:id="chooseSubject" layoutX="115.0" layoutY="92.0" prefHeight="27.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-color: #3F4E63; -fx-border-radius: 10;" stylesheets="@../css/app.css" />
-                  <Text fill="WHITE" layoutX="187.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Exam For Execution">
+                  <Text fill="WHITE" layoutX="161.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Exam For Execution">
                      <font>
                         <Font name="Century Gothic" size="20.0" />
                      </font>
                   </Text>
                   <ChoiceBox fx:id="chooseCourse" layoutX="383.0" layoutY="92.0" prefHeight="25.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-color: #3F4E63; -fx-border-radius: 10;" stylesheets="@../css/app.css" />
-                  <Button fx:id="show_question_btn" layoutX="258.0" layoutY="147.0" mnemonicParsing="false" onAction="#pullExams" prefHeight="30.0" prefWidth="125.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/app.css" text="Choose Exam" textFill="WHITE">
+                  <Button fx:id="show_question_btn" layoutX="235.0" layoutY="149.0" mnemonicParsing="false" onAction="#pullExams" prefHeight="30.0" prefWidth="125.0" style="-fx-border-color: #5dcfde; -fx-background-color: transparent; -fx-border-radius: 10;" styleClass="element" stylesheets="@../css/app.css" text="Choose Exam" textFill="WHITE">
                      <font>
                         <Font name="Century Gothic" size="14.0" />
                      </font>
