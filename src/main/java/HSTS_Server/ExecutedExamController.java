@@ -270,7 +270,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 					.where(builder.equal(rootEntry.get("examCode"), msg.getExamForExec().getExamCode()));
 			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
-				executedExam = (ExecutedExam) query.getSingleResult();
+				executedExam = (ExecutedExam) query.getResultList().get(0);
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
 			}	
