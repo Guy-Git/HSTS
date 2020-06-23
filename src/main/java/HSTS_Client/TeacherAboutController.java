@@ -72,9 +72,7 @@ public class TeacherAboutController implements Initializable {
 	private HstsUser user;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) 
-	{
-		EventBus.getDefault().register(this);
+	public void initialize(URL location, ResourceBundle resources) {
 	}
 
 	@FXML
@@ -87,9 +85,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -104,9 +100,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -121,9 +115,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -138,9 +130,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -155,9 +145,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -172,9 +160,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -193,9 +179,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -210,9 +194,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -227,9 +209,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -244,9 +224,7 @@ public class TeacherAboutController implements Initializable {
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				EventBus.getDefault().post(user);
-				EventBus.getDefault().unregister(this);
-
+				
 				Message msg = new Message();
 				msg.setAction("user log out");
 				msg.setUser(this.user);

@@ -603,18 +603,20 @@ public class StudentExamExecutionController implements Initializable {
 			TeacherName.getChildren().addAll(TeacherName1, TeacherName2);
 
 			TextFlow instructions = new TextFlow();
-			Text instructions1 = new Text("\nInstructions: ");
+			Text instructions1 = new Text("Instructions: ");
 			Text instructions2 = new Text(exam.getInstructions());
 			instructions.getChildren().add(instructions1);
 			instructions.getChildren().add(instructions2);
-			instructions1.setFont(Font.font("Century Gothic", 14));
+			instructions1.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
 			instructions1.setFill(Color.WHITE);
 			instructions2.setFont(Font.font("Century Gothic", 14));
 			instructions2.setFill(Color.WHITE);
 			instructions2.setWrappingWidth(280);
 
 			displayExam.getChildren().add(TeacherName);
+			displayExam.setMargin(TeacherName, new Insets(30, 0, 0, 0));
 			displayExam.getChildren().add(instructions);
+
 			Button save_btn = new Button();
 			save_btn.setAlignment(Pos.CENTER);
 			save_btn.setText("save exam");
@@ -625,7 +627,7 @@ public class StudentExamExecutionController implements Initializable {
 			displayExam.getChildren().add(examTitle);
 
 			for (int j = 0; j < exam.getQuestions().size(); j++) {
-				VBox questionBox = new VBox(20);
+				VBox questionBox = new VBox(15);
 				ToggleGroup answerGroup = new ToggleGroup();
 				RadioButton ans1RB = new RadioButton();
 				RadioButton ans2RB = new RadioButton();
