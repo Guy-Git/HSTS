@@ -326,6 +326,7 @@ public class TeacherShowExecutedExamsController implements Initializable {
 
 		Platform.runLater(() -> {
 			exams_box.setVisible(true);
+			exams_container.getPanes().clear();
 
 			for (int i = 0; i < exams.size(); i++) {
 				VBox displayExam = new VBox(15);
