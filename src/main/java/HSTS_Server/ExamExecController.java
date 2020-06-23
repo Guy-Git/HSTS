@@ -67,9 +67,10 @@ public class ExamExecController {
 				examForExec = (ExamForExec) query.getSingleResult();
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
+				exam = null;
 			}
 
-			if (examForExec == null) {
+			if (exam == null) {
 				exam = null;
 			}
 

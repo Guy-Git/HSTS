@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
+import org.apache.poi.hssf.record.PageBreakRecord.Break;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -179,6 +180,8 @@ public class StudentExamExecutionController implements Initializable {
 	private boolean beforeTimeExtension = true;
 
 	private String teacherName = null;
+	
+	boolean firstTimeInPage;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -305,11 +308,23 @@ public class StudentExamExecutionController implements Initializable {
 	@Subscribe
 	public void setExamToPage(Message msg) {
 
+		if(firstTimeInPage)
+		{
+			firstTimeInPage = false;
+		}
+		else {
+			
 		Platform.runLater(() -> {
 
 			boolean submitted = false;
 
 			if (beforeTimeExtension == true) {
+				if (msg.getExam() == null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setHeaderText("Exam code is incorrect! \nTry again!");
+					alert.setTitle("");
+					alert.show();
+				}
 				beforeTimeExtension = false;
 				for (int i = 0; i < msg.getExecutedExam().getStudentsExecutedExams().size(); i++) {
 					if (msg.getExecutedExam().getStudentsExecutedExams().get(i).getUserId().equals(user.getUserId())) {
@@ -396,6 +411,7 @@ public class StudentExamExecutionController implements Initializable {
 				}
 			}
 		});
+		}
 	}
 
 	@FXML
@@ -932,6 +948,8 @@ public class StudentExamExecutionController implements Initializable {
 	@Subscribe
 	public void onUserEvent(HstsUser user) {
 		Platform.runLater(() -> {
+			
+			firstTimeInPage = true;
 			this.user = user;
 			ArrayList<String> subjects = new ArrayList<String>();
 			ArrayList<String> courses = new ArrayList<String>();
