@@ -48,12 +48,11 @@ public class ExecutedExamController {
 		} finally {
 			session.close();
 		}
-		
-		if(studentExecutedExam.isManual())
+
+		if (studentExecutedExam.isManual())
 			addCheckedExam(studentExecutedExam);
 	}
-	
-	
+
 	public void addExectutedExam(ExecutedExam executedExam) {
 
 		try {
@@ -75,9 +74,8 @@ public class ExecutedExamController {
 			session.close();
 		}
 	}
-	
-	public ArrayList<ExecutedExam> getUncheckedExamsByTeacher(HstsUser user)
-	{
+
+	public ArrayList<ExecutedExam> getUncheckedExamsByTeacher(HstsUser user) {
 		ArrayList<ExecutedExam> exams = null;
 		try {
 			session = sessionFactory.openSession();
@@ -87,16 +85,15 @@ public class ExecutedExamController {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
 			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
-					builder.equal(rootEntry.get("isChecked"), false));					
-					TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+					builder.equal(rootEntry.get("isChecked"), false));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
 				exams = (ArrayList<ExecutedExam>) query.getResultList();
 			} catch (NoResultException nre) {
 				System.out.println("Exam not found!");
-			}	
-			
+			}
+
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -109,28 +106,26 @@ public class ExecutedExamController {
 		System.out.println(exams.get(0).getNumOfStudents());
 		return exams;
 	}
-	
-	public ArrayList<ExecutedExam> getCheckedExamsByTeacher(HstsUser user)
-	{
+
+	public ArrayList<ExecutedExam> getCheckedExamsByTeacher(HstsUser user) {
 		ArrayList<ExecutedExam> exams = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			
+
 			System.out.println(user.getUserId());
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
 			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
-					builder.equal(rootEntry.get("isChecked"), true));					
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+					builder.equal(rootEntry.get("isChecked"), true));
 			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
 				exams = (ArrayList<ExecutedExam>) query.getResultList();
 			} catch (NoResultException nre) {
 				System.out.println("Exam not found!");
-			}	
-			
+			}
+
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -140,10 +135,10 @@ public class ExecutedExamController {
 		} finally {
 			session.close();
 		}
-		
+
 		return exams;
 	}
-	
+
 	public void checkExam(StudentsExecutedExam studentsExecutedExam) {
 		// TODO Auto-generated method stub
 
@@ -154,13 +149,13 @@ public class ExecutedExamController {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 
-			//System.out.println(studentsExecutedExam.getExamID());
+			// System.out.println(studentsExecutedExam.getExamID());
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Exam> criteriaQuery = builder.createQuery(Exam.class);
 			Root<Exam> rootEntry = criteriaQuery.from(Exam.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExecutedExam().getExamID()));					
-					TypedQuery<Exam> query = session.createQuery(criteriaQuery);
+			criteriaQuery.select(rootEntry)
+					.where(builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExecutedExam().getExamID()));
+			TypedQuery<Exam> query = session.createQuery(criteriaQuery);
 			try {
 				exam = (Exam) query.getSingleResult();
 			} catch (NoResultException nre) {
@@ -168,11 +163,10 @@ public class ExecutedExamController {
 			}
 
 			for (int i = 0; i < exam.getQuestions().size(); i++) {
-				if (studentsExecutedExam.getAnswersForExam().get(i) == exam.getQuestions().get(i)
-						.getRightAnswer()) {
+				if (studentsExecutedExam.getAnswersForExam().get(i) == exam.getQuestions().get(i).getRightAnswer()) {
 					grade += exam.getQuestionGrade().get(i);
 
-				} 
+				}
 			}
 			studentsExecutedExam.setGrade(grade);
 			addCheckedExam(studentsExecutedExam);
@@ -187,14 +181,13 @@ public class ExecutedExamController {
 		}
 
 	}
-	
-public void updateExecutedExam(ExecutedExam updatedExecutedExam) 
-{
-		//System.out.println(updatedExecutedExam.getStudentsExecutedExams().get(0).getExamGrade());
-		
+
+	public void updateExecutedExam(ExecutedExam updatedExecutedExam) {
+		// System.out.println(updatedExecutedExam.getStudentsExecutedExams().get(0).getExamGrade());
+
 		ExecutedExam executedExam = null;
 		ArrayList<StudentsExecutedExam> studentsExecutedExams = null;
-		
+
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -210,41 +203,40 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 				executedExam = (ExecutedExam) query.getSingleResult();
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
-			}	
-			
+			}
+
 			session.evict(executedExam);
 			session.update(updatedExecutedExam);
-			
+
 			session.flush();
-			
+
 			session.getTransaction().commit();
 			session.close();
-			
+
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			
+
 			CriteriaBuilder builder1 = session.getCriteriaBuilder();
 			CriteriaQuery<StudentsExecutedExam> criteriaQuery1 = builder1.createQuery(StudentsExecutedExam.class);
 			Root<StudentsExecutedExam> rootEntry1 = criteriaQuery1.from(StudentsExecutedExam.class);
-			criteriaQuery1.select(rootEntry1).where(
-					builder1.equal(rootEntry1.get("executedExam"), updatedExecutedExam.getId()));
+			criteriaQuery1.select(rootEntry1)
+					.where(builder1.equal(rootEntry1.get("executedExam"), updatedExecutedExam.getId()));
 			TypedQuery<StudentsExecutedExam> query1 = session.createQuery(criteriaQuery1);
 			try {
 				studentsExecutedExams = (ArrayList<StudentsExecutedExam>) query1.getResultList();
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
 			}
-			
-			for(int i = 0; i < updatedExecutedExam.getNumOfStudents(); i++)
-			{
+
+			for (int i = 0; i < updatedExecutedExam.getNumOfStudents(); i++) {
 				session.evict(studentsExecutedExams.get(i));
 				studentsExecutedExams.set(i, updatedExecutedExam.getStudentsExecutedExams().get(i));
 				session.update(studentsExecutedExams.get(i));
 				session.flush();
 			}
-			
+
 			session.getTransaction().commit();
-			
+
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -255,7 +247,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			session.close();
 		}
 	}
-	
+
 	public ExecutedExam getExecutedExam(Message msg) {
 		// TODO Auto-generated method stub
 		ExecutedExam executedExam = null;
@@ -273,7 +265,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 				executedExam = (ExecutedExam) query.getResultList().get(0);
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
-			}	
+			}
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -286,6 +278,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 
 		return executedExam;
 	}
+
 	public ArrayList<StudentsExecutedExam> getStudentsExams(HstsUser user) {
 		// TODO Auto-generated method stub
 		ArrayList<StudentsExecutedExam> studentsExams = null;
@@ -296,8 +289,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<StudentsExecutedExam> criteriaQuery = builder.createQuery(StudentsExecutedExam.class);
 			Root<StudentsExecutedExam> rootEntry = criteriaQuery.from(StudentsExecutedExam.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("userId"), user.getUserId()),
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userId"), user.getUserId()),
 					builder.equal(rootEntry.get("isChecked"), true));
 			TypedQuery<StudentsExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
@@ -305,7 +297,6 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
 			}
-			
 
 		} catch (Exception exception) {
 			if (session != null) {
@@ -319,7 +310,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 
 		return studentsExams;
 	}
-	
+
 	public ArrayList<String> getStudentsExamById(HstsUser user) {
 		// TODO Auto-generated method stub
 		ArrayList<String> studentsExamsId = new ArrayList<String>();
@@ -331,15 +322,14 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<StudentsExecutedExam> criteriaQuery = builder.createQuery(StudentsExecutedExam.class);
 			Root<StudentsExecutedExam> rootEntry = criteriaQuery.from(StudentsExecutedExam.class);
-			criteriaQuery.select(rootEntry)
-					.where(builder.equal(rootEntry.get("userId"), user.getUserId()));
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("userId"), user.getUserId()));
 			TypedQuery<StudentsExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
 				studentsExams = (ArrayList<StudentsExecutedExam>) query.getResultList();
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
 			}
-			for(int i=0;i<studentsExams.size();i++)
+			for (int i = 0; i < studentsExams.size(); i++)
 				studentsExamsId.add(studentsExams.get(i).getExecutedExam().getExamID());
 
 		} catch (Exception exception) {
@@ -354,9 +344,8 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 
 		return studentsExamsId;
 	}
-	
-	public ArrayList<String> getCheckedTeacherExamsById(HstsUser user) 
-	{
+
+	public ArrayList<String> getCheckedTeacherExamsById(HstsUser user) {
 		// TODO Auto-generated method stub
 		ArrayList<String> teacherExamsId = new ArrayList<String>();
 		ArrayList<ExecutedExam> exams = null;
@@ -367,16 +356,15 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
 			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
-			criteriaQuery.select(rootEntry).where(
-							builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
-							builder.equal(rootEntry.get("isChecked"), true));
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+					builder.equal(rootEntry.get("isChecked"), true));
 			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
 				exams = (ArrayList<ExecutedExam>) query.getResultList();
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
 			}
-			for(int i=0;i<exams.size();i++)
+			for (int i = 0; i < exams.size(); i++)
 				teacherExamsId.add(exams.get(i).getExamID());
 
 		} catch (Exception exception) {
@@ -391,21 +379,19 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 
 		return teacherExamsId;
 	}
-	
-	public ArrayList<String> getUncheckedTeacherExamsById(HstsUser user) 
-	{
+
+	public ArrayList<String> getUncheckedTeacherExamsById(HstsUser user) {
 		// TODO Auto-generated method stub
 		ArrayList<String> teacherExamsId = new ArrayList<String>();
 		ArrayList<ExecutedExam> exams = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			
+
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
 			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
-			criteriaQuery.select(rootEntry).where(
-					builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
+			criteriaQuery.select(rootEntry).where(builder.equal(rootEntry.get("assignedBy"), user.getUserId()),
 					builder.equal(rootEntry.get("isChecked"), false));
 			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
 			try {
@@ -413,9 +399,9 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 			} catch (NoResultException nre) {
 				System.out.println("Exam code not found!");
 			}
-			for(int i=0;i<exams.size();i++)
+			for (int i = 0; i < exams.size(); i++)
 				teacherExamsId.add(exams.get(i).getExamID());
-			
+
 		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -425,7 +411,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 		} finally {
 			session.close();
 		}
-		
+
 		return teacherExamsId;
 	}
 
@@ -433,7 +419,7 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 		// TODO Auto-generated method stub
 
 		ExecutedExam executedExam = null;
-		
+
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
@@ -444,35 +430,33 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 					builder.equal(rootEntry.get("examID"), studentsExecutedExam.getExecutedExam().getExamID()),
 					builder.equal(rootEntry.get("examCode"), studentsExecutedExam.getExecutedExam().getExamCode()));
 			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
-			
+
 			try {
 				executedExam = (ExecutedExam) query.getSingleResult();
 			} catch (NoResultException nre) {
 				System.out.println("Executed Exam not found!");
 			}
 			session.close();
-			
+
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			
-			//System.out.println(executedExam);
+
+			// System.out.println(executedExam);
 			session.evict(executedExam);
 			executedExam.setChecked(false);
 			executedExam.getStudentsExecutedExams().add(studentsExecutedExam);
 			executedExam.setNumOfStudents(executedExam.getNumOfStudents() + 1);
-			if(studentsExecutedExam.isForcedFinish())
-			{
+			if (studentsExecutedExam.isForcedFinish()) {
 				executedExam.setNumForced(executedExam.getNumForced() + 1);
-			}
-			else {
+			} else {
 				executedExam.setNumUnforced(executedExam.getNumUnforced() + 1);
 			}
-			
+
 			session.update(executedExam);
 			session.flush();
-			//session.getTransaction().commit(); 
+			// session.getTransaction().commit();
 
-		}catch (Exception exception) {
+		} catch (Exception exception) {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
@@ -484,7 +468,41 @@ public void updateExecutedExam(ExecutedExam updatedExecutedExam)
 		return;
 
 	}
-	
+
+	public boolean checkCode(String checkExecCode) {
+		ExecutedExam checkIfUsed = null;
+
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ExecutedExam> criteriaQuery = builder.createQuery(ExecutedExam.class);
+			Root<ExecutedExam> rootEntry = criteriaQuery.from(ExecutedExam.class);
+			criteriaQuery.select(rootEntry).where(
+					builder.equal(rootEntry.get("examCode"), checkExecCode));
+			TypedQuery<ExecutedExam> query = session.createQuery(criteriaQuery);
+
+			try {
+				checkIfUsed = (ExecutedExam) query.getSingleResult();
+			} catch (NoResultException nre) {
+				System.out.println("Executed Exam not found!");
+			}
+		} catch (Exception exception) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			System.err.println("An error occured, changes have been rolled back.");
+			exception.printStackTrace();
+		} finally {
+			session.close();
+		}
+		
+		if(checkIfUsed == null)
+			return true;
+		else
+			return false;
+	}
+
 	private static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
 		// Add ALL of your entities here. You can also try adding a whole package

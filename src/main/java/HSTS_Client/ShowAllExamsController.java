@@ -323,16 +323,16 @@ public class ShowAllExamsController implements Initializable {
 				instructionsHBox.setMargin(instructionsArea, new Insets(0, 34, 0, 0));
 				instructionsHBox.setPadding(new Insets(0, 0, 0, 78));	
 				
-				HBox teacherHbox=new HBox(10);
+				HBox teacherHbox = new HBox(10);
 				teacherHbox.setAlignment(Pos.TOP_CENTER);
-				Label teacher=new Label("Teacher: "); 
+				Label teacher = new Label("Teacher: "); 
 				teacher.setFont(Font.font("Century Gothic", FontWeight.BOLD, 14));
-				Text teacherName=new Text(exams.get(i).getTeacherName());
+				Text teacherName = new Text(exams.get(i).getTeacherName());
 				teacherName.setFont(Font.font("Century Gothic", 14));
 				teacherName.setFill(Color.WHITE);
 				teacherName.setWrappingWidth(300);
 				teacherHbox.getChildren().addAll(teacher, teacherName);
-				teacherHbox.setPadding(new Insets(0, 0, 0, 78));
+				teacherHbox.setPadding(new Insets(0, 0, 0, 65));
 
 				HBox notesHBox = new HBox(10);
 				notesHBox.setAlignment(Pos.TOP_CENTER);

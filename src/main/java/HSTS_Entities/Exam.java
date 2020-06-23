@@ -31,7 +31,10 @@ public class Exam implements Serializable {
 	private String teacherName;
 	private int examTime;
 	private boolean manual;
+	
+	@Column(length = 100000)
 	private ArrayList<Integer> questionGrade;
+	
 	String examSubject;
 	String course;
 

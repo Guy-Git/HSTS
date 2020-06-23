@@ -91,6 +91,11 @@ public class AppsClient extends AbstractClient {
 			EventBus.getDefault().post(((Message) msg).getTeachers());
 		}
 		
+		if(((Message) msg).getAction().equals("code not used") || ((Message) msg).getAction().equals("code used"))
+		{
+			EventBus.getDefault().post(((Message) msg));
+		}
+			
 		
 
 		// if(((Message)msg).getAction().equals(""))

@@ -280,6 +280,21 @@ public class AppsServer extends AbstractServer {
 		{
 			executedExamController.updateExecutedExam(((Message)msg).getExecutedExam());
 		}
+		
+		if(((Message)msg).getAction().equals("Check exam code - teacher"))
+		{
+			if(executedExamController.checkCode(((Message)msg).getExecCode()))
+				serverMsg.setAction("code not used");
+			else
+				serverMsg.setAction("code used");
+			
+			try {
+				client.sendToClient(serverMsg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
