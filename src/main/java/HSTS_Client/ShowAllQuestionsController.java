@@ -280,6 +280,7 @@ public class ShowAllQuestionsController implements Initializable {
 		EventBus.getDefault().clearCaches();
 
 		Platform.runLater(() -> {
+			questions_container.getPanes().clear();
 			questions_box.setSpacing(15);
 			questions_box.setAlignment(Pos.CENTER);
 

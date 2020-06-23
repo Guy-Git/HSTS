@@ -211,11 +211,11 @@ public class StudentShowExamsController implements Initializable {
 
 		this.exams = msg.getExams();
 		this.examsOfStudent = msg.getExamsByStudent();
-//		this.questions = msg.getQuestions();
-//		this.finishedExamsOfStudent=msg.getStudentExecutedExamsArrayList();
+		
 		EventBus.getDefault().clearCaches();
 
 		Platform.runLater(() -> {
+			exams_container.getPanes().clear();
 			exams_box.setVisible(true);
 			if (exams.size() != 0 && examsOfStudent.size() != 0) {
 				for (int i = 0; i < exams.size(); i++) {

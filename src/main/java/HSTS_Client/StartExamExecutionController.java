@@ -401,7 +401,7 @@ public class StartExamExecutionController implements Initializable {
 
 		if (exams_container.getExpandedPane() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setHeaderText("You must pick an one exam!");
+			alert.setHeaderText("You must pick one exam!");
 			alert.setTitle("");
 			alert.show();
 			return;
